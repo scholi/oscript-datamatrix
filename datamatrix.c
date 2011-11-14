@@ -2,6 +2,12 @@
 #include<stdlib.h>
 #define f(m) for(ui i=0;i < m ;i++)
 
+#ifdef DEBUG
+#define DBMSG(t,x) printf(t,x)
+#else
+#define DBMSG(t,x)
+#endif
+
 typedef unsigned char u;
 typedef unsigned int ui;
 
@@ -30,8 +36,11 @@ ui nrow=0;
 ui ncol=0;
 ui status=0;
 
-int main(int iv, char* V[])
+int main(ui iv, char* V[])
 {
+	if(iv!=2) return 1;
+	u* msg=V[1];
+	DBMSG("Your input message is: %s\n",msg);
 	/* Init conversion table */
 	for(ui i=0;i<3;i++) c40[i]=text[i]=0;
 	f(10) c40[i+4]=text[i+4]=0x30+i;
@@ -275,7 +284,7 @@ void fill(u *data, ui ldata, ui *a)
 	}
 }
 
-vid encodeASCII(u *data, ui ldata)
+void encodeASCII(u *data, ui ldata)
 {
 	/*  encode txt to data in the ASCII mode (ie.: one char or 2 num per MC) */
 	u *dl=data+ldata;
