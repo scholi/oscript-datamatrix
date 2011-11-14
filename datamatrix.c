@@ -3,9 +3,9 @@
 #define f(m) for(ui i=0;i < m ;i++)
 
 #ifdef DEBUG
-#define DBMSG(t,x) printf(t,x)
+#define DBMSG(t,...) printf(t,__VA_ARGS__); printf("\n")
 #else
-#define DBMSG(t,x)
+#define DBMSG(t,...)
 #endif
 
 typedef unsigned char u;
@@ -36,35 +36,6 @@ ui nrow=0;
 ui ncol=0;
 ui status=0;
 
-int main(ui iv, char* V[])
-{
-	if(iv!=2) return 1;
-	u* msg=V[1];
-	DBMSG("Your input message is: %s\n",msg);
-	/* Init conversion table */
-	for(ui i=0;i<3;i++) c40[i]=text[i]=0;
-	f(10) c40[i+4]=text[i+4]=0x30+i;
-	f(32)
-	{
-		s01[i]=i;
-		s02[i]=33+i;
-		s03[i]=96+i;
-	}
-	f(5) s02[22+i]=91+i;
-
-	/* Init log,alog in gallois */
-	alog[0]=1;
-	glog[1]=0;
-	ui a;
-	f(255)
-	{
-		a=2*alog[i];
-		if(a>=256) alog[i+1]= (a>=256) ? (a^301) : a ;
-		glog[alog[i+1]]=i+1;
-	}
-	glog[1]=0;
-	return 0;
-}
 
 ui* PolyRS(u n)
 {
@@ -316,11 +287,12 @@ void encodeASCII(u *data, ui ldata)
 	if(l>=0) *(dl)=49+l;
 }
 
-ui* getSize(ui ldata)
+ui* getSize(ui l)
 {
 	/*  return the minimum size of the data-matrix needed to encode the data (already encoded data, but without RS) */
 	/*  the dict s have as key the data-matrix size, as value a tuple (#Data MC,#RS MC,#regions,#blocks) */
 	ui ls=14; /* len of s */
+	/* TotalSize,DataSize,RS Size,#Regions,#blocks */
 	u s[][5]={{8,3,5,1,1},
 		{10,5,7,1,1},
 		{12,8,10,1,1},
@@ -339,7 +311,7 @@ ui* getSize(ui ldata)
 	ui ms=44;
 	f(ls)
 	{
-		if(s[i][0]>=ldata){
+		if(s[i][1]>=l){
 			if(s[i][0]<md || md==-1)
 			{
 				md=s[i][0];
@@ -347,9 +319,8 @@ ui* getSize(ui ldata)
 			}
 		}
 	}
-	ui *r=malloc(sizeof(ui)*2);
-	r[0]=ms;
-	r[1]=s[ms][0];	
+	ui *r=malloc(sizeof(ui)*5);
+	f(5) r[i]=s[ms][i];
 	return r;
 }
 
@@ -411,8 +382,8 @@ void calculateDM()
 			for xx in range(self.dataRegion[1]):
 				i=(yy*es[0]+y)*self.ncol+xx*es[1]
 				self.display+=[1]+self.matrix[i:i+es[0]]+[y%2]
-		self.display+=[1]*(self.ncol+2*self.dataRegion[1])
-def showDM(self):
+		self.display+=[1]*(self.ncol+2*self.dataRegion[1]) */
+/*def showDM(self):
 	# create an image from self.display
 	im=Image.new("1",(self.ncol+2*self.dataRegion[1],self.nrow+2*self.dataRegion[0]))
 	# remember, in self.display, 1="binary 1", so it means black which is color 0 ⇒ the data are inverted
@@ -421,58 +392,63 @@ def showDM(self):
 	z=8
 	im=im.resize((z*(self.ncol+2*self.dataRegion[1]),z*(self.nrow+2*self.dataRegion[0])))
 	im.save("datamatrix.png","PNG")
-	del im
-def process(self):
-	# This create the entire datamatrix out of self.data
-	# As the function encode(self) is not yet ready, you have to use
-	# 	encodeASCII(),switchC40(),switchTEXT(),encodeC40() and encodeTEXT()
-	#	manually before calling this function
-	n=self.getSize()
-	self.ncol=n[0][0]
-	self.nrow=n[0][1]
-	self.dataRegion=n[1][2]
-	print("Data-matrix size: %ix%i"%(self.ncol,self.nrow))
-	print("Datamatrix regions: %ix%i"%self.dataRegion)
-	print("Datamatrix capacity: %i"%(self.nrow*self.ncol/8))
-	print("Data size: %i"%(len(self.data)))
-	print("Data capacity: %i"%(n[1][0]))
-	# Padd data
-	# If not all the data fill de datamatrix, a 254 MC should be added to mark the end of data
-	if n[1][0]>len(self.data):
-		self.switchASCII()
-		self.data+=[254]
-		# Fill the free space with MC 129
-		self.data+=[129]*(n[1][0]-len(self.data))
-	print("Data size after padding: %i"%(len(self.data)))
-	# Calculate Read-Solomon code
-	self.RS(n[1][1])
-	print("Data size after RS: %i"%(len(self.data)))
-#		print("Data: ",self.data)
-	# Calculate Matrix => self.array
-	self.mapDataMatrix()
-	self.fill()
-	self.calculateDM()
-	self.showDM()
-def optimizeSwitch(self, txt):
-	# TODO
-	pass
-def optimizeEncode(self, txt):
-	# TODO: complete function
-	dig="0123456789"
-	i=0
-	while i<len(txt):
-		if self.mode=="ASCII":
-			if i+1<len(txt):
-				if (txt[i] in dig) and (txt[i+1] in dig):
-					self.data+=[130+int(txt[i:i+2])]
-					i+=2
-			else: self.data+=ord(txt[i])+1
-			
+	del im */
+int main(ui iv, char* V[])
+{
+	if(iv!=2) return 1;
 
-# small exemple
-if __name__=="__main__":	
-d=DataMatrix("")
-d.switchTEXT()
-d.encodeTEXT("Hello")
-d.process()
-*/
+	/* Init conversion table */
+	for(ui i=0;i<3;i++) c40[i]=text[i]=0;
+	f(10) c40[i+4]=text[i+4]=0x30+i;
+	f(32)
+	{
+		s01[i]=i;
+		s02[i]=33+i;
+		s03[i]=96+i;
+	}
+	f(5) s02[22+i]=91+i;
+
+	/* Init log,alog in gallois */
+	alog[0]=1;
+	glog[1]=0;
+	ui a;
+	f(255)
+	{
+		a=2*alog[i];
+		if(a>=256) alog[i+1]= (a>=256) ? (a^301) : a ;
+		glog[alog[i+1]]=i+1;
+	}
+	glog[1]=0;
+	
+	ui lmsg=strlen(V[1]);
+	DBMSG("Your input message is: %s",V[1]);
+	DBMSG("Message length: %i",lmsg);
+	/* TotalSize,DataSize,RS Size,#Regions,#blocks */
+	ui* n=getSize(lmsg);
+	ncol=nrow=n[0];
+	DBMSG("Data-matrix size: %ix%i",ncol,nrow);
+	DBMSG("Datamatrix regions: %ix%i",n[3]);
+	DBMSG("Datamatrix capacity: %i",(nrow*ncol/8));
+	DBMSG("Data size: %i",(ldata));
+	DBMSG("Data capacity: %i",(n[1]));
+/*	Padd data 
+ *	If not all the data fill de datamatrix, a 254 MC should be added to mark the end of data 
+ *	if(n[1][0]>ldata)
+ *	{
+ *		switchASCII();
+ *		data[ldata++]=254;
+ *  Fill the free space with MC 129 
+ *		while(ldata<n[0]) data[ldata++];
+ *	DBMSG("Data size after padding: %i",ldata);
+ *	 Calculate Read-Solomon code 
+ *	RS(n[1]);
+ *	DBMSG("Data size after RS: %i",ldata);
+ *	DBMSG("Data: ",data);
+ *	 Calculate Matrix => self.array 
+ *	mapDataMatrix();
+ *	fill();
+ *	calculateDM();
+ *	showDM();
+ */
+	return 0;
+}
