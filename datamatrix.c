@@ -54,6 +54,7 @@ int main(int iv, char* V[])
 		glog[alog[i+1]]=i+1;
 	}
 	glog[1]=0;
+	return 0;
 }
 
 ui* PolyRS(u n)
