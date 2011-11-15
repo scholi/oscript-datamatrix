@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include<stdlib.h>
 #define f(m) for(ui i=0;i < m ;i++)
+#define MO(ro,co) f(8)module(ro,co,c,i+1)
 
 #ifdef DEBUG
 #define DBMSG(t,...) printf(t,__VA_ARGS__); printf("\n")
@@ -34,7 +35,6 @@ ui *array;
 ui nrow=0;
 ui ncol=0;
 ui status=0;
-
 
 ui* PolyRS(u n){
 	ui *poly=(ui*)calloc(n+1,sizeof(ui));
@@ -81,24 +81,35 @@ void module(int row,int col,u c,u bit){
 }
 
 void utah(int row,int col,u c){
-	f(8) module(row-(i<2)?-2:-(i<5),col-((0x6f&(1<<i))>>i)-((0x25&(1<<i))>>i),c,i+1);
+	MO((i<2)?row-2:row-(i<5),col-((0x6f&(1<<i))>>i)-((0x25&(1<<i))>>i));
 }
 
 void corner1(u c){
-	f(8) module((i<3)?nrow-1:(i!=3)*(i-4),(i<3)?i:ncol-1-(i==3),c,i+1);
+	MO((i<3)?nrow-1:(i!=3)*(i-4),(i<3)?i:ncol-1-(i==3));
 }
 
 void corner2(u c){
-	f(8) module((i<3)?nrow+i-3:i==7,(i<3)?0:ncol+i-7-(i==7),c,i+1);
+	MO((i<3)?nrow+i-3:i==7,(i<3)?0:ncol+i-7-(i==7));
 }
 
 void corner3(u c){
-	f(8) module((i<4)?nrow+i-3:(i!=4)*(i-4),(i<3)?0:ncol-1-(i==3),c,i+1);
+	MO((i<4)?nrow+i-3:(i!=4)*(i-4),(i<3)?0:ncol-1-(i==3));
+}
+void corner4(u c){
+	MO((i<2)?nrow-1:(i-2)/3,i*(ncol+(i-2)%3-3));
 }
 
-void corner4(u c){
-	f(8) module((i<2)?nrow-1:(i-2)/3,i*(ncol+(i-2)%3-3),c,i+1);
-}
+/*void utah(int row, int col, int chr)
+{
+module(row-2,col-2,chr,1);
+module(row-2,col-1,chr,2);
+module(row-1,col-2,chr,3);
+module(row-1,col-1,chr,4);
+module(row-1,col,chr,5);
+module(row,col-2,chr,6);
+module(row,col-1,chr,7);
+module(row,col,chr,8);
+}*/
 
 void mapDataMatrix(){
 	/*  create a map of data-matrix. */
@@ -107,14 +118,12 @@ void mapDataMatrix(){
 	u c=1;
 	int row=4;
 	int col=0;
-	do
-	{
+	do{
 		if((row==nrow) && (col==0)) corner1(c++);
 		if((row==nrow-2) && (col==0) && (ncol%4)) corner2(c++);
 		if((row==nrow-2) && (col==0) && (ncol%8==4)) corner3(c++);
 		if((row==nrow+4) && (col==2) && (!(ncol%8))) corner4(c++);
-		do
-		{
+		do{
 			if((row<nrow) && (col>=0) && (!array[row*ncol+col])) utah(row,col,c++);
 			row -= 2; col += 2;
 		}while((row>=0) && (col<ncol));
@@ -125,8 +134,7 @@ void mapDataMatrix(){
 		}while((row<nrow) && (col>=0));
 		row += 3; col +=1;
 	}while((row <nrow) || (col < ncol));
-	if(!array[nrow*ncol-1])
-	{
+	if(!array[nrow*ncol-1]){
 		array[nrow*ncol-1]=array[nrow*ncol-ncol-2]=1;
 	}
 }
@@ -134,10 +142,9 @@ void mapDataMatrix(){
 /* index of array */
 ui idx(ui* a, ui value){
 	/*  Warning the value MUST BE in the array or segfault! */
-	ui i=0;
-	do{
+	for(ui i=0;;i++){
 		if(a[i]==value) return i;
-	}while(1);
+	}
 }
 
 
