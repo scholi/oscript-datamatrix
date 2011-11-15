@@ -57,9 +57,6 @@ void RS(u nc){
 	f(nc+1) wd[i]=0;
 	/* coeff RS polynome */
 	ui *poly=PolyRS(nc);
-	printf("RS-Polynom: ");
-	f(nc+1) printf("%03i ",poly[i]);
-	printf("\n");
 	f(ldata){
 		k=wd[0]^data[i];
 		for(u j=0;j<nc;j++) wd[j]=wd[j+1]^mul(k,poly[nc-j-1]);
@@ -315,11 +312,6 @@ int main(ui iv, char* V[]){
 	/* loading msg in data */
 	f(lmsg)	data[ldata++]=(u)V[1][i];
 	/* display data */
-	printf("Data: ");
-	f(ldata) printf("%c",data[i]);
-	printf("\nData [hex]: ");
-	f(ldata) printf("%02x",data[i]);
-	printf("\n");
 
 	/* Padd data  */
  	/* If not all the data fill de datamatrix, a 254 MC should be added to mark the end of data */
