@@ -99,18 +99,6 @@ void corner4(u c){
 	MO((i<2)?nrow-1:(i-2)/3,i*(ncol+(i-2)%3-3));
 }
 
-/*void utah(int row, int col, int chr)
-{
-module(row-2,col-2,chr,1);
-module(row-2,col-1,chr,2);
-module(row-1,col-2,chr,3);
-module(row-1,col-1,chr,4);
-module(row-1,col,chr,5);
-module(row,col-2,chr,6);
-module(row,col-1,chr,7);
-module(row,col,chr,8);
-}*/
-
 void mapDataMatrix(){
 	/*  create a map of data-matrix. */
 	/*  array will contain numbers in the form 10*c+b where c is the MC number and b is the bit number */
@@ -154,12 +142,12 @@ void fill(){
 	/*  Scan throught all data (ie.: MC) */
 	f(ldata){
 		u v=data[i];
-		for(ui j=7;j>=0;j--){
+		for(int j=7;j>=0;j--){
 			/*  Scan through each bits */
 			u kk=10*(i+1)+8-j;
 			ui k=idx(array,kk);
-			if(v>=(2<<i)){
-				v-=(2<<i);
+			if(v&(1<<j)){
+				v-=(1<<j);
 				array[k]=1;
 			}else array[k]=0;
 		}
@@ -348,19 +336,22 @@ int main(ui iv, char* V[]){
 	DBMSG("Data size after RS: %i",ldata);
 
 	/* display data */
-	printf("      ");
+/*	printf("      ");
 	f(ldata) printf("%02i|",i);
 	printf("\nData: ");
 	f(ldata) printf("%02x|",data[i]);
-	printf("\n");
+	printf("\n");*/
 
  /*	 Calculate Matrix => self.array */
  	mapDataMatrix();
 	/* display Matrix */
-	f(nrow){ for(ui j=0;j<ncol;j++) printf("|%03i|",array[ncol*i+j]); printf("\n");}
- 	/* fill(); */
- /*	calculateDM();
- *	showDM();
- */
+ 	fill();
+	/* display Matrix */
+	printf("#");
+	f(ncol/2) printf(" #");
+	printf("\n");
+	f(nrow){ printf("#"); for(ui j=0;j<ncol;j++) printf("%c",array[ncol*i+j]?'#':' '); printf("%c\n",(i%2==0)?'#':' ');}
+	f(ncol+2) printf("#");
+	printf("\n");
 	return 0;
 }
