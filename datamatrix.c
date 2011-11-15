@@ -22,8 +22,7 @@ u alog[256];
 enum emode { ASCII, TEXT, C40 } mode=ASCII;
 
 /* Multiplication in Galois Ring 256 */
-u mul(u a,u b)
-{
+u mul(u a,u b){
 	if(a==0 || b==0) return 0;
 	return alog[(glog[a]+glog[b])%255];
 }
@@ -37,12 +36,10 @@ ui ncol=0;
 ui status=0;
 
 
-ui* PolyRS(u n)
-{
+ui* PolyRS(u n){
 	ui *poly=(ui*)calloc(n+1,sizeof(ui));
 	poly[0]=1;
-	for(int i=1;i<=n;i++)
-	{	
+	for(int i=1;i<=n;i++){	
 		poly[i]=poly[i-1];
 		for(int j=i-1;j>=1;j--){
 			u x=mul(poly[j],alog[i]);
@@ -53,8 +50,7 @@ ui* PolyRS(u n)
 	return poly;
 }
 
-void RS(u nc)
-{
+void RS(u nc){
 	/* Calculate Reed-Solomon error code from self.data and append it to self.data */
 	u wd[nc+1];
 	u k;
@@ -64,16 +60,14 @@ void RS(u nc)
 	printf("RS-Polynom: ");
 	f(nc+1) printf("%03i ",poly[i]);
 	printf("\n");
-	f(ldata)
-	{
+	f(ldata){
 		k=wd[0]^data[i];
 		for(u j=0;j<nc;j++) wd[j]=wd[j+1]^mul(k,poly[nc-j-1]);
 	}
 	f(nc) data[ldata++]=wd[i];
 }
 
-void module(int row,int col,u c,u bit)
-{
+void module(int row,int col,u c,u bit){
 	/*  Module function to position MC and bits in the datamatrix */
 	if(row<0){
 		row+=nrow;
@@ -86,33 +80,27 @@ void module(int row,int col,u c,u bit)
 	array[row*ncol+col]=10*c+bit;
 }
 
-void utah(int row,int col,u c)
-{
+void utah(int row,int col,u c){
 	f(8) module(row-(i<2)?-2:-(i<5),col-((0x6f&(1<<i))>>i)-((0x25&(1<<i))>>i),c,i+1);
 }
 
-void corner1(u c)
-{
+void corner1(u c){
 	f(8) module((i<3)?nrow-1:(i!=3)*(i-4),(i<3)?i:ncol-1-(i==3),c,i+1);
 }
 
-void corner2(u c)
-{
+void corner2(u c){
 	f(8) module((i<3)?nrow+i-3:i==7,(i<3)?0:ncol+i-7-(i==7),c,i+1);
 }
 
-void corner3(u c)
-{
+void corner3(u c){
 	f(8) module((i<4)?nrow+i-3:(i!=4)*(i-4),(i<3)?0:ncol-1-(i==3),c,i+1);
 }
 
-void corner4(u c)
-{
+void corner4(u c){
 	f(8) module((i<2)?nrow-1:(i-2)/3,i*(ncol+(i-2)%3-3),c,i+1);
 }
 
-void mapDataMatrix()
-{
+void mapDataMatrix(){
 	/*  create a map of data-matrix. */
 	/*  array will contain numbers in the form 10*c+b where c is the MC number and b is the bit number */
 	array=(ui*)calloc(nrow*ncol,sizeof(ui));
@@ -128,18 +116,14 @@ void mapDataMatrix()
 		do
 		{
 			if((row<nrow) && (col>=0) && (!array[row*ncol+col])) utah(row,col,c++);
-			row -= 2;
-			col += 2;
+			row -= 2; col += 2;
 		}while((row>=0) && (col<ncol));
-		row ++;
-		col += 3;
+		row+=1; col += 3;
 		do{
-			if((row>=0) && (col<ncol) && (!(array[row*ncol+col]))) utah(row,col,c++);
-			row += 2;
-			col -= 2;
+			if((row>=0) && (col<ncol) && (!array[row*ncol+col])) utah(row,col,c++);
+			row += 2; col -= 2;
 		}while((row<nrow) && (col>=0));
-		row += 3;
-		col ++;
+		row += 3; col +=1;
 	}while((row <nrow) || (col < ncol));
 	if(!array[nrow*ncol-1])
 	{
@@ -148,8 +132,7 @@ void mapDataMatrix()
 }
 
 /* index of array */
-ui idx(ui* a, ui value)
-{
+ui idx(ui* a, ui value){
 	/*  Warning the value MUST BE in the array or segfault! */
 	ui i=0;
 	do{
@@ -158,21 +141,17 @@ ui idx(ui* a, ui value)
 }
 
 
-void fill()
-{
+void fill(){
 	/*  Put data in the data-matrix */
 	/*  Once self.array contain the map, fill each bit of the data in the right position */
 	/*  Scan throught all data (ie.: MC) */
-	f(ldata)
-	{
+	f(ldata){
 		u v=data[i];
-		for(ui j=7;j>=0;j--)
-		{
+		for(ui j=7;j>=0;j--){
 			/*  Scan through each bits */
 			u kk=10*(i+1)+8-j;
 			ui k=idx(array,kk);
-			if(v>=(2<<i))
-			{
+			if(v>=(2<<i)){
 				v-=(2<<i);
 				array[k]=1;
 			}else array[k]=0;
@@ -180,16 +159,13 @@ void fill()
 	}
 }
 
-void encodeASCII()
-{
+void encodeASCII(){
 	/*  encode txt to data in the ASCII mode (ie.: one char or 2 num per MC) */
 	u *dl=data+ldata;
 	int l=-1;
-	f(ldata)
-	{
+	f(ldata){
 		/*  Check for double number */
-		if((data[i]>'0' && data[i]<'9'))
-		{
+		if((data[i]>'0' && data[i]<'9')){
 			if(l==-1){
 				l=data[i];
 			}else{
@@ -197,8 +173,7 @@ void encodeASCII()
 				l=-1;
 			}
 		}else{
-			if(l==-1)
-			{
+			if(l==-1){
 				*(dl++)=data[i]+1;
 			}else{
 				*(dl++)=48+l;
@@ -209,10 +184,7 @@ void encodeASCII()
 	if(l>=0) *(dl)=49+l;
 }
 
-ui* getSize(ui l)
-{
-	/*  return the minimum size of the data-matrix needed to encode the data (already encoded data, but without RS) */
-	/*  the dict s have as key the data-matrix size, as value a tuple (#Data MC,#RS MC,#regions,#blocks) */
+ui* getSize(ui l){
 	ui ls=14; /* len of s */
 	/* TotalSize,DataSize,RS Size,#Regions,#blocks */
 	u s[][5]={{8,3,5,1,1},
@@ -231,11 +203,9 @@ ui* getSize(ui l)
 		{44,174,68,2,1}};
 	int md=-1;
 	ui ms=44;
-	f(ls)
-	{
+	f(ls){
 		if(s[i][1]>=l){
-			if(s[i][0]<md || md==-1)
-			{
+			if(s[i][0]<md || md==-1){
 				md=s[i][0];
 				ms=i;
 			}
@@ -261,8 +231,7 @@ void switchC40()
 	mode=C40;
 }
 
-void switchASCII()
-{
+void switchASCII(){
 	/*  add the needed MC to switch to ASCII */
 	if(mode==ASCII) return;
 	else{
@@ -270,8 +239,7 @@ void switchASCII()
 	}
 	mode=ASCII;
 }
-void switchTEXT()
-{
+void switchTEXT(){
 	/*  add the needed MC to switch to TEXT */
 	if(mode==TEXT);
 	else if(mode==ASCII){
@@ -310,15 +278,13 @@ void calculateDM()
 	im=im.resize((z*(self.ncol+2*self.dataRegion[1]),z*(self.nrow+2*self.dataRegion[0])))
 	im.save("datamatrix.png","PNG")
 	del im */
-int main(ui iv, char* V[])
-{
+int main(ui iv, char* V[]){
 	if(iv!=2) return 1;
 
 	/* Init conversion table */
 	for(ui i=0;i<3;i++) c40[i]=text[i]=0;
 	f(10) c40[i+4]=text[i+4]=0x30+i;
-	f(32)
-	{
+	f(32){
 		s01[i]=i;
 		s02[i]=33+i;
 		s03[i]=96+i;
@@ -329,8 +295,7 @@ int main(ui iv, char* V[])
 	alog[0]=1;
 	glog[1]=0;
 	ui a;
-	f(255)
-	{
+	f(255){
 		a=2*alog[i];
 		alog[i+1]= (a>=256) ? (a^301) : a ;
 		glog[alog[i+1]]=i+1;
@@ -364,8 +329,7 @@ int main(ui iv, char* V[])
 	/* Padd data  */
  	/* If not all the data fill de datamatrix, a 254 MC should be added to mark the end of data */
 
-	if(n[1]>ldata)
-	{
+	if(n[1]>ldata){
 		switchASCII();
 		data[ldata++]=254;
 		/*  Fill the free space with MC 129 */
