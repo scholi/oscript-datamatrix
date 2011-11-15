@@ -24,14 +24,14 @@ enum emode { ASCII, TEXT, C40 } mode=ASCII;
 /* Multiplication in Galois Ring 256 */
 u mul(u a,u b)
 {
-	if(!(a&b)) return 0;
+	if(a==0 || b==0) return 0;
 	return alog[(glog[a]+glog[b])%255];
 }
 
 /* datamatrix properties */
 u *data;
 ui ldata=0;
-u *array;
+ui *array;
 ui nrow=0;
 ui ncol=0;
 ui status=0;
@@ -39,26 +39,21 @@ ui status=0;
 
 ui* PolyRS(u n)
 {
-	ui *poly=malloc(sizeof(ui)*(n+1));
-	/* Calculate Reed-Solomon polynom coefficient (x+2)(x+4)(x+8)… = a₀+a₁·x+a₂·x²+a₃·x³+…
-	* poly = [1,…,a₃,a₂,a₁,a₀]
-	*/
+	ui *poly=(ui*)calloc(n+1,sizeof(ui));
 	poly[0]=1;
-	f(n-1) poly[i+1]=0;
-	f(n)
+	for(int i=1;i<=n;i++)
 	{	
-		poly[i+1]=poly[i];
-		for(int j=i;j>=0;j--)
-		{
-			poly[j]=poly[j-1]^mul(poly[j],alog[i+1]);
-			poly[0]=mul(poly[0],alog[i]);
+		poly[i]=poly[i-1];
+		for(int j=i-1;j>=1;j--){
+			u x=mul(poly[j],alog[i]);
+			poly[j]=poly[j-1]^x;
 		}
+		poly[0]=mul(poly[0],alog[i]);
 	}
 	return poly;
 }
 
- /* n = self.getSize() */
-void RS(u nc, ui n, u *data, ui ldata)
+void RS(u nc)
 {
 	/* Calculate Reed-Solomon error code from self.data and append it to self.data */
 	u wd[nc+1];
@@ -66,15 +61,18 @@ void RS(u nc, ui n, u *data, ui ldata)
 	f(nc+1) wd[i]=0;
 	/* coeff RS polynome */
 	ui *poly=PolyRS(nc);
+	printf("RS-Polynom: ");
+	f(nc+1) printf("%03i ",poly[i]);
+	printf("\n");
 	f(ldata)
 	{
 		k=wd[0]^data[i];
 		for(u j=0;j<nc;j++) wd[j]=wd[j+1]^mul(k,poly[nc-j-1]);
 	}
-	f(nc) data[ldata+i]=wd[i];
+	f(nc) data[ldata++]=wd[i];
 }
 
-void module(u row,u col,u c,u bit)
+void module(int row,int col,u c,u bit)
 {
 	/*  Module function to position MC and bits in the datamatrix */
 	if(row<0){
@@ -88,127 +86,55 @@ void module(u row,u col,u c,u bit)
 	array[row*ncol+col]=10*c+bit;
 }
 
-void utah(u row,u col,u c)
+void utah(int row,int col,u c)
 {
-	/* Utah position bits of one MC in the L shape
-	* ┌─┬─┐
-	* │1│2│
-	* ├─┼─┼─┐
-	* │3│4│5│
-	* ├─┼─┼─┤
-	* │6│7│8│
-	* └─┴─┴─┘
-	*/
-	module(row-2,col-2,c,1);
-	module(row-2,col-1,c,2);
-	module(row-1,col-2,c,3);
-	module(row-1,col-1,c,4);
-	module(row-1,col,c,5);
-	module(row,col-2,c,6);
-	module(row,col-1,c,7);
-	module(row,col,c,8);
+	f(8) module(row-(i<2)?-2:-(i<5),col-((0x6f&(1<<i))>>i)-((0x25&(1<<i))>>i),c,i+1);
 }
 
 void corner1(u c)
 {
-	/*  special case to replace utah depending on datamatrix size */
-	module(nrow-1,0,c,1);
-	module(nrow-1,1,c,2);
-	module(nrow-1,2,c,3);
-	module(0,ncol-2,c,4);
-	module(0,ncol-1,c,5);
-	module(1,ncol-1,c,6);
-	module(2,ncol-1,c,7);
-	module(3,ncol-1,c,8);
+	f(8) module((i<3)?nrow-1:(i!=3)*(i-4),(i<3)?i:ncol-1-(i==3),c,i+1);
 }
 
 void corner2(u c)
 {
-	/*  special case to replace utah depending on datamatrix size */
-	module(nrow-3,0,c,1);
-	module(nrow-2,0,c,2);
-	module(nrow-1,0,c,3);
-	module(0,ncol-4,c,4);
-	module(0,ncol-3,c,5);
-	module(0,ncol-2,c,6);
-	module(0,ncol-1,c,7);
-	module(1,ncol-1,c,8);
+	f(8) module((i<3)?nrow+i-3:i==7,(i<3)?0:ncol+i-7-(i==7),c,i+1);
 }
 
 void corner3(u c)
 {
-	/*  special case to replace utah depending on datamatrix size */
-	module(nrow-3,0,c,1);
-	module(nrow-2,0,c,2);
-	module(nrow-1,0,c,3);
-	module(0,ncol-2,c,4);
-	module(0,ncol-1,c,5);
-	module(1,ncol-1,c,6);
-	module(2,ncol-1,c,7);
-	module(3,ncol-1,c,8);
+	f(8) module((i<4)?nrow+i-3:(i!=4)*(i-4),(i<3)?0:ncol-1-(i==3),c,i+1);
 }
 
 void corner4(u c)
 {
-	/*  special case to replace utah depending on datamatrix size */
-	module(nrow-1,0,c,1);
-	module(nrow-1,ncol-1,c,2);
-	module(0,ncol-3,c,3);
-	module(0,ncol-2,c,4);
-	module(0,ncol-1,c,5);
-	module(1,ncol-3,c,6);
-	module(1,ncol-2,c,7);
-	module(1,ncol-1,c,8);
+	f(8) module((i<2)?nrow-1:(i-2)/3,i*(ncol+(i-2)%3-3),c,i+1);
 }
 
-ui* mapDataMatrix(ui nrow, ui ncol)
+void mapDataMatrix()
 {
 	/*  create a map of data-matrix. */
 	/*  array will contain numbers in the form 10*c+b where c is the MC number and b is the bit number */
-	ui *array=calloc(nrow*ncol,0);
+	array=(ui*)calloc(nrow*ncol,sizeof(ui));
 	u c=1;
-	ui row=4;
-	ui col=0;
+	int row=4;
+	int col=0;
 	do
 	{
-		if((row==nrow) && (col==0))
-		{
-			corner1(c);
-			c++;
-		}
-		if((row==nrow-2) && (col==0) && (ncol%4))
-		{
-			corner2(c);
-			c++;
-		}
-		if((row==nrow-2) && (col==0) && (ncol%8==4))
-		{
-			corner3(c);
-			c++;
-		}
-		if((row==nrow+4) && (col==2) && (!(ncol%8)))
-		{
-			corner4(c);
-			c++;
-		}
+		if((row==nrow) && (col==0)) corner1(c++);
+		if((row==nrow-2) && (col==0) && (ncol%4)) corner2(c++);
+		if((row==nrow-2) && (col==0) && (ncol%8==4)) corner3(c++);
+		if((row==nrow+4) && (col==2) && (!(ncol%8))) corner4(c++);
 		do
 		{
-			if((row<nrow) && (col>=0) && (!(array[row*ncol+col])))
-			{
-				utah(row,col,c);
-				c++;
-			}
+			if((row<nrow) && (col>=0) && (!array[row*ncol+col])) utah(row,col,c++);
 			row -= 2;
 			col += 2;
 		}while((row>=0) && (col<ncol));
 		row ++;
 		col += 3;
 		do{
-			if((row>=0) && (col<ncol) && (!(array[row*ncol+col])))
-			{
-				utah(row,col,c);
-				c++;
-			}
+			if((row>=0) && (col<ncol) && (!(array[row*ncol+col]))) utah(row,col,c++);
 			row += 2;
 			col -= 2;
 		}while((row<nrow) && (col>=0));
@@ -217,8 +143,7 @@ ui* mapDataMatrix(ui nrow, ui ncol)
 	}while((row <nrow) || (col < ncol));
 	if(!array[nrow*ncol-1])
 	{
-		array[nrow*ncol-1]=1 ;
-		array[nrow*ncol-2]=1;
+		array[nrow*ncol-1]=array[nrow*ncol-ncol-2]=1;
 	}
 }
 
@@ -233,7 +158,7 @@ ui idx(ui* a, ui value)
 }
 
 
-void fill(u *data, ui ldata, ui *a)
+void fill()
 {
 	/*  Put data in the data-matrix */
 	/*  Once self.array contain the map, fill each bit of the data in the right position */
@@ -245,17 +170,17 @@ void fill(u *data, ui ldata, ui *a)
 		{
 			/*  Scan through each bits */
 			u kk=10*(i+1)+8-j;
-			ui k=idx(a,kk);
+			ui k=idx(array,kk);
 			if(v>=(2<<i))
 			{
 				v-=(2<<i);
-				a[k]=1;
-			}else a[k]=0;
+				array[k]=1;
+			}else array[k]=0;
 		}
 	}
 }
 
-void encodeASCII(u *data, ui ldata)
+void encodeASCII()
 {
 	/*  encode txt to data in the ASCII mode (ie.: one char or 2 num per MC) */
 	u *dl=data+ldata;
@@ -268,17 +193,14 @@ void encodeASCII(u *data, ui ldata)
 			if(l==-1){
 				l=data[i];
 			}else{
-				data=(u*)realloc(data,sizeof(u)*(ldata+1));
 				*(dl++)=(130+l*10+data[i]);
 				l=-1;
 			}
 		}else{
 			if(l==-1)
 			{
-				data=(u*)realloc(data,sizeof(u)*(ldata+1));
 				*(dl++)=data[i]+1;
 			}else{
-				data=(u*)realloc(data,sizeof(u)*(ldata+2));
 				*(dl++)=48+l;
 				*(dl++)=data[i]+1;
 			}
@@ -325,41 +247,36 @@ ui* getSize(ui l)
 }
 
 
-void switchC40(u *data, ui ldata)
+void switchC40()
 {
 	/*  add the needed MC to switch to C40 */
 	if(mode==ASCII){
-		data=(u*)realloc(data,sizeof(u)*(ldata+1));
 		data[ldata++]=230;
 	}
 	else if(mode==C40) ;
 	else{
-		data=(u*)realloc(data,sizeof(u)*(ldata+2));
 		data[ldata++]=254;
 		data[ldata++]=230;
 	}
 	mode=C40;
 }
 
-void switchASCII(u *data, ui ldata)
+void switchASCII()
 {
 	/*  add the needed MC to switch to ASCII */
-	if(mode==ASCII);
+	if(mode==ASCII) return;
 	else{
-		data=(u*)realloc(data,sizeof(u)*(ldata+1));
 		data[ldata++]=254;
 	}
 	mode=ASCII;
 }
-void switchTEXT(u *data, ui ldata)
+void switchTEXT()
 {
 	/*  add the needed MC to switch to TEXT */
 	if(mode==TEXT);
 	else if(mode==ASCII){
-		data=(u*)realloc(data,sizeof(u)*(ldata+1));
 		data[ldata++]=239;
 	}else{
-		data=(u*)realloc(data,sizeof(u)*(ldata+2));
 		data[ldata++]=254;
 		data[ldata++]=239;
 	}
@@ -415,12 +332,13 @@ int main(ui iv, char* V[])
 	f(255)
 	{
 		a=2*alog[i];
-		if(a>=256) alog[i+1]= (a>=256) ? (a^301) : a ;
+		alog[i+1]= (a>=256) ? (a^301) : a ;
 		glog[alog[i+1]]=i+1;
 	}
 	glog[1]=0;
 	
 	ui lmsg=strlen(V[1]);
+
 	DBMSG("Your input message is: %s",V[1]);
 	DBMSG("Message length: %i",lmsg);
 	/* TotalSize,DataSize,RS Size,#Regions,#blocks */
@@ -429,25 +347,48 @@ int main(ui iv, char* V[])
 	DBMSG("Data-matrix size: %ix%i",ncol,nrow);
 	DBMSG("Datamatrix regions: %ix%i",n[3]);
 	DBMSG("Datamatrix capacity: %i",(nrow*ncol/8));
-	DBMSG("Data size: %i",(ldata));
+	DBMSG("Data size: %i",(lmsg));
 	DBMSG("Data capacity: %i",(n[1]));
-/*	Padd data 
- *	If not all the data fill de datamatrix, a 254 MC should be added to mark the end of data 
- *	if(n[1][0]>ldata)
- *	{
- *		switchASCII();
- *		data[ldata++]=254;
- *  Fill the free space with MC 129 
- *		while(ldata<n[0]) data[ldata++];
- *	DBMSG("Data size after padding: %i",ldata);
- *	 Calculate Read-Solomon code 
- *	RS(n[1]);
- *	DBMSG("Data size after RS: %i",ldata);
- *	DBMSG("Data: ",data);
- *	 Calculate Matrix => self.array 
- *	mapDataMatrix();
- *	fill();
- *	calculateDM();
+
+	/* allocate space for data (MC+RS) */
+	data=(u*)malloc(sizeof(u)*(nrow*ncol/8));
+	/* loading msg in data */
+	f(lmsg)	data[ldata++]=(u)V[1][i];
+	/* display data */
+	printf("Data: ");
+	f(ldata) printf("%c",data[i]);
+	printf("\nData [hex]: ");
+	f(ldata) printf("%02x",data[i]);
+	printf("\n");
+
+	/* Padd data  */
+ 	/* If not all the data fill de datamatrix, a 254 MC should be added to mark the end of data */
+
+	if(n[1]>ldata)
+	{
+		switchASCII();
+		data[ldata++]=254;
+		/*  Fill the free space with MC 129 */
+		while(ldata<n[1]) data[ldata++]=129;
+	}
+	DBMSG("Data size after padding: %i",ldata);
+	/* Calculate Read-Solomon code  */
+	RS(n[2]); 
+	DBMSG("Data size after RS: %i",ldata);
+
+	/* display data */
+	printf("      ");
+	f(ldata) printf("%02i|",i);
+	printf("\nData: ");
+	f(ldata) printf("%02x|",data[i]);
+	printf("\n");
+
+ /*	 Calculate Matrix => self.array */
+ 	mapDataMatrix();
+	/* display Matrix */
+	f(nrow){ for(ui j=0;j<ncol;j++) printf("|%03i|",array[ncol*i+j]); printf("\n");}
+ 	/* fill(); */
+ /*	calculateDM();
  *	showDM();
  */
 	return 0;
