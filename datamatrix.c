@@ -4,9 +4,9 @@
 #define MO(ro,co) f(8)module(ro,co,c,i+1)
 
 #ifdef DEBUG
-#define DBMSG(t,...) printf(t,__VA_ARGS__); printf("\n")
+#define DBMSG(...) printf(__VA_ARGS__); printf("\n")
 #else
-#define DBMSG(t,...)
+#define DBMSG(...)
 #endif
 
 typedef unsigned char u;
@@ -151,35 +151,34 @@ void fill(){
 	}
 }
 
-void encodeASCII(){
+void encodeASCII(char *txt){
 	/*  encode txt to data in the ASCII mode (ie.: one char or 2 num per MC) */
-	u *dl=data+ldata;
 	int l=-1;
-	f(ldata){
+	for(int i=0;txt[i];i++){
 		/*  Check for double number */
-		if((data[i]>'0' && data[i]<'9')){
+		if((txt[i]>'0' && txt[i]<'9')){
 			if(l==-1){
-				l=data[i];
+				l=txt;
 			}else{
-				*(dl++)=(130+l*10+data[i]);
+				data[ldata++]=(130+l*10+txt[i]);
 				l=-1;
 			}
 		}else{
 			if(l==-1){
-				*(dl++)=data[i]+1;
+				data[ldata++]=txt[i]+1;
 			}else{
-				*(dl++)=48+l;
-				*(dl++)=data[i]+1;
+				data[ldata++]=48+l;
+				data[ldata++]=txt[i]+1;
 			}
 		}
 	}
-	if(l>=0) *(dl)=49+l;
+	if(l>=0) data[ldata++]=49+l;
 }
 
 ui* getSize(ui l){
 	ui ls=14; /* len of s */
 	/* TotalSize,DataSize,RS Size,#Regions,#blocks */
-	u s[][5]={{8,3,5,1,1},
+	ui s[][5]={{8,3,5,1,1},
 		{10,5,7,1,1},
 		{12,8,10,1,1},
 		{14,12,12,1,1},
@@ -297,20 +296,25 @@ int main(ui iv, char* V[]){
 	ui lmsg=strlen(V[1]);
 
 	DBMSG("Your input message is: %s",V[1]);
-	DBMSG("Message length: %i",lmsg);
+#ifdef DEBUG
+	printf("Your input message [hex]: ");
+	f(lmsg) printf("%x|",V[1][i]);
+#endif
+	DBMSG("\nMessage length: %i",lmsg);
 	/* TotalSize,DataSize,RS Size,#Regions,#blocks */
 	ui* n=getSize(lmsg);
 	ncol=nrow=n[0];
 	DBMSG("Data-matrix size: %ix%i",ncol,nrow);
 	DBMSG("Datamatrix regions: %ix%i",n[3]);
-	DBMSG("Datamatrix capacity: %i",(nrow*ncol/8));
+	DBMSG("Datamatrix capacity: %i",n[1]+n[2]);
 	DBMSG("Data size: %i",(lmsg));
 	DBMSG("Data capacity: %i",(n[1]));
 
 	/* allocate space for data (MC+RS) */
 	data=(u*)malloc(sizeof(u)*(nrow*ncol/8));
 	/* loading msg in data */
-	f(lmsg)	data[ldata++]=(u)V[1][i];
+	/*f(lmsg)	data[ldata++]=(u)V[1][i];*/
+	encodeASCII(V[1]);
 	/* display data */
 
 	/* Padd data  */
@@ -328,11 +332,13 @@ int main(ui iv, char* V[]){
 	DBMSG("Data size after RS: %i",ldata);
 
 	/* display data */
-/*	printf("      ");
+#ifdef DEBUG
+	printf("      ");
 	f(ldata) printf("%02i|",i);
 	printf("\nData: ");
 	f(ldata) printf("%02x|",data[i]);
-	printf("\n");*/
+	printf("\n");
+#endif
 
  /*	 Calculate Matrix => self.array */
  	mapDataMatrix();
