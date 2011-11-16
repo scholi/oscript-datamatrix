@@ -3,6 +3,7 @@ DEBUG=yes
 
 repo=ioccc
 
+HEADERS=headers.h
 SOURCES=$(wildcard *.c)
 OBJS=$(SOURCES:.c=.o)
 
@@ -12,22 +13,18 @@ else
 	CFLAGS=-ansi -std=c99 -std=gnu99
 endif
 
-all: datamatrix
-
-datamatrix: datamatrix.o
-	$(GCC) -o $@ $^
-
-debug: datamatrix.o
+all: $(OBJS)
+	$(GCC) -o datamatrix $^
 
 %.o: %.c
 	$(GCC) -c $(CFLAGS) $<
 
-clear:
+clean:
 	rm -f $(OBJS)
 
-.PHONY:  mrproper clear push pull
+.PHONY:  mrproper clean push pull
 
-mrproper: clear
+mrproper: clean
 	rm -f datamatrix
 
 push:
