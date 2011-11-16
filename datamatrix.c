@@ -1,6 +1,6 @@
 #include <stdio.h>
 #include<stdlib.h>
-#define f(m) for(ui i=0;i < m ;i++)
+#define f(m) for(i=0;i < m ;i++)
 #define MO(ro,co) f(8)module(ro,co,c,i+1)
 
 #ifdef DEBUG
@@ -35,17 +35,18 @@ ui *array;
 ui nrow=0;
 ui ncol=0;
 ui status=0;
+ui i,j; /* loop vars */
 
 ui* PolyRS(u n){
 	ui *poly=(ui*)calloc(n+1,sizeof(ui));
 	poly[0]=1;
-	for(int i=1;i<=n;i++){	
-		poly[i]=poly[i-1];
-		for(int j=i-1;j>=1;j--){
-			u x=mul(poly[j],alog[i]);
+	f(n){	
+		poly[i+1]=poly[i];
+		for(j=i;j>=1;j--){
+			u x=mul(poly[j],alog[i+1]);
 			poly[j]=poly[j-1]^x;
 		}
-		poly[0]=mul(poly[0],alog[i]);
+		poly[0]=mul(poly[0],alog[i+1]);
 	}
 	return poly;
 }
@@ -59,7 +60,7 @@ void RS(u nc){
 	ui *poly=PolyRS(nc);
 	f(ldata){
 		k=wd[0]^data[i];
-		for(u j=0;j<nc;j++) wd[j]=wd[j+1]^mul(k,poly[nc-j-1]);
+		for(j=0;j<nc;j++) wd[j]=wd[j+1]^mul(k,poly[nc-j-1]);
 	}
 	f(nc) data[ldata++]=wd[i];
 }
@@ -131,7 +132,7 @@ void mapDataMatrix(){
 /* index of array */
 ui idx(ui* a, ui value){
 	/*  Warning the value MUST BE in the array or segfault! */
-	for(ui i=0;;i++){
+	for(i=0;;i++){
 		if(a[i]==value) return i;
 	}
 }
@@ -143,7 +144,7 @@ void fill(){
 	/*  Scan throught all data (ie.: MC) */
 	f(ldata){
 		u v=data[i];
-		for(int j=7;j>=0;j--){
+		for(j=7;j>=0;j--){
 			/*  Scan through each bits */
 			ui kk=10*(i+1)+8-j;
 			ui k=idx(array,kk);
@@ -158,7 +159,7 @@ void fill(){
 void encodeASCII(char *txt){
 	/*  encode txt to data in the ASCII mode (ie.: one char or 2 num per MC) */
 	int l=-1;
-	for(int i=0;txt[i];i++){
+	for(i=0;txt[i];i++){
 		/*  Check for double number */
 		if((txt[i]>'0' && txt[i]<'9')){
 			if(l==-1){
@@ -267,7 +268,7 @@ int main(ui iv, char* V[]){
 	if(iv!=2) return 1;
 
 	/* Init conversion table */
-	for(ui i=0;i<3;i++) c40[i]=text[i]=0;
+	f(3) c40[i]=text[i]=0;
 	f(10) c40[i+4]=text[i+4]=0x30+i;
 	f(32){
 		s01[i]=i;
