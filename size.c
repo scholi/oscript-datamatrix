@@ -16,17 +16,10 @@ ui* getSize(ui l){
 		{36,114,48,2,1},
 		{40,144,56,2,1},
 		{44,174,68,2,1}};
-	int md=-1;
-	ui ms=44;
 	f(ls){
 		if(s[i][1]>=l){
-			if(s[i][0]<md || md==-1){
-				md=s[i][0];
-				ms=i;
-			}
+				ui *r=s[i];
+				return r;
 		}
 	}
-	ui *r=malloc(sizeof(ui)*5);
-	f(5) r[i]=s[ms][i];
-	return r;
 }

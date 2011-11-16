@@ -9,5 +9,5 @@ void module(int row,int col,u c,u bit){
 		col+=ncol;
 		row+=4-((ncol+4)%8);
 	}
-	array[row*ncol+col]=10*c+bit;
+	array[row*ncol+col]=1+((data[c-1]&(1<<(8-bit)))>>(8-bit));
 }

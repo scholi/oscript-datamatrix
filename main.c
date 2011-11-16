@@ -77,17 +77,11 @@ int main(ui iv, char* V[]){
 #ifdef DEBUG
 	f(nrow){ for(ui j=0;j<ncol;j++) printf("%03i|",array[ncol*i+j]); printf("\n");}
 #endif
- 	fill();
-#ifdef DEBUG
-	printf("\n");
-	f(nrow){ for(ui j=0;j<ncol;j++) printf("%03i|",array[ncol*i+j]); printf("\n");}
-#endif
-	DBMSG("Filling: Done");
 	/* display Matrix */
 	printf("#");
 	f(ncol/2) printf(" #");
 	printf("\n");
-	f(nrow){ printf("#"); for(ui j=0;j<ncol;j++) printf("%c",array[ncol*i+j]?'#':' '); printf("%c\n",(i%2==0)?'#':' ');}
+	f(nrow){ printf("#"); for(ui j=0;j<ncol;j++) printf("%c",(array[ncol*i+j]==2)?'#':' '); printf("%c\n",(i%2==0)?'#':' ');}
 	f(ncol+2) printf("#");
 	printf("\n");
 	return 0;
