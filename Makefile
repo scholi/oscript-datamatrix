@@ -29,9 +29,3 @@ test:
 
 mrproper: clean
 	rm -f datamatrix
-
-push:
-	git push ssh://kpax/~/$(repo).git
-
-pull:
-	git pull ssh://kpax/~/$(repo).git
