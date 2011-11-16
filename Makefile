@@ -1,7 +1,7 @@
 GCC=gcc
 DEBUG=yes
 
-repo=repo
+repo=ioccc
 
 SOURCES=$(wildcard *.c)
 OBJS=$(SOURCES:.c=.o)
