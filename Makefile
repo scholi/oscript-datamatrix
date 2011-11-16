@@ -22,7 +22,10 @@ all: $(OBJS)
 clean:
 	rm -f $(OBJS)
 
-.PHONY:  mrproper clean push pull
+.PHONY:  mrproper clean push pull test
+
+test:
+	@[ ! "$$(./datamatrix "abcde" | tail -n 12 | diff unit.test -)" ] || echo "Test Failed"
 
 mrproper: clean
 	rm -f datamatrix
