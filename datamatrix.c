@@ -82,17 +82,21 @@ void utah(int row,int col,u c){
 }
 
 void corner1(u c){
+	DBMSG("CORNER1");
 	MO((i<3)?nrow-1:(i!=3)*(i-4),(i<3)?i:ncol-1-(i==3));
 }
 
 void corner2(u c){
+	DBMSG("CORNER2");
 	MO((i<3)?nrow+i-3:i==7,(i<3)?0:ncol+i-7-(i==7));
 }
 
 void corner3(u c){
+	DBMSG("CORNER3");
 	MO((i<4)?nrow+i-3:(i!=4)*(i-4),(i<3)?0:ncol-1-(i==3));
 }
 void corner4(u c){
+	DBMSG("CORNER4");
 	MO((i<2)?nrow-1:(i-2)/3,i*(ncol+(i-2)%3-3));
 }
 
@@ -141,7 +145,7 @@ void fill(){
 		u v=data[i];
 		for(int j=7;j>=0;j--){
 			/*  Scan through each bits */
-			u kk=10*(i+1)+8-j;
+			ui kk=10*(i+1)+8-j;
 			ui k=idx(array,kk);
 			if(v&(1<<j)){
 				v-=(1<<j);
@@ -242,7 +246,7 @@ void switchTEXT(){
 	mode=TEXT;
 }
 
-/* TODO
+/*
 void calculateDM()
 {
 	* Calculate the visual datamatrix out of the data-matrix
@@ -259,16 +263,6 @@ void calculateDM()
 				i=(yy*es[0]+y)*self.ncol+xx*es[1]
 				self.display+=[1]+self.matrix[i:i+es[0]]+[y%2]
 		self.display+=[1]*(self.ncol+2*self.dataRegion[1]) */
-/*def showDM(self):
-	# create an image from self.display
-	im=Image.new("1",(self.ncol+2*self.dataRegion[1],self.nrow+2*self.dataRegion[0]))
-	# remember, in self.display, 1="binary 1", so it means black which is color 0 ⇒ the data are inverted
-	im.putdata([1-z for z in self.display])
-	# zoom factor to display larger datamatrix
-	z=8
-	im=im.resize((z*(self.ncol+2*self.dataRegion[1]),z*(self.nrow+2*self.dataRegion[0])))
-	im.save("datamatrix.png","PNG")
-	del im */
 int main(ui iv, char* V[]){
 	if(iv!=2) return 1;
 
@@ -342,8 +336,17 @@ int main(ui iv, char* V[]){
 
  /*	 Calculate Matrix => self.array */
  	mapDataMatrix();
+	DBMSG("Maping: Done");
 	/* display Matrix */
+#ifdef DEBUG
+	f(nrow){ for(ui j=0;j<ncol;j++) printf("%03i|",array[ncol*i+j]); printf("\n");}
+#endif
  	fill();
+#ifdef DEBUG
+	printf("\n");
+	f(nrow){ for(ui j=0;j<ncol;j++) printf("%03i|",array[ncol*i+j]); printf("\n");}
+#endif
+	DBMSG("Filling: Done");
 	/* display Matrix */
 	printf("#");
 	f(ncol/2) printf(" #");
