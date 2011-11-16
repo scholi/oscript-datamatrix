@@ -1,6 +1,8 @@
 GCC=gcc
 DEBUG=yes
 
+repo=repo
+
 SOURCES=$(wildcard *.c)
 OBJS=$(SOURCES:.c=.o)
 
@@ -23,7 +25,13 @@ debug: datamatrix.o
 clear:
 	rm -f $(OBJS)
 
-.PHONY:  mrproper clear
+.PHONY:  mrproper clear push pull
 
 mrproper: clear
 	rm -f datamatrix
+
+push:
+	git push ssh://kpax/~/$(repo).git
+
+pull:
+	git pull ssh://kpax/~/$(repo).git
