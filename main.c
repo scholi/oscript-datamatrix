@@ -35,7 +35,7 @@ int main(ui iv, char* V[]){
 	ui* n=getSize(lmsg);
 	ncol=nrow=n[0];
 	DBMSG("Data-matrix size: %ix%i",ncol,nrow);
-	DBMSG("Datamatrix regions: %ix%i",n[3]);
+	DBMSG("Datamatrix regions: %ix%i",n[3],n[3]);
 	DBMSG("Datamatrix capacity: %i",n[1]+n[2]);
 	DBMSG("Data size: %i",(lmsg));
 	DBMSG("Data capacity: %i",(n[1]));
