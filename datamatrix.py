@@ -308,7 +308,7 @@ class DataMatrix:
 			for y in range(es[1]):
 				for xx in range(self.dataRegion[1]):
 					i=(yy*es[0]+y)*self.ncol+xx*es[1]
-					self.display+=[1]+self.matrix[i:i+es[0]]+[y%2]
+					self.display+=[1]+self.matrix[i:i+es[0]]+[1-y%2]
 			self.display+=[1]*(self.ncol+2*self.dataRegion[1])
 	def showDMAscii(self):
 		for i in xrange(self.ncol+2*self.dataRegion[1]):

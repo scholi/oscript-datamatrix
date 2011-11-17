@@ -25,7 +25,7 @@ clean:
 .PHONY:  mrproper clean push pull test
 
 test:
-	@[ ! "$$(./datamatrix "abcde" | tail -n 12 | diff unit.test -)" ] || echo "Test Failed"
+	@[ ! "$$(./datamatrix "Hello" | tail -n 12 | diff unit.test -)" ] || echo "Test Failed"
 
 mrproper: clean
 	rm -f datamatrix
