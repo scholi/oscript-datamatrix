@@ -5,11 +5,11 @@ void encodeASCII(char *txt){
 	int l=-1;
 	for(int i=0;txt[i];i++){
 		/*  Check for double number */
-		if((txt[i]>'0' && txt[i]<'9')){
+		if((txt[i]>='0' && txt[i]<='9')){
 			if(l==-1){
-				l=txt;
+				l=txt[i]-'0';
 			}else{
-				data[ldata++]=(130+l*10+txt[i]);
+				data[ldata++]=(130+l*10+txt[i]-'0');
 				l=-1;
 			}
 		}else{

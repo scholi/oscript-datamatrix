@@ -31,20 +31,25 @@ int main(ui iv, char* V[]){
 	f(lmsg) printf("%x|",V[1][i]);
 #endif
 	DBMSG("\nMessage length: %i",lmsg);
+
+	/* allocate at least space for the same amount as lmsg */
+	data=(u*)malloc(sizeof(u)*lmsg);
+	/* loading msg in data */
+	/*f(lmsg)	data[ldata++]=(u)V[1][i];*/
+	encodeASCII(V[1]);
+
 	/* TotalSize,DataSize,RS Size,#Regions,#blocks */
-	ui* n=getSize(lmsg);
+	ui* n=getSize(ldata);
 	ncol=nrow=n[0];
 	DBMSG("Data-matrix size: %ix%i",ncol,nrow);
 	DBMSG("Datamatrix regions: %ix%i",n[3],n[3]);
 	DBMSG("Datamatrix capacity: %i",n[1]+n[2]);
-	DBMSG("Data size: %i",(lmsg));
+	DBMSG("Data size: %i",(ldata));
 	DBMSG("Data capacity: %i",(n[1]));
 
-	/* allocate space for data (MC+RS) */
-	data=(u*)malloc(sizeof(u)*(nrow*ncol/8));
-	/* loading msg in data */
-	/*f(lmsg)	data[ldata++]=(u)V[1][i];*/
-	encodeASCII(V[1]);
+	/* reallocate space for data (MC+RS) */
+	realloc(data, sizeof(u)*(nrow*ncol/8));
+
 	/* display data */
 
 	/* Padd data  */

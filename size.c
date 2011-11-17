@@ -17,11 +17,7 @@ ui s[][5]={{8,3,5,1,1},
 	{44,174,68,2,1}};
 
 ui* getSize(ui l){
-	ui ls=14; /* len of s */
-	f(ls){
-		if(s[i][1]>=l){
-				ui *r=s[i];
-				return r;
-		}
-	}
+	f(14)
+		if(s[i][1]>=l)
+				return s[i];
 }

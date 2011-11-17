@@ -1,5 +1,5 @@
 #include "headers.h"
-void module(int row,int col,u c,u bit){
+void module(int row,int col,u c,u shift){
 	/*  Module function to position MC and bits in the datamatrix */
 	if(row<0){
 		row+=nrow;
@@ -9,5 +9,5 @@ void module(int row,int col,u c,u bit){
 		col+=ncol;
 		row+=4-((ncol+4)%8);
 	}
-	array[row*ncol+col]=1+((data[c-1]&(1<<(8-bit)))>>(8-bit));
+	array[row*ncol+col]=1+((data[c-1]>>shift)&1);
 }

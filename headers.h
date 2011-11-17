@@ -5,7 +5,7 @@
 #include<stdlib.h>
 
 #define f(m) for(int i=0;i < m ;i++)
-#define MO(ro,co) f(8)module(ro,co,c,i+1)
+#define MO(ro,co) f(8)module(ro,co,c,7-i)
 
 #ifdef DEBUG
 #define DBMSG(...) printf(__VA_ARGS__); printf("\n")
@@ -28,7 +28,6 @@ enum emode { ASCII, TEXT, C40 } mode;
 
 /* Multiplication in Galois Ring 256 */
 u mul(u a,u b);
-
 
 /* datamatrix properties */
 u *data;
