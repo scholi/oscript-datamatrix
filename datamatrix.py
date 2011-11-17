@@ -310,6 +310,13 @@ class DataMatrix:
 					i=(yy*es[0]+y)*self.ncol+xx*es[1]
 					self.display+=[1]+self.matrix[i:i+es[0]]+[y%2]
 			self.display+=[1]*(self.ncol+2*self.dataRegion[1])
+	def showDMAscii(self):
+		for i in xrange(self.ncol+2*self.dataRegion[1]):
+			ch = [" ", "#"]
+			xx = i*(self.nrow+2*self.dataRegion[0])
+			yy = self.nrow+2*self.dataRegion[0]
+			print "".join(map(lambda x: ch[x], self.display[xx:xx+yy]))
+
 	def showDM(self):
 		# create an image from self.display
 		im=Image.new("1",(self.ncol+2*self.dataRegion[1],self.nrow+2*self.dataRegion[0]))
@@ -345,9 +352,10 @@ class DataMatrix:
 		# Calculate Read-Solomon code
 		self.RS(n[1][1])
 		print("Data size after RS: %i"%(len(self.data)))
-#		print("Data: ",self.data)
+		print "Data:", "|".join(map(lambda x: hex(x), self.data))
 		# Calculate Matrix => self.array
 		self.mapDataMatrix()
+		self.dumpArray()
 		self.fill()
 		self.calculateDM()
 		self.showDM()
@@ -365,11 +373,28 @@ class DataMatrix:
 						self.data+=[130+int(txt[i:i+2])]
 						i+=2
 				else: self.data+=ord(txt[i])+1
-				
+	def dumpArray(self):
+		print "DM Array :"
+		for i in xrange(self.nrow):
+			for j in xrange(self.ncol):
+				print self.array[i*self.ncol + j] ,
+			print
 
 # small exemple
 if __name__=="__main__":	
-	d=DataMatrix("")
-	d.switchTEXT()
-	d.encodeTEXT("Hello")
-	d.process()
+	from sys import argv
+
+	if len(argv) != 2:
+		print "Usage :",argv[0], " msg"
+	else:
+		print "Your input message is:", argv[1]
+		print "Your input message [hex]:", "|".join(map(lambda x: hex(ord(x)), argv[1]))
+		print "Message length: %d" % len(argv[1])
+
+		d=DataMatrix("")
+		#d.switchTEXT()
+		#d.encodeTEXT("Hello")
+		d.encodeASCII(argv[1])
+		d.process()
+		d.showDMAscii()
+
