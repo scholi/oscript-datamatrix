@@ -16,7 +16,7 @@ endif
 all: $(OBJS)
 	$(GCC) -o datamatrix $^
 
-%.o: %.c
+%.o: %.c headers.h
 	$(GCC) -c $(CFLAGS) $<
 
 clean:
@@ -25,7 +25,7 @@ clean:
 .PHONY:  mrproper clean push pull test
 
 test:
-	@[ ! "$$(./datamatrix "Hello" | tail -n 12 | diff unit.test -)" ] || echo "Test Failed"
+	@bash test.sh
 
 mrproper: clean
 	rm -f datamatrix
