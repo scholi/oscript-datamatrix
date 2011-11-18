@@ -166,7 +166,7 @@ class DataMatrix:
 			if not ((row <self.nrow) or (col < self.ncol)): break
 		if not self.array[self.nrow*self.ncol-1]:
 			self.array[self.nrow*self.ncol-1]=1 
-			self.array[self.nrow*self.ncol-ncol-2]=1
+			self.array[self.nrow*self.ncol-self.ncol-2]=1
 
 	def fill(self):
 		# Put data in the data-matrix
