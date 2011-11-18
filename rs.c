@@ -5,8 +5,7 @@ u mul(u a,u b){
 	return alog[(glog[a]+glog[b])%255];
 }
 
-ui* PolyRS(u n){
-	ui *poly=(ui*)calloc(n+1,sizeof(ui));
+ui* PolyRS(u n, ui* poly){
 	poly[0]=1;
 	f(n){	
 		poly[i+1]=poly[i];
@@ -25,7 +24,8 @@ void RS(u nc){
 	u k;
 	f(nc+1) wd[i]=0;
 	/* coeff RS polynome */
-	ui *poly=PolyRS(nc);
+	ui poly[69];
+  PolyRS(nc, poly);
 	f(ldata){
 		k=wd[0]^data[i];
 		for(int j=0;j<nc;j++) wd[j]=wd[j+1]^mul(k,poly[nc-j-1]);

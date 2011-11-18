@@ -2,16 +2,6 @@
 int main(ui iv, char* V[]){
 	if(iv!=2) return 1;
 
-	/* Init conversion table */
-	f(3) c40[i]=text[i]=0;
-	f(10) c40[i+4]=text[i+4]=0x30+i;
-	f(32){
-		s01[i]=i;
-		s02[i]=33+i;
-		s03[i]=96+i;
-	}
-	f(5) s02[22+i]=91+i;
-
 	/* Init log,alog in gallois */
 	alog[0]=1;
 	glog[1]=0;
@@ -32,10 +22,6 @@ int main(ui iv, char* V[]){
 #endif
 	DBMSG("\nMessage length: %i",lmsg);
 
-	/* allocate at least space for the same amount as lmsg */
-	data=(u*)malloc(sizeof(u)*lmsg);
-	/* loading msg in data */
-	/*f(lmsg)	data[ldata++]=(u)V[1][i];*/
 	encodeASCII(V[1]);
 
 	/* TotalSize,DataSize,RS Size,#Regions,#blocks */
@@ -47,16 +33,10 @@ int main(ui iv, char* V[]){
 	DBMSG("Data size: %i",(ldata));
 	DBMSG("Data capacity: %i",(n[1]));
 
-	/* reallocate space for data (MC+RS) */
-	realloc(data, sizeof(u)*(nrow*ncol/8));
-
-	/* display data */
-
 	/* Padd data  */
  	/* If not all the data fill de datamatrix, a 254 MC should be added to mark the end of data */
 
 	if(n[1]>ldata){
-		switchASCII();
 		data[ldata++]=254;
 		/*  Fill the free space with MC 129 */
 		while(ldata<n[1]) data[ldata++]=129;

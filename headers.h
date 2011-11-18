@@ -16,29 +16,22 @@
 typedef unsigned char u;
 typedef unsigned int ui;
 
-/* Lookup table for converion table C40 and TEXT */
-u c40[40],text[40],s01[40],s02[40],s03[40];
-
 /* Gallois look-up table */
 u glog[256];
 u alog[256];
-
-/* different mode of the datamatrix */
-enum emode { ASCII, TEXT, C40 } mode;
 
 /* Multiplication in Galois Ring 256 */
 u mul(u a,u b);
 
 /* datamatrix properties */
-u *data;
+u data[174+68];
 ui ldata;
-ui *array;
+ui array[44*44];
 ui nrow;
 ui ncol;
 ui stas;
 
 /* functions headers */
-ui* PolyRS(u);
 void RS(u);
 void module(int,int,u,u);
 void utah(int,int,u);
@@ -47,12 +40,8 @@ void corner2(u);
 void corner3(u);
 void corner4(u);
 void mapDataMatrix();
-ui idx(ui*,ui);
 void fill();
 void encodeASCII(u*);
 ui* getSize(ui);
-void switchC40();
-void switchASCII();
-void switchTEXT();
 void ps();
 #endif

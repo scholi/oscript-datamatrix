@@ -2,7 +2,6 @@
 void mapDataMatrix(){
 	/*  create a map of data-matrix. */
 	/*  array will contain numbers in the form 10*c+b where c is the MC number and b is the bit number */
-	array=(ui*)calloc(nrow*ncol,sizeof(ui));
 	u c=1;
 	int row=4;
 	int col=0;
