@@ -49,7 +49,7 @@ void corner4(u);
 void mapDataMatrix();
 ui idx(ui*,ui);
 void fill();
-void encodeASCII(char*);
+void encodeASCII(u*);
 ui* getSize(ui);
 void switchC40();
 void switchASCII();

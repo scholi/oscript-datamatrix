@@ -192,18 +192,19 @@ class DataMatrix:
 		l=-1
 		for i in range(len(data)):
 			# Check for double number
-			if (data[i] in "0123456789"):
-				if l==-1:
-					l=int(data[i])
+			if ord(data[i])>127:
+				if l>-1: d.append(ord('0')+l+1)
+				d.append(235)
+				d.append(ord(data[i])-127)
+			elif (data[i] in "0123456789"):
+				if l==-1: l=int(data[i])
 				else:
 					d.append(130+l*10+int(data[i]))
 					l=-1
 			else:
-				if l==-1: d.append(ord(data[i])+1)
-				else:
-					d.append(48+l)
-					d.append(ord(data[i])+1)
-		if l>=0: d.append(49+l)
+				if l>-1: d.append(ord('0')+l+1)
+				d.append(ord(data[i])+1)
+		if l>=0: d.append(ord('0')+l+1)
 		self.data+=d
 	def encodeTEXT(self,data):
 		# encode txt to data in the TEXT mode (ie.: 3 char on 2 MC)
