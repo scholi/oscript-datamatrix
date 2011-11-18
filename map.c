@@ -23,6 +23,7 @@ void mapDataMatrix(){
 		row += 3; col +=1;
 	}while((row <nrow) || (col < ncol));
 	if((nrow*ncol)%8){
-		array[nrow*ncol-1]=array[nrow*ncol-2]=2;
+		array[nrow*ncol-1]=array[nrow*ncol-ncol-2]=2;
+		array[nrow*ncol-2]=array[nrow*ncol-ncol-1]=1;
 	}
 }
