@@ -88,5 +88,6 @@ int main(ui iv, char* V[]){
 	f(nrow){ printf("#"); for(ui j=0;j<ncol;j++) printf("%c",(array[ncol*i+j]==2)?'#':' '); printf("%c\n",(i%2==0)?'#':' ');}
 	f(ncol+2) printf("#");
 	printf("\n");
+	ps();
 	return 0;
 }

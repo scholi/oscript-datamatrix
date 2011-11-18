@@ -19,6 +19,8 @@ function datamatrix_test {
 datamatrix_test "Alphacharacters" "Hello" 12
 datamatrix_test "Numeric" "0123456789" 12
 datamatrix_test "Alphanum" "01ab5cd876fFf" 12
+datamatrix_test "Symbols" "01abAB+-!?" 12
+datamatrix_test "ExtASCII" "`cat extascii.txt`" 12
 
 if (( OK == 1 )); then
   echo "All tests ok!"

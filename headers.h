@@ -54,4 +54,5 @@ ui* getSize(ui);
 void switchC40();
 void switchASCII();
 void switchTEXT();
+void ps();
 #endif
