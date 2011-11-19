@@ -6,6 +6,8 @@
 #include<stdlib.h>
 #endif
 
+#define BIT_FUN
+
 #define f(m) for(int i=0;i < m ;i++)
 #define MO(ro,co) f(8)module(ro,co,c,7-i)
 
@@ -28,7 +30,7 @@ u mul(u a,u b);
 /* datamatrix properties */
 u data[174+68];
 ui ldata;
-ui array[44*44];
+u array[44*44];
 ui nrow;
 ui ncol;
 ui stas;
@@ -48,7 +50,8 @@ ui* getSize(ui);
 void ps();
 
 #ifdef NO_STD_ON_x32
-int printf(void* buf);
+ui printf(u*);
+ui printfl(u*,ui);
 #endif
 
 #endif

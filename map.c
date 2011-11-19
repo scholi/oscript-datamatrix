@@ -22,7 +22,12 @@ void mapDataMatrix(){
 		row += 3; col +=1;
 	}while((row <nrow) || (col < ncol));
 	if((nrow*ncol)%8){
+#ifndef BIT_FUN
 		array[nrow*ncol-1]=array[nrow*ncol-ncol-2]=2;
 		array[nrow*ncol-2]=array[nrow*ncol-ncol-1]=1;
+#else
+		array[nrow*ncol-1]=array[nrow*ncol-ncol-2]='#';
+		array[nrow*ncol-2]=array[nrow*ncol-ncol-1]=' ';
+#endif
 	}
 }

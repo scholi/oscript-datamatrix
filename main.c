@@ -71,8 +71,20 @@ main(ui iv,char **V){
 	printf("\n");
 	f(nrow){
     printf("#");
+    // use new printf with lenght, and write printf(array[ncol*i],ncol)
+#ifdef NO_STD_ON_x32
+#ifndef BIT_FUN
+#error "only implemented for bit fun"
+#endif
+    printfl(array+(ncol*i), ncol);
+#else
     for(ui j=0;j<ncol;j++)
-      printf(array[ncol*i+j]==2?"#":" ");
+#ifndef BIT_FUN
+      printf("%c",array[ncol*i+j]==2?'#':' ');
+#else
+      printf("%c",array[ncol*i+j]);
+#endif
+#endif
     printf(i%2?" \n":"#\n");
   }
 	f(ncol+2) printf("#");
