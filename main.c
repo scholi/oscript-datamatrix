@@ -1,4 +1,5 @@
 #include "headers.h"
+
 main(ui iv,char **V){
 	if(iv!=2) return 1;
 
@@ -67,15 +68,15 @@ main(ui iv,char **V){
 #endif
   ps();
 	/* display Matrix */
-	f(ncol/2+1) printf("# ");
+	f(ncol/2+1) printf("█ ");
 	printf("\n");
 	f(nrow){
-    printf("#");
+    printf("█");
     for(ui j=0;j<ncol;j++)
-      printf(array[ncol*i+j]==2?"#":" ");
-    printf(i%2?" \n":"#\n");
+      printf(array[ncol*i+j]==2?"█":" ");
+    printf(i%2?" \n":"█\n");
   }
-	f(ncol+2) printf("#");
+	f(ncol+2) printf("█");
 	printf("\n");
 	return 0;
 }

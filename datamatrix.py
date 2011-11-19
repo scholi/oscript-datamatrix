@@ -313,7 +313,7 @@ class DataMatrix:
 			self.display+=[1]*(self.ncol+2*self.dataRegion[1])
 	def showDMAscii(self):
 		for i in xrange(self.ncol+2*self.dataRegion[1]):
-			ch = [" ", "#"]
+			ch = [" ", "█"]
 			xx = i*(self.nrow+2*self.dataRegion[0])
 			yy = self.nrow+2*self.dataRegion[0]
 			print "".join(map(lambda x: ch[x], self.display[xx:xx+yy]))
