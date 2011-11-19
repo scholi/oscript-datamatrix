@@ -1,6 +1,6 @@
 GCC=gcc
-DEBUG=no
-NOSTD=yes
+DEBUG=yes
+NOSTD=no
 
 repo=ioccc
 
