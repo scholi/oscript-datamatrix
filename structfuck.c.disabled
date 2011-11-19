@@ -1,0 +1,21 @@
+#include <stdlib.h>
+#include <stdio.h>
+
+#define z .
+#define zz ->
+
+typedef struct e* x;
+struct e {
+  x _;
+  char __;
+  int ___;
+};
+
+int main() {
+  struct e _;
+  _._=&_;
+  _.__='c';
+  _.___=2;
+
+  printf("%c %d\n", _ z _ zz _ zz __, _ z _ zz ___);
+}
