@@ -4,19 +4,13 @@ main(ui iv,char **V){
   if(iv!=2) return 1;
 
   /* Init log,alog in gallois */
-  alog[0]=1;
-  glog[1]=0;
-  ui a;
-  f(255){
-    a=2*alog[i];
-    alog[i+1]= (a>=256) ? (a^301) : a ;
-    glog[alog[i+1]]=i+1;
-  }
-  glog[1]=0;
-  
+  // maybe we can still do more with that 301 ...
+  u i=(alog[glog[(1)]=(0)]=(1));
+  while(alog[i] = (u)(alog[i-1]<<1) < alog[i-1] ? (alog[i-1]<<1)^301 : alog[i-1] << 1, alog[glog[(1)]=(0)]=(1), glog[alog[i]] = i++);
+
   // strlen ;)
   ui lmsg;
-    char* x=V[1];
+  char* x=V[1];
   for(lmsg=0;*x;++lmsg,++x);
 
   DBMSG("Your input message is: %s",V[1]);
@@ -59,8 +53,8 @@ main(ui iv,char **V){
   printf("\n");
 #endif
 
- /*   Calculate Matrix => self.array */
-   mapDataMatrix();
+  /*   Calculate Matrix => self.array */
+  mapDataMatrix();
   DBMSG("Maping: Done");
   /* display Matrix */
 #ifdef DEBUG
@@ -72,7 +66,6 @@ main(ui iv,char **V){
   printf("\n");
   f(nrow){
     printf("#");
-    // use new printf with lenght, and write printf(array[ncol*i],ncol)
 #ifdef NO_STD_ON_x32
 #ifndef BIT_FUN
 #error "only implemented for bit fun"
