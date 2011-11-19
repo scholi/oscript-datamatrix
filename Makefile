@@ -1,5 +1,6 @@
 GCC=gcc
-DEBUG=yes
+DEBUG=no
+NOSTD=yes
 
 repo=ioccc
 
@@ -8,9 +9,12 @@ SOURCES=$(wildcard *.c)
 OBJS=$(SOURCES:.c=.o)
 
 ifeq ($(DEBUG),yes)
-	CFLAGS=-g -ansi -std=c99 -std=gnu99 -D DEBUG
+	CFLAGS=-g -ansi -std=c99 -std=gnu99 -D DEBUG -Wall
 else
-	CFLAGS=-ansi -std=c99 -std=gnu99
+	CFLAGS=-ansi -std=c99 -std=gnu99 -Wall
+  ifeq ($(NOSTD),yes)
+	  CFLAGS+=-fno-builtin -nodefaultlibs -D NO_STD_ON_x32
+  endif
 endif
 
 all: $(OBJS)

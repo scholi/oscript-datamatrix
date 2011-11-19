@@ -1,6 +1,7 @@
 #include "headers.h"
 
 void ps(){
+#ifndef NO_STD_ON_x32
 	printf("Creating postscript image...\n");
 	FILE *fp = fopen("datamatrix.ps","w");
 	if(fp==NULL){
@@ -29,4 +30,5 @@ void ps(){
 		f(ncol+2) fprintf(fp,"0");
 		fprintf(fp,"\n>}\nimage\nshowpage"); 
 	}		
+#endif
 }

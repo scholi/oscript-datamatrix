@@ -1,7 +1,7 @@
 #include "headers.h"
 
 u mul(u a,u b){
-	if(a==0 || b==0) return 0;
+	if(!(a|b)) return 0;
 	return alog[(glog[a]+glog[b])%255];
 }
 
@@ -9,10 +9,8 @@ ui* PolyRS(u n, ui* poly){
 	poly[0]=1;
 	f(n){	
 		poly[i+1]=poly[i];
-		for(int j=i;j>=1;j--){
-			u x=mul(poly[j],alog[i+1]);
-			poly[j]=poly[j-1]^x;
-		}
+		for(int j=i;j>=1;j--)
+			poly[j]=poly[j-1]^(mul(poly[j],alog[i+1]));
 		poly[0]=mul(poly[0],alog[i+1]);
 	}
 	return poly;

@@ -1,5 +1,5 @@
 #include "headers.h"
-int main(ui iv, char* V[]){
+main(ui iv,char **V){
 	if(iv!=2) return 1;
 
 	/* Init log,alog in gallois */
@@ -13,7 +13,10 @@ int main(ui iv, char* V[]){
 	}
 	glog[1]=0;
 	
-	ui lmsg=strlen(V[1]);
+  // strlen ;)
+	ui lmsg;
+  char* x=V[1];
+  for(lmsg=0;*x;++lmsg,++x);
 
 	DBMSG("Your input message is: %s",V[1]);
 #ifdef DEBUG
@@ -62,11 +65,16 @@ int main(ui iv, char* V[]){
 #ifdef DEBUG
 	f(nrow){ for(ui j=0;j<ncol;j++) printf("%03i|",array[ncol*i+j]); printf("\n");}
 #endif
-	ps();
+  ps();
 	/* display Matrix */
 	f(ncol/2+1) printf("# ");
 	printf("\n");
-	f(nrow){ printf("#"); for(ui j=0;j<ncol;j++) printf("%c",(array[ncol*i+j]==2)?'#':' '); printf("%c\n",(i%2==0)?'#':' ');}
+	f(nrow){
+    printf("#");
+    for(ui j=0;j<ncol;j++)
+      printf(array[ncol*i+j]==2?"#":" ");
+    printf(i%2?" \n":"#\n");
+  }
 	f(ncol+2) printf("#");
 	printf("\n");
 	return 0;
