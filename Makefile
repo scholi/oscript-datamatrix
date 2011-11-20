@@ -1,10 +1,10 @@
 GCC=gcc
-DEBUG=yes
-NOSTD=no
+DEBUG=no
+NOSTD=yes
 
 repo=ioccc
 
-HEADERS=headers.h
+HEADERS=
 SOURCES=$(wildcard *.c)
 OBJS=$(SOURCES:.c=.o)
 
@@ -17,7 +17,7 @@ else
   endif
 endif
 
-all: $(OBJS)
+all: main.o
 	$(GCC) -o datamatrix $^
 
 %.o: %.c headers.h
