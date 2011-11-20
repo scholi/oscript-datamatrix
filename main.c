@@ -66,7 +66,7 @@ main(ui iv,char **V){
 #ifdef DEBUG
 	f(nrow){ for(ui j=0;j<ncol;j++) printf("%03i|",array[ncol*i+j]); printf("\n");}
 #endif
-	ps();
+	ps(n[3]);
 	/* display Matrix */
 	printf("\n");
 	f(nrow){
