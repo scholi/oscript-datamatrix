@@ -31,5 +31,8 @@ clean:
 test:
 	@bash test.sh
 
+stack: stack.c
+	$(GCC) -o stack -D STANDALONE -std=gnu99 $<
+
 mrproper: clean
 	rm -f datamatrix
