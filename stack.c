@@ -1,4 +1,11 @@
 #include <stdio.h>
+
+#define VERBOSE 0
+#define STACK 0
+#define MACRO 0
+#define MEM 0
+#define FINAL 1
+
 #define SS(x) else if(s[i]==x)
 typedef unsigned int ui;
 
@@ -6,6 +13,11 @@ ui sd[1024];
 ui lsd=0;
 unsigned char macro[1024];
 ui lmacro=0;
+ui mid[10];
+ui lmid = 0;
+
+// freely indexable
+ui mem[1024];
 
 void Sinit(unsigned char* s){
 	for(ui i=0;s[i];i++){
@@ -26,6 +38,8 @@ void Sinit(unsigned char* s){
 		SS('|') sd[lsd-2]|=sd[--lsd];
 		SS('^') sd[lsd-2]^=sd[--lsd];
 		SS('~') sd[lsd-1]=~sd[lsd-1];
+		SS('{') sd[lsd-2]<<=sd[--lsd];
+		SS('}') sd[lsd-2]>>=sd[--lsd];
 		SS('S'){ ui x=sd[lsd-2]; sd[lsd-2]=sd[lsd-1];sd[lsd-1]=x; }
 		SS('>'){ if(sd[lsd-2]>sd[--lsd]) sd[lsd-1]=1; else sd[lsd-1]=0;}
 		SS('<'){ if(sd[lsd-2]<sd[--lsd]) sd[lsd-1]=1; else sd[lsd-1]=0;}
@@ -33,18 +47,87 @@ void Sinit(unsigned char* s){
 		SS('I'){ if(sd[--lsd]) lsd--; else sd[lsd-2]=sd[--lsd]; }
 		SS('D') sd[lsd++]=sd[lsd-1];
 		SS('C'){ ui l=sd[--lsd]; for(ui j=0;j<l;j++) sd[lsd++]=sd[lsd-l]; }
-		SS('['){ lmacro=0; for(++i;s[i]!=']';i++) macro[lmacro++]=s[i];}
-		SS('@'){ ui l=sd[--lsd]; macro[lmacro]=0; for(ui j=0;j<l;j++) Sinit(macro);}
-		SS('K') lsd=0;
+		SS('['){ mid[lmid] = lmacro; ++lmid; for(++i;s[i]!=']';i++) macro[lmacro++]=s[i]; macro[lmacro++] = 0; }
+		SS('@'){ ui id=sd[--lsd]; ui l=sd[--lsd];
+      for(ui j=0;j<l;j++) {
+#if VERBOSE
+        printf("Exec macro %d (run %d)\n",id, j);
+#endif
+        Sinit(macro+mid[id]);
+      }
+    }
+    // mem move (set/get)
+    SS('s'){
+      ui id=sd[--lsd]; mem[id] = sd[--lsd];
+#if VERBOSE
+      printf("store %d at mem addr %d\n", sd[lsd], id);
+#endif
+    }
+    SS('g'){
+      ui id=sd[--lsd]; sd[lsd++] = mem[id];
+#if VERBOSE
+      printf("get %d at mem addr %d\n", sd[lsd], id);
+#endif
+    }
 
+		SS('K') lsd=0;
+    SS('i') { ui o1 = sd[--lsd]; ui o2 = sd[--lsd]; ui t = sd[--lsd];
+      if (t) {
+#if VERBOSE
+        printf("Execute macro %d at %d\n", o1, mid[o1]);
+#endif
+        Sinit(macro+mid[o1]);
+      }
+      else {
+#if VERBOSE
+        printf("Execute macro %d at %d\n", o1, mid[o2]);
+#endif
+        Sinit(macro+mid[o2]);
+      }
+    }
+    SS('.') { printf("%d\n", sd[lsd-1]); }
+    else { printf("WARNING: %c unknown\n", s[i]); }
+
+#if STACK
+    printf("stack (%d): ",lsd);
+    for(ui j=0;j<lsd;j++) printf("%i ",sd[j]);
+    printf("\n");
+#endif
+#if MACRO
+    printf("macro (%d): ",lmacro);
+    for(ui j=0;j<lmacro;j++) printf("%c",macro[j]);
+    printf("\n");
+#endif
+#if MEM
+    printf("mem  : ");
+    for(ui j=0;j<10;j++) printf("%d ",mem[j]);
+    printf("\n");
+#endif
 	}
 }
 
 #ifdef STANDALONE
 int main(_,__){
-	printf("Calculate first 10 fibonacci numbers\n");
-	Sinit("x1x1[x2C+]xa@");
-	for(ui j=0;j<10;j++) printf("%i\n",sd[j]);
+
+  // init alog[0] = 1 and compute the rest ...
+  // the result ends up in mem[1..255] (0 is used as counter)
+  Sinit("[x12d^][][x1{Dx8}x1&x1x0iDx0gx1+sx0gx1+x0s]x1DDx0ssx1xfex2@");
+
+  // Mem store/get test
+  // Sinit("x4x0sx5x1sx2x1g+");
+
+  // initial condition for alog[]
+  // Sinit("x1DDx0ss");
+
+#if FINAL
+  printf("stack (%d): ",lsd);
+  for(ui j=0;j<lsd;j++) printf("%i ",sd[j]);
+  printf("\n");
+  printf("mem  : ");
+  for(ui j=0;j<256;j++) printf("%d ",mem[j]);
+  printf("\n");
+#endif
+
 	return 0;
 }
 #endif
