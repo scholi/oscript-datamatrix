@@ -4,17 +4,10 @@ main(ui iv,char **V){
 	if(iv!=2) return 1;
 
 	/* Init log,alog in gallois */
-	alog[0]=1;
-	glog[1]=0;
-	ui a;
-	f(255){
-		a=2*alog[i];
-		alog[i+1]= (a>=256) ? (a^301) : a ;
-		glog[alog[i+1]]=i+1;
-	}
-	glog[1]=0;
+	alog[glog[1]=0]=1;
+	f(255) glog[alog[i+1]=((alog[i]<<1)&0x0100)?(alog[i]<<1)^301:(alog[i]<<1)]=i+1; 
+	glog[1]=0;	
 	
-	// strlen ;)
 	ui lmsg;
 	char* x=V[1];
 	for(lmsg=0;*x;++lmsg,++x);
