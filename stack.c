@@ -1,9 +1,9 @@
 #include <stdio.h>
 
-#define VERBOSE 0
-#define STACK 0
+#define VERBOSE 1
+#define STACK 1
 #define MACRO 0
-#define MEM 0
+#define MEM 1
 #define FINAL 1
 
 #define SS(x) else if(s[i]==x)
@@ -60,17 +60,17 @@ void Sinit(unsigned char* s){
     SS('s'){
       ui id=sd[--lsd]; mem[id] = sd[--lsd];
 #if VERBOSE
-      printf("store %d at mem addr %d\n", sd[lsd], id);
+      printf("store %d at mem addr %d\n", mem[id], id);
 #endif
     }
     SS('g'){
       ui id=sd[--lsd]; sd[lsd++] = mem[id];
 #if VERBOSE
-      printf("get %d at mem addr %d\n", sd[lsd], id);
+      printf("get %d at mem addr %d\n", mem[id], id);
 #endif
     }
 
-		SS('K') lsd=0;
+		SS('K') { lsd=0; lmid=0; lmacro=0; }
     SS('i') { ui o1 = sd[--lsd]; ui o2 = sd[--lsd]; ui t = sd[--lsd];
       if (t) {
 #if VERBOSE
@@ -85,6 +85,20 @@ void Sinit(unsigned char* s){
         Sinit(macro+mid[o2]);
       }
     }
+    // for loop
+    SS('r') { ui m = sd[--lsd]; ui count = sd[--lsd];
+#if VERBOSE
+        printf("Execute macro %d, %d times\n", m, count);
+#endif
+
+      for (ui j=0;j<count;++j) {
+#if VERBOSE
+        printf("Execute macro %d at %d\n", m, mid[m]);
+#endif
+        Sinit(macro+mid[m]);
+      }
+    }
+
     SS('.') { printf("%d\n", sd[lsd-1]); }
     else { printf("WARNING: %c unknown\n", s[i]); }
 
@@ -109,9 +123,25 @@ void Sinit(unsigned char* s){
 #ifdef STANDALONE
 int main(_,__){
 
+#if 1
   // init alog[0] = 1 and compute the rest ...
   // the result ends up in mem[1..255] (0 is used as counter)
-  Sinit("[x12d^][][x1{Dx8}x1&x1x0iDx0gx1+sx0gx1+x0s]x1DDx0ssx1xfex2@");
+  Sinit("[x12d^][][x1{Dx8}x1&x1x0iDx0gx1+sx0gx1+x0s]x1DDx0ssx1xfex2@K");
+
+#if FINAL
+  printf("stack (%d): ",lsd);
+  for(ui j=0;j<lsd;j++) printf("%i ",sd[j]);
+  printf("\n\n");
+  printf("mem  : ");
+  for(ui j=0;j<256;j++) printf("%d ",mem[j]);
+  printf("\n\n");
+#endif
+
+  printf("First part done\n");
+
+  // init glog[1] = 0 and compute the rest ...
+  Sinit("[x0gx1+x0sx0gDx100-Sxff-gxff+s]x0gx1+x0sx0gx0Ssxfex0r");
+#endif
 
   // Mem store/get test
   // Sinit("x4x0sx5x1sx2x1g+");
@@ -119,13 +149,20 @@ int main(_,__){
   // initial condition for alog[]
   // Sinit("x1DDx0ss");
 
+  // for loop
+  // Sinit("[.]x123x5x0r");
+
 #if FINAL
   printf("stack (%d): ",lsd);
   for(ui j=0;j<lsd;j++) printf("%i ",sd[j]);
-  printf("\n");
+  printf("\n\n");
   printf("mem  : ");
-  for(ui j=0;j<256;j++) printf("%d ",mem[j]);
+  printf("%d ",mem[0]);
   printf("\n");
+  for(ui j=1;j<256;j++) printf("%d ",mem[j]);
+  printf("\n");
+  for(ui j=256;j<256+254;j++) printf("%d\n",mem[j]);
+  printf("\n\n");
 #endif
 
 	return 0;
