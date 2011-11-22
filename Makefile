@@ -4,7 +4,7 @@ NOSTD=no
 
 repo=ioccc
 
-HEADERS=headers.h
+HEADERS=
 SOURCES=$(wildcard *.c)
 OBJS=$(SOURCES:.c=.o)
 
@@ -17,7 +17,9 @@ else
   endif
 endif
 
-all: $(OBJS)
+all: datamatrix
+	
+datamatrix: $(OBJS)
 	$(GCC) -o datamatrix $^
 
 %.o: %.c headers.h
@@ -30,6 +32,9 @@ clean:
 
 test:
 	@bash test.sh
+
+stack: stack.c
+	$(GCC) -g -o stack -D STANDALONE -std=gnu99 $<
 
 mrproper: clean
 	rm -f datamatrix

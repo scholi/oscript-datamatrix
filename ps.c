@@ -1,6 +1,6 @@
 #include "headers.h"
 
-void ps(){
+void ps(ui r){
 #ifndef NO_STD_ON_x32
   printf("Creating postscript image...\n");
   FILE *fp = fopen("datamatrix.ps","w");
