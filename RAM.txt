@@ -1,0 +1,36 @@
+Here is a map of the RAM. Each line is 256 bytes long
+
+┌───┬┬─────────┬───────────────┐
+│   ││  x00    │    x01 - xff  │
+├───┼┼─────────┼───────────────┤
+│0xx││   lmsg  │     msg       │
+├───┼┼─────────┼───────────────┤
+│1xx││   ncol  │  reserved     │ <- reserved for single-byte vars, see bellow for more details
+├───┼┼─────────┼───────────────┤
+│2xx││   ldata │     data      │
+├───┼┼─────────┴───────────────┤
+│3xx││         alog            │
+├───┼┼─────────────────────────┤
+│4xx││         glog            │
+├───┼┼─────────────────────────┤
+│5xx││         array1          │
+├───┼┼─────────────────────────┤
+│6xx││         array2          │
+├───┼┼─────────────────────────┤
+
+
+
+Detail of RAM space 1xx
+
+100 ncol=nrow
+101 n[1]=#of data MC
+102 n[2]=#of RS MC
+103 
+104
+105
+106
+107
+108
+109
+10a
+10b
