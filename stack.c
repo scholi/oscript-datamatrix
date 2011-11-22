@@ -36,8 +36,9 @@ void Sinit(u* s){
 		SS('I'){ if(sd[--lsd]) lsd--; else sd[lsd-2]=sd[--lsd]; }
 		SS('D') sd[lsd++]=sd[lsd-1];
 		SS('C'){ ui l=sd[--lsd]; for(ui j=0;j<l;j++) sd[lsd++]=sd[lsd-l]; }
-		SS('['){ u k=s[++i]-'a'; lmacro[k]=0; for(++i;s[i]!=']';i++) macro[k][lmacro[k]++]=s[i]; }
-		SS('@'){ ui l=sd[--lsd]; u k=s[++i]-'a'; macro[k][lmacro[k]]=0; for(ui j=0;j<l;j++) Sinit(macro[k]); }
+		SS('['){ u k=sd[--lsd]; for(++i;s[i]!=']';i++) macro[k][lmacro[k]++]=s[i]; macro[k][lmacro[k]]=0; }
+		SS('@'){ ui k=sd[--lsd]; Sinit(macro[k]); }
+		SS('!'){ ui k=sd[--lsd]; ui l=sd[--lsd]; for(;l>0;l--) Sinit(macro[k]); }
 		SS('K') lsd=0;
 		SS('G') sd[lsd++]=*ptr;
 		SS('P') *ptr=sd[--lsd];
@@ -51,8 +52,8 @@ void Sinit(u* s){
 
 #ifdef STANDALONE
 int main(_,__){
-	printf("Calculate first 10 fibonacci numbers\n");
-	Sinit("x1Px1Q[aGBGA+Q]xa@a");
+	printf("Calculate first 10 fibonacci numbers (with RAM)\n");
+	Sinit("x1Px1Qx0[GBGA+Q]xax0!");
 	printf("Stack [%i]\n=========\n",lsd);
 	for(ui j=0;j<lsd;j++) printf("%i\n",sd[j]);
 	printf("RAM\n===\n");
