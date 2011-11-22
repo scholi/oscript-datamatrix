@@ -3,12 +3,13 @@ main(ui iv,char **V){
 	/* Init pointers to have valid code even if not
 	 * everything translated in oscript */
 	DBMSG("Init pointers to ram...");
-	ldata=ram+512;
-	data=ram+513;
-	alog=ram+768;
-	glog=ram+1024;
-	ncol=ram+256;
-	nrow=ram+256;
+	ldata=ram+0x200;
+	data=ram+0x201;
+	alog=ram+0x300;
+	glog=ram+0x400;
+	ncol=ram+0x100;
+	nrow=ram+0x100;
+	array=ram+0x500;
 
 	if(iv!=2) return 1;
 	DBMSG("Load msg into ram...");

@@ -28,7 +28,7 @@ u mul(u a,u b);
 /* datamatrix properties */
 u *data;
 u *ldata;
-u array[256];
+u *array;
 u *nrow;
 u *ncol;
 
