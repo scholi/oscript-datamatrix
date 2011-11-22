@@ -6,10 +6,10 @@ void mapDataMatrix(){
 	int row=4;
 	int col=0;
 	do{
-		if((row==*nrow) && (col==0)) corner1(c++);
-		if((row==*nrow-2) && (col==0) && (*ncol%4)) corner2(c++);
-		if((row==*nrow-2) && (col==0) && (*ncol%8==4)) corner3(c++);
-		if((row==*nrow+4) && (col==2) && (!(*ncol%8))) corner4(c++);
+		if((row==(*nrow)) && (col==0)) corner1(c++);
+		if((row==(*nrow)-2) && (col==0) && (*ncol%4)) corner2(c++);
+		if((row==(*nrow)-2) && (col==0) && (*ncol%8==4)) corner3(c++);
+		if((row==(*nrow)+4) && (col==2) && (!(*ncol%8))) corner4(c++);
 		do{
 			if((row<*nrow) && (col>=0) && (!array[row*(*ncol)+col])) utah(row,col,c++);
 			row -= 2; col += 2;

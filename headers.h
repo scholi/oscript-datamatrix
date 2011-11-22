@@ -27,10 +27,10 @@ u mul(u a,u b);
 
 /* datamatrix properties */
 u *data;
-ui *ldata;
+u *ldata;
 u *array;
-ui *nrow;
-ui *ncol;
+u *nrow;
+u *ncol;
 
 /* oscript vars */
 #define VERBOSE 1

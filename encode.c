@@ -2,6 +2,7 @@
 
 void encodeASCII(u *txt){
   /*  encode txt to data in the ASCII mode (ie.: one char or 2 num per MC) */
+  DBMSG("Message to encode: %s",txt);
   int l=-1;
   for(int i=0;txt[i];i++){
     if(txt[i]>127){
@@ -23,4 +24,5 @@ void encodeASCII(u *txt){
     }
   }
   if(l>=0) data[(*ldata)++]='0'+l+1;
+  DBMSG("Encode finished");
 }

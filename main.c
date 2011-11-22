@@ -7,6 +7,8 @@ main(ui iv,char **V){
 	data=ram+513;
 	alog=ram+768;
 	glog=ram+1024;
+	ncol=ram+256;
+	nrow=ram+256;
 
 	if(iv!=2) return 1;
 	DBMSG("Load msg into ram...");
@@ -17,7 +19,7 @@ main(ui iv,char **V){
 	
 /* Init log,alog in gallois */
 	DBMSG("Init alog/glog table...");
-	Sinit("x300Ex1Px0[Gx2*Dx12d^SDxff>IQZDx400G+Ex300-PE]xffx0rx401Ex0P.");
+	Sinit("x300Ex1Px0[Gx2*Dx12d^SDxff>IQZDx400G+Ex300-PE]xffx0rx400ExffPx0Q");
 	
 	DBMSG("Your input message is: %s",V[1]);
 #ifdef DEBUG
@@ -29,12 +31,13 @@ main(ui iv,char **V){
 	encodeASCII(V[1]);
 
 	/* TotalSize,DataSize,RS Size,#Regions,#blocks */
-	ui* n=getSize(ldata);
-	ncol=nrow=n[0];
-	DBMSG("Data-matrix size: %ix%i",ncol,nrow);
+	ui* n=getSize(*ldata);
+
+	*ncol=*nrow=n[0];
+	DBMSG("Data-matrix size: %ix%i",*ncol,*nrow);
 	DBMSG("Datamatrix regions: %ix%i",n[3],n[3]);
 	DBMSG("Datamatrix capacity: %i",n[1]+n[2]);
-	DBMSG("Data size: %i",(ldata));
+	DBMSG("Data size: %i",(*ldata));
 	DBMSG("Data capacity: %i",(n[1]));
 
 	/* Padd data	*/
@@ -45,17 +48,17 @@ main(ui iv,char **V){
 		/*	Fill the free space with MC 129 */
 		while(*ldata<n[1]) data[(*ldata)++]=129;
 	}
-	DBMSG("Data size after padding: %i",ldata);
+	DBMSG("Data size after padding: %i",*ldata);
 	/* Calculate Read-Solomon code	*/
 	RS(n[2]); 
-	DBMSG("Data size after RS: %i",ldata);
+	DBMSG("Data size after RS: %i",*ldata);
 
 	/* display data */
 #ifdef DEBUG
 	printf("			");
-	f(ldata) printf("%02i|",i);
+	f(*ldata) printf("%02i|",i);
 	printf("\nData: ");
-	f(ldata) printf("%02x|",data[i]);
+	f(*ldata) printf("%02x|",data[i]);
 	printf("\n");
 #endif
 
