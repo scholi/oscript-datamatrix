@@ -28,7 +28,7 @@ u mul(u a,u b);
 /* datamatrix properties */
 u *data;
 u *ldata;
-u *array;
+u array[256];
 u *nrow;
 u *ncol;
 
@@ -62,7 +62,7 @@ void corner4(u);
 void mapDataMatrix();
 void fill();
 void encodeASCII(u*);
-ui* getSize(ui);
+u* getSize(ui);
 void ps();
 void Sinit();
 

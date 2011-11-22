@@ -11,11 +11,17 @@ void mapDataMatrix(){
 		if((row==(*nrow)-2) && (col==0) && (*ncol%8==4)) corner3(c++);
 		if((row==(*nrow)+4) && (col==2) && (!(*ncol%8))) corner4(c++);
 		do{
-			if((row<*nrow) && (col>=0) && (!array[row*(*ncol)+col])) utah(row,col,c++);
+			DBMSG("@1 %i %i %i",row,col, row*(*ncol)+col);
+			if((row<(*nrow)) && (col>=0) && (!array[row*(*ncol)+col])){
+				DBMSG("@@");
+				utah(row,col,c++);
+			}
+			DBMSG("#11");
 			row -= 2; col += 2;
-		}while((row>=0) && (col<*ncol));
+		}while((row>=0) && (col<(*ncol)));
 		row+=1; col += 3;
 		do{
+			DBMSG("@2");
 			if((row>=0) && (col<*ncol) && (!array[row*(*ncol)+col])) utah(row,col,c++);
 			row += 2; col -= 2;
 		}while((row<*nrow) && (col>=0));
