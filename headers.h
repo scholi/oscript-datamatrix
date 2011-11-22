@@ -19,19 +19,37 @@ typedef unsigned char u;
 typedef unsigned int ui;
 
 /* Gallois look-up table */
-u glog[256];
-u alog[256];
+u *glog;
+u *alog;
 
 /* Multiplication in Galois Ring 256 */
 u mul(u a,u b);
 
 /* datamatrix properties */
-u data[174+68];
-ui ldata;
-u array[44*44];
-ui nrow;
-ui ncol;
-ui stas;
+u *data;
+ui *ldata;
+u *array;
+ui *nrow;
+ui *ncol;
+
+/* oscript vars */
+#define VERBOSE 1
+#define STACK 1
+#define MACRO 0
+#define MEM 0
+
+#define SS(x) else if(s[i]==x)
+
+ui sd[1024];
+ui lsd;
+
+u ram[1024000];
+u *ptr;
+u macro[26][1024];
+ui lmacro[26];
+#if MACRO
+ui lmacros;
+#endif
 
 /* functions headers */
 void RS(u);
@@ -46,6 +64,7 @@ void fill();
 void encodeASCII(u*);
 ui* getSize(ui);
 void ps();
+void Sinit();
 
 #ifdef NO_STD_ON_x32
 ui printf(u*);

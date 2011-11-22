@@ -30,10 +30,10 @@ void RS(u nc){
   /* coeff RS polynome */
   ui poly[69];
   PolyRS(nc, poly);
-  f(ldata){
+  f(*ldata){
     k=wd[0]^data[i];
     for(int j=0;j<nc;j++) wd[j]=wd[j+1]^mul(k,poly[nc-j-1]);
   }
-  f(nc) data[ldata++]=wd[i];
+  f(nc) data[(*ldata)++]=wd[i];
 }
 

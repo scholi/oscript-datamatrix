@@ -1,24 +1,4 @@
-#include <stdio.h>
-
-#define VERBOSE 0
-#define STACK 0
-#define MACRO 0
-#define MEM 0
-
-#define SS(x) else if(s[i]==x)
-typedef unsigned int ui;
-typedef unsigned char u;
-
-ui sd[1024];
-ui lsd=0;
-
-u ram[1024000];
-u *ptr=ram;
-u macro[26][1024];
-ui lmacro[26];
-#if MACRO
-ui lmacros=0;
-#endif
+#include "headers.h"
 
 void Sinit(u* s){
 	for(ui i=0;s[i];i++){
