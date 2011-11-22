@@ -81,9 +81,37 @@ a b % -> a%b
 modulo
 .TP
 a b & -> a&b
-AND
+AND (bitwise). Use * for logic
 .TP
 a b | -> a|b
-OR
+OR (bitwise). Use + for logic
 .TP
 a b ^ -> a^b
+XOR (bitwise)
+.TP
+a ~ -> ~a
+NOT (bitwise)
+.TP
+a n { -> a<<n
+left-bitshift
+.TP
+a n } -> a>>n
+right bitshift
+.TP
+a b < -> (a<b)
+test if a<b
+.TP
+a b > -> (a>b)
+test if a>b
+.TP
+a b = -> (a==b)
+test equality
+.TP
+k [...] -> -
+make macro from code in bracket and copy it to register k
+.TP
+k @ -> -
+execute macro from register k
+.TP
+a \. -> a
+Print onto screen value from stack (without poping it)
