@@ -38,3 +38,6 @@ stack: stack.c
 
 mrproper: clean
 	rm -f datamatrix
+
+oscript: oscript.man
+	groff -man -Tascii $< | less

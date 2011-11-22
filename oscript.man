@@ -1,0 +1,89 @@
+.TH oscript documentation "November 22, 2011" "version 0.1" "USER COMMANDS"
+.SH NAME
+oscript \- A minimalistic stack based programming language for geeks
+
+.SH
+Commands by alphabetic order
+.TP
+\- A -> -
+increment ram pointer: ++ptr
+.TP
+\- B -> -
+decrement ram pointer: --ptr
+.TP
+... a2 a1 n C -> ... a2 a1 an ... a2 a1
+Copy n elemnts from the top of the stack
+.TP
+a D -> a a
+Duplicate element from stack
+.TP
+a E -> - ; ptr=E
+Move ram pointer to index designed from stack
+.TP
+a b c d F -> -
+Run macro #d with the stack pushed by values from a till b with an increment c. (=FOR)
+.TP
+- G -> *ptr
+Get value from ram and push it to stack
+.TP
+a b t I -> a/b
+value based if. If test is true (!=0) keep value a, otherwise keep b in stack
+.TP
+m1 m2 t i -> -
+Execute macro m1 if true else m2
+.TP
+- K -> -
+Clear stack
+.TP
+a M -> - ; ptr+=a
+increment ram pointer by value from stack
+.TP
+a N -> - ; ptr-=a
+decrement ram pointer by value from stack
+.TP
+a P -> - ; *ptr=a
+push value in stack into ram
+.TP
+a p -> -
+pop value from stack
+.TP
+a Q -> - ; *(ptr++)=a
+Push value from stack into ram and increment ram pointer
+.TP
+... a[n-1] a2 a1 a0 n k R -> ... a[(j-1)%n]  a0 a[n-1] ... aj
+Roll n elements k times
+.TP
+n k r -> -
+execute macro k n times
+.TP
+a b S -> b s
+swap top two stack elements
+.TP
+x[0-9a-f]+ 
+push the hex value into stack. Ex. x1 push value 1, x12 push value 18, etc.
+.TP
+- Z -> ptr
+Push into stack ram pointer position
+.TP
+a b + -> a+b
+ADD
+.TP
+a b - -> a-b
+SUB
+.TP
+a b * -> a*b
+MUL
+.TP
+a b / -> a/b
+integer divion
+.TP
+a b % -> a%b
+modulo
+.TP
+a b & -> a&b
+AND
+.TP
+a b | -> a|b
+OR
+.TP
+a b ^ -> a^b

@@ -152,10 +152,11 @@ void Sinit(u* s){
 		SS('Z') sd[lsd++]=(ui)(ptr-ram);
 		SS('F'){
 			i++;
-			ui j=sd[lsd-3], b=sd[lsd-2], c=sd[lsd-1];
-			lsd-=3;for(;j<b;j+=c){
+			ui j=sd[lsd-4], b=sd[lsd-3], c=sd[lsd-2], k=sd[lsd-1];
+			lsd-=4;
+			for(;j<b;j+=c){
 				sd[lsd++]=j;
-				Sinit(macro[s[i]-'a']);
+				Sinit(macro[k]);
 			}
 		}
 		else {
