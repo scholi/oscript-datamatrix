@@ -3,12 +3,11 @@
 main(ui iv,char **V){
   if(iv!=2) return 1;
 
-  /* Init log,alog in gallois */
-  // maybe we can still do more with that 301 ...
-  u i=(alog[glog[(1)]=(0)]=(1));
-  while(alog[i] = (u)(alog[i-1]<<1) < alog[i-1] ? (alog[i-1]<<1)^301 : alog[i-1] << 1, alog[glog[(1)]=(0)]=(1), glog[alog[i]] = i++);
-
-  // strlen ;)
+/* Init log,alog in gallois */
+  alog[glog[1]=0]=1;
+  f(255) glog[alog[i+1]=((alog[i]<<1)&0x0100)?(alog[i]<<1)^301:(alog[i]<<1)]=i+1; 
+  glog[1]=0;	
+	
   ui lmsg;
   char* x=V[1];
   for(lmsg=0;*x;++lmsg,++x);
@@ -58,14 +57,17 @@ main(ui iv,char **V){
   DBMSG("Maping: Done");
   /* display Matrix */
 #ifdef DEBUG
-  f(nrow){ for(ui j=0;j<ncol;j++) printf("%03i|",array[ncol*i+j]); printf("\n");}
+  f(nrow){
+	for(ui j=0;j<ncol;j++) printf("%03i|",array[ncol*i+j]);
+	printf("\n");
+  }
 #endif
   ps();
   /* display Matrix */
   f(ncol/2+1) printf("# ");
   printf("\n");
   f(nrow){
-    printf("#");
+  	printf("#");
 #ifdef NO_STD_ON_x32
 #ifndef BIT_FUN
 #error "only implemented for bit fun"
