@@ -185,6 +185,7 @@ void Sinit(u* s){
 
 #ifdef STANDALONE
 int main(_,__){
+	ptr=ram;
 	printf("Calculate first 10 fibonacci numbers (with RAM)\n");
 	Sinit("x1Px1Qx0[GBGA+Q]xax0r");
 	printf("Stack [%i]\n=========\n",lsd);
