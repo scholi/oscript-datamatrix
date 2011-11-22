@@ -142,6 +142,7 @@ void Sinit(u* s){
 		SS('K') lsd=0;
 		SS('G') sd[lsd++]=*ptr;
 		SS('P') *ptr=sd[--lsd];
+		SS('p') --lsd;
 		SS('Q') *(++ptr)=sd[--lsd];
 		SS('A')	ptr++;
 		SS('B') ptr--;
