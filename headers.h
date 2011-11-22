@@ -6,8 +6,6 @@
 #include<stdlib.h>
 #endif
 
-#define BIT_FUN
-
 #define f(m) for(int i=0;i < m ;i++)
 #define MO(ro,co) f(8)module(ro,co,c,7-i)
 
