@@ -1,0 +1,56 @@
+Opcodes :                                    Example
+
+Stack manip
+===========
+'x'     : push a hex value on the stack      ('x12' push 0x12)
+'D'     : duplicate                          ('x5D') 5 => 5,5)
+'C'     : copy                               ('x1x2C' 1,2 => 1,1,1)
+'S'     : swap                               ('x1x2S' 1,2 => 2,1)
+'K'     : clear stack (and macros)
+
+Math/Binary Ops
+===============
+'+-*/%' : add,sub,mul,div,mod                ('x1x2+' 1+2)
+'&|^'   : and,or,xor                         ('x1x2&' 1&2)
+'~'     : binary not                         ('x1~' ~1)
+'{}'    : bitshift left, right               ('x1x2{' 1<<2)
+
+Tests
+=====
+'<>='   : test. pop,pop,push result          ('x1x2<' 1,2 => 1<2)
+
+Conditionals:
+=============
+'I'     : in-place if.                       ('x1x2x0I' 0?1:2)
+'i'     : if and execute macro 0 or 1        ('x1x2x0i' 0?m1:m2)
+
+Looping:
+========
+'r'     : for loop for macros.               ('x5x2r' rep(5) m2)
+
+I/O
+===
+'.'     : print stack top value
+
+Macros
+======
+'['     : start defining macro (preceded     ('x4[.]' def m4)
+'@'     : exec macro n once                  ('x4@')
+'F'     : we have 3 values on the stack      ('x0x2x1Fa' => for() exec m0)
+          (a,b,c) for (j=a;j<b;j+=b)
+          push j on the stack and exec
+          macro given as 'a'-'z' after
+          'F' ('a'-'z'->0-26).
+
+RAM access
+==========
+'G'     : load val at RAM ptr to stack 
+'P'     : store stack val to RAM at ptr
+'Q'     : store stack val to ptr+1 and inc ptr
+'A'     : increment RAM ptr (advance)
+'B'     : decrement RAM ptr (go one back)
+'E'     : absolute index for ptr in RAM      ('x4E' ptr points to RAM[4])
+'M'     : relative advance ptr               ('x2M' ptr+=2)
+'N'     : relative move back ptr             ('x2N' ptr-=2)
+'Z'     : push RAM index ptr points to       ('Z' => stack 12)
+
