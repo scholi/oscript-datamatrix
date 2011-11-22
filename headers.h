@@ -35,8 +35,8 @@ ui *ncol;
 /* oscript vars */
 #define VERBOSE 1
 #define STACK 1
-#define MACRO 0
-#define MEM 0
+#define MACRO 1
+#define MEM 1
 
 #define SS(x) else if(s[i]==x)
 
