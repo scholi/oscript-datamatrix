@@ -139,16 +139,6 @@ void Sinit(u* s){
 #endif
 			Sinit(macro[k]);
 		}
-		SS('!'){
-			ui k=sd[--lsd];
-			ui l=sd[--lsd];
-#if VERBOSE
-				printf("Exec macro %i [%s], %i times\n",k,macro[k],l);
-#endif
-			for(;l>0;l--){
-				Sinit(macro[k]);
-			}
-		}
 		SS('K') lsd=0;
 		SS('G') sd[lsd++]=*ptr;
 		SS('P') *ptr=sd[--lsd];
@@ -156,6 +146,9 @@ void Sinit(u* s){
 		SS('A')	ptr++;
 		SS('B') ptr--;
 		SS('E') ptr=ram+sd[--lsd];
+		SS('M') ptr+=sd[--lsd];
+		SS('N') ptr-=sd[--lsd];
+		SS('Z') sd[lsd++]=(ui)(ptr-ram);
 		SS('F'){
 			i++;
 			ui j=sd[lsd-3], b=sd[lsd-2], c=sd[lsd-1];
@@ -173,7 +166,7 @@ void Sinit(u* s){
 #ifdef STANDALONE
 int main(_,__){
 	printf("Calculate first 10 fibonacci numbers (with RAM)\n");
-	Sinit("x1Px1Qx0[GBGA+Q]xax0!");
+	Sinit("x1Px1Qx0[GBGA+Q]xax0r");
 	printf("Stack [%i]\n=========\n",lsd);
 	for(ui j=0;j<lsd;j++) printf("%i\n",sd[j]);
 	printf("RAM\n===\n");
