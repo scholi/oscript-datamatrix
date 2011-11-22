@@ -17,7 +17,7 @@ main(ui iv,char **V){
 	
 /* Init log,alog in gallois */
 	DBMSG("Init alog/glog table...");
-	Sinit("x300Ex1Px0[Gx2*Dx12d^SDxff>IQZDx400G+Ex300-PE]x0xffrx401Ex0P.");
+	Sinit("x300Ex1Px0[Gx2*Dx12d^SDxff>IQZDx400G+Ex300-PE]xffx0rx401Ex0P.");
 	
 	DBMSG("Your input message is: %s",V[1]);
 #ifdef DEBUG

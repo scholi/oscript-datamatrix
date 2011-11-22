@@ -153,7 +153,7 @@ void Sinit(u* s){
 #if VERBOSE
 			printf("Move value %i into ram @%x\n", sd[lsd-1],ptr-ram);
 #endif
-			*ptr=sd[--lsd];
+			*ptr=(u)(sd[--lsd]&0xff);
 		}
 		SS('p') --lsd;
 		SS('Q') *(++ptr)=sd[--lsd];
