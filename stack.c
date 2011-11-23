@@ -168,7 +168,9 @@ void Sinit(u* s){
 				Sinit(macro[m]);
 			}
 		}
-
+		SS('#') {
+			if(lsd>0) printf("%c\n", sd[lsd-1]);
+		}
 		SS('.') {
 			if(lsd>0) printf("%i\n", sd[lsd-1]);
 #if STACK
