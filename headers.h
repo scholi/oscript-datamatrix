@@ -16,6 +16,7 @@
 typedef unsigned char u;
 typedef unsigned int ui;
 
+u verb;
 /* Gallois look-up table */
 u *glog;
 u *alog;

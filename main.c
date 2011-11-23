@@ -20,6 +20,7 @@ main(ui iv,char **V){
 	
 /* Init log,alog in gallois */
 	DBMSG("Init alog/glog table...");
+	verb=0; // Turn verbose =false
 	Sinit("x300Ex1Px0" // Init alog/glog with start value 0/1
 		"[Gx2*Dx12d^" // x12d = 301, la valeur a xorer si >256
 		"SDxff>I"

@@ -7,7 +7,8 @@ u mul(u a,u b){
   }
   ram[0x110]=a;
   ram[0x111]=b;
-  return alog[(glog[a]+glog[b])%255];
+//  return alog[(glog[a]+glog[b])%255];
+  verb=1;
   Sinit("x110EG" // Push a to the stack
 	"AG" // Push b to the stack
 	"x400+EG" // get glog[b]

@@ -9,20 +9,20 @@ void Sinit(u* s){
 				v+=(s[i]>='a')?s[i]+10-'a':s[i]-'0';
 			}
 #if VERBOSE
- 				fprintf(stderr,"Push value %i into stack\n", v);
+ 				if(verb) fprintf(stderr,"Push value %i into stack\n", v);
 #endif
 			sd[lsd++]=v;
 			i--;
 		}
 		SS('+'){
 #if VERBOSE
- 			fprintf(stderr,"ADD\n");
+ 			if(verb) fprintf(stderr,"ADD\n");
 #endif
 			sd[lsd-2]+=sd[--lsd];
 		}
 		SS('-'){
 #if VERBOSE
- 			fprintf(stderr,"SUB\n");
+ 			if(verb) fprintf(stderr,"SUB\n");
 #endif
 			sd[lsd-2]-=sd[--lsd];
 		}
@@ -39,7 +39,7 @@ void Sinit(u* s){
 			if(tm) k++;
 			tm=!tm;
 #if VERBOSE
-			fprintf(stderr,"Create temp macro (%x)\n",k);
+			if(verb) fprintf(stderr,"Create temp macro (%x)\n",k);
 #endif
 			for(++i;s[i]!=')';i++) macro[k][lmacro[k]++]=s[i];
 			macro[k][lmacro[k]]=0;
@@ -69,7 +69,7 @@ void Sinit(u* s){
 		}
 		SS('D'){
 #if VERBOSE
-			fprintf(stderr,"DUP (%i)\n",sd[lsd-1]);
+			if(verb) fprintf(stderr,"DUP (%i)\n",sd[lsd-1]);
 #endif
 			sd[lsd++]=sd[lsd-1];
 		}
@@ -89,12 +89,12 @@ void Sinit(u* s){
 			ui t = sd[--lsd];
 			if (t) {
 #if VERBOSE
- 				fprintf(stderr,"Execute macro %d [%s]\n", o1, macro[o1]);
+ 				if(verb) fprintf(stderr,"Execute macro %d [%s]\n", o1, macro[o1]);
 #endif
 				Sinit(macro[o1]);
 			} else {
 #if VERBOSE
-				fprintf(stderr,"Execute macro %d [%s]\n", o2, macro[o2]);
+				if(verb) fprintf(stderr,"Execute macro %d [%s]\n", o2, macro[o2]);
 #endif
 				Sinit(macro[o2]);
 			}
@@ -104,37 +104,37 @@ void Sinit(u* s){
 			ui m = sd[--lsd];
 			ui count = sd[--lsd];
 #if VERBOSE
-			fprintf(stderr,"Execute macro %d [%s], %d times\n", m, macro[m],count);
+			if(verb) fprintf(stderr,"Execute macro %d [%s], %d times\n", m, macro[m],count);
 #endif
 
 			for (;count>0;count--) {
 #if VERBOSE
-				fprintf(stderr,"Execute macro %d [%s]\n", m, macro[m]);
+				if(verb) fprintf(stderr,"Execute macro %d [%s]\n", m, macro[m]);
 #endif
 				Sinit(macro[m]);
 			}
 		}
 
 		SS('.') {
-			if(lsd>0) fprintf(stderr,"%d\n", sd[lsd-1]);
+			if(lsd>0) if(verb) fprintf(stderr,"%d\n", sd[lsd-1]);
 #if STACK
-			fprintf(stderr,"stack (%d): ",lsd);
-			for(ui j=0;j<lsd;j++) fprintf(stderr,"%i ",sd[j]);
-			fprintf(stderr,"\n");
+			if(verb) fprintf(stderr,"stack (%d): ",lsd);
+			for(ui j=0;j<lsd;j++) if(verb) fprintf(stderr,"%i ",sd[j]);
+			if(verb) fprintf(stderr,"\n");
 #endif
 #if MACRO
-			fprintf(stderr,"macro (%d): ",lmacros);
-			for(ui j=0;j<lmacros;j++) fprintf(stderr,"%i: [%s]\n",j,macro[j]);
-			fprintf(stderr,"\n");
+			if(verb) fprintf(stderr,"macro (%d): ",lmacros);
+			for(ui j=0;j<lmacros;j++) if(verb) fprintf(stderr,"%i: [%s]\n",j,macro[j]);
+			if(verb) fprintf(stderr,"\n");
 #endif
 #if MEM
-			fprintf(stderr,"mem:\n");
+			if(verb) fprintf(stderr,"mem:\n");
 			for(ui j=0;j<7;j++){
 				f(16){
-					for(ui k=0;k<16;k++) fprintf(stderr,"%02x ",ram[j*256+i*16+k]);
-					fprintf(stderr,"\n");
+					for(ui k=0;k<16;k++) if(verb) fprintf(stderr,"%02x ",ram[j*256+i*16+k]);
+					if(verb) fprintf(stderr,"\n");
 				}
-				fprintf(stderr,"\n\n");
+				if(verb) fprintf(stderr,"\n\n");
 			}
 #endif
 		}
@@ -143,7 +143,7 @@ void Sinit(u* s){
 			for(++i;s[i]!=']';i++) macro[k][lmacro[k]++]=s[i];
 			macro[k][lmacro[k]]=0;
 #if VERBOSE
-			fprintf(stderr,"Copy macro [%s] into reg %i\n",macro[k],k);
+			if(verb) fprintf(stderr,"Copy macro [%s] into reg %i\n",macro[k],k);
 #endif
 #if MACRO
 			if(k+1>lmacros) lmacros=k+1;
@@ -152,20 +152,20 @@ void Sinit(u* s){
 		SS('@'){
 			ui k=sd[--lsd];
 #if VERBOSE
-	 			fprintf(stderr,"Exec macro %d [%s]\n",k,macro[k]);
+	 			if(verb) fprintf(stderr,"Exec macro %d [%s]\n",k,macro[k]);
 #endif
 			Sinit(macro[k]);
 		}
 		SS('K') lsd=0;
 		SS('G'){
 #if VERBOSE
-			fprintf(stderr,"Get value %i from ram @%x\n", *ptr,ptr-ram);
+			if(verb) fprintf(stderr,"Get value %i from ram @%x\n", *ptr,ptr-ram);
 #endif
 			sd[lsd++]=*ptr;
 		}
 		SS('P'){
 #if VERBOSE
-			fprintf(stderr,"Move value %i into ram @%x\n", sd[lsd-1],ptr-ram);
+			if(verb) fprintf(stderr,"Move value %i into ram @%x\n", sd[lsd-1],ptr-ram);
 #endif
 			*ptr=(u)(sd[--lsd]&0xff);
 		}
@@ -175,7 +175,7 @@ void Sinit(u* s){
 		SS('B') ptr--;
 		SS('E'){
 #if VERBOSE
-			fprintf(stderr,"Move ram pointer @%x\n",sd[lsd-1]);
+			if(verb) fprintf(stderr,"Move ram pointer @%x\n",sd[lsd-1]);
 #endif			
 			ptr=ram+sd[--lsd];
 		}
@@ -192,7 +192,7 @@ void Sinit(u* s){
 			}
 		}
 		else {
-			fprintf(stderr,"WARNING: %c unknown\n", s[i]);
+			if(verb) fprintf(stderr,"WARNING: %c unknown\n", s[i]);
 		}
 	}
 }
