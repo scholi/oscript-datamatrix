@@ -1,7 +1,9 @@
 #include "headers.h"
 
 void Sinit(u* s){
+	fprintf(stderr,"\e[36mRUN\e[0m oscript: %s\n",s);
 	for(ui i=0;s[i];i++){
+		fprintf(stderr,"\e[37mPARSE\e[0m byte %c\n",s[i]);
 		if(s[i]=='x'){
 			ui v=0;
 			for(++i;(s[i]>='0'&&s[i]<='9')||(s[i]>='a'&&s[i]<='f');i++){
@@ -9,7 +11,7 @@ void Sinit(u* s){
 				v+=(s[i]>='a')?s[i]+10-'a':s[i]-'0';
 			}
 #if VERBOSE
- 				if(verb) fprintf(stderr,"\e[32mPush\e[0m value %i into stack\n", v);
+ 				if(verb) fprintf(stderr,"\e[32mPush\e[0m value %i (0x%x) into stack\n", v, v);
 #endif
 			sd[lsd++]=v;
 			i--;
@@ -52,6 +54,9 @@ void Sinit(u* s){
 		}
 		SS('}') sd[lsd-2]>>=sd[--lsd];
 		SS('S'){
+#if VERBOSE
+			if(verb) fprintf(stderr,"\e[35mSWAP: %i ↔ %i \n",sd[lsd-2],sd[lsd-1]);
+#endif
 			ui x=sd[lsd-2];
 			sd[lsd-2]=sd[lsd-1];
 			sd[lsd-1]=x;
@@ -177,13 +182,13 @@ void Sinit(u* s){
 		SS('p') --lsd;
 		SS('Q') *(++ptr)=sd[--lsd];
 		SS('A'){
-#if verbose
+#if VERBOSE
 			if(verb) fprintf(stderr,"\e[34mPTR++\e[0m: new pos: %x\n",ptr+1-ram);
 #endif
-			ptr++;
+			++ptr;
 		}
 		SS('B'){
-#if verbose
+#if VERBOSE
 			if(verb) fprintf(stderr,"\e[34mPTR--\e[0m: new pos: %x\n",ptr-1-ram);
 #endif
 			ptr--;
