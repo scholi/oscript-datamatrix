@@ -7,7 +7,7 @@ void utah(int row,int col,u c){
 	ram[0x110] = c;
 	ram[0x111] = col&0xff;
 	ram[0x112] = row&0xff;
-  Sinit("x110EGAGAGA."); // push c,col,row on stack
+  Sinit("x110EGAGAGA"); // push c,col,row on stack
 
 	for (int i=0;i<8;++i) {
 		
@@ -49,4 +49,7 @@ void utah(int row,int col,u c){
 		char arg3 = ram[0x115];
 		module(arg1,arg2,arg3,7-i);
 	}
+
+  // cleanup c,col,row on stack
+  Sinit("ppp");
 }
