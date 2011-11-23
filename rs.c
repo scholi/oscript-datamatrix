@@ -1,14 +1,20 @@
 #include "headers.h"
 
 u mul(u a,u b){
-  if(!(a|b)) return 0;
-  /* TODO: check if %255 on an unsigned char work really as expected
-  en effet l'addition se fait automatiquement mod 256 
-  donc (120+250)%255=(370%256)%255=114%255=114
-  alors que l'on aimerait 370%255=115
-  ???
-  */
+  if(!(a|b)){
+	ram[0x120]=0;
+	return 0;
+  }
+  ram[0x110]=a;
+  ram[0x111]=b;
   return alog[(glog[a]+glog[b])%255];
+  Sinit("x110EG" // Push a to the stack
+	"AG" // Push b to the stack
+	"x400+EG" // get glog[b]
+	"Sx400+EG" // get glog[a]
+	"+xff%x" // mod 255
+	"300+G"); // get alog[(glog[a]+glog[b])%255)]
+  return sd[--lsd];
 }
 
 ui* PolyRS(u n, ui* poly){

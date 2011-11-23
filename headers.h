@@ -1,6 +1,9 @@
 #ifndef H_HEADERS
 #define H_HEADERS
 
+
+#include <stdio.h>
+
 #define f(m) for(int i=0;i < m ;i++)
 #define MO(ro,co) f(8)module(ro,co,c,7-i)
 

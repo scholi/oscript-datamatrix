@@ -9,20 +9,20 @@ void Sinit(u* s){
 				v+=(s[i]>='a')?s[i]+10-'a':s[i]-'0';
 			}
 #if VERBOSE
- 				printf("Push value %i into stack\n", v);
+ 				fprintf(stderr,"Push value %i into stack\n", v);
 #endif
 			sd[lsd++]=v;
 			i--;
 		}
 		SS('+'){
 #if VERBOSE
- 			printf("ADD\n");
+ 			fprintf(stderr,"ADD\n");
 #endif
 			sd[lsd-2]+=sd[--lsd];
 		}
 		SS('-'){
 #if VERBOSE
- 			printf("SUB\n");
+ 			fprintf(stderr,"SUB\n");
 #endif
 			sd[lsd-2]-=sd[--lsd];
 		}
@@ -39,7 +39,7 @@ void Sinit(u* s){
 			if(tm) k++;
 			tm=!tm;
 #if VERBOSE
-			printf("Create temp macro (%x)\n",k);
+			fprintf(stderr,"Create temp macro (%x)\n",k);
 #endif
 			for(++i;s[i]!=')';i++) macro[k][lmacro[k]++]=s[i];
 			macro[k][lmacro[k]]=0;
@@ -69,7 +69,7 @@ void Sinit(u* s){
 		}
 		SS('D'){
 #if VERBOSE
-			printf("DUP (%i)\n",sd[lsd-1]);
+			fprintf(stderr,"DUP (%i)\n",sd[lsd-1]);
 #endif
 			sd[lsd++]=sd[lsd-1];
 		}
@@ -89,12 +89,12 @@ void Sinit(u* s){
 			ui t = sd[--lsd];
 			if (t) {
 #if VERBOSE
- 				printf("Execute macro %d [%s]\n", o1, macro[o1]);
+ 				fprintf(stderr,"Execute macro %d [%s]\n", o1, macro[o1]);
 #endif
 				Sinit(macro[o1]);
 			} else {
 #if VERBOSE
-				printf("Execute macro %d [%s]\n", o2, macro[o2]);
+				fprintf(stderr,"Execute macro %d [%s]\n", o2, macro[o2]);
 #endif
 				Sinit(macro[o2]);
 			}
@@ -104,37 +104,37 @@ void Sinit(u* s){
 			ui m = sd[--lsd];
 			ui count = sd[--lsd];
 #if VERBOSE
-			printf("Execute macro %d [%s], %d times\n", m, macro[m],count);
+			fprintf(stderr,"Execute macro %d [%s], %d times\n", m, macro[m],count);
 #endif
 
 			for (;count>0;count--) {
 #if VERBOSE
-				printf("Execute macro %d [%s]\n", m, macro[m]);
+				fprintf(stderr,"Execute macro %d [%s]\n", m, macro[m]);
 #endif
 				Sinit(macro[m]);
 			}
 		}
 
 		SS('.') {
-			if(lsd>0) printf("%d\n", sd[lsd-1]);
+			if(lsd>0) fprintf(stderr,"%d\n", sd[lsd-1]);
 #if STACK
-			printf("stack (%d): ",lsd);
-			for(ui j=0;j<lsd;j++) printf("%i ",sd[j]);
-			printf("\n");
+			fprintf(stderr,"stack (%d): ",lsd);
+			for(ui j=0;j<lsd;j++) fprintf(stderr,"%i ",sd[j]);
+			fprintf(stderr,"\n");
 #endif
 #if MACRO
-			printf("macro (%d): ",lmacros);
-			for(ui j=0;j<lmacros;j++) printf("%i: [%s]\n",j,macro[j]);
-			printf("\n");
+			fprintf(stderr,stderr,"macro (%d): ",lmacros);
+			for(ui j=0;j<lmacros;j++) fprintf(stderr,"%i: [%s]\n",j,macro[j]);
+			fprintf(stderr,"\n");
 #endif
 #if MEM
-			printf("mem:\n");
+			fprintf(stderr,"mem:\n");
 			for(ui j=0;j<7;j++){
 				f(16){
-					for(ui k=0;k<16;k++) printf("%02x ",ram[j*256+i*16+k]);
-					printf("\n");
+					for(ui k=0;k<16;k++) fprintf(stderr,"%02x ",ram[j*256+i*16+k]);
+					fprintf(stderr,"\n");
 				}
-				printf("\n\n");
+				fprintf(stderr,"\n\n");
 			}
 #endif
 		}
@@ -143,7 +143,7 @@ void Sinit(u* s){
 			for(++i;s[i]!=']';i++) macro[k][lmacro[k]++]=s[i];
 			macro[k][lmacro[k]]=0;
 #if VERBOSE
-			printf("Copy macro [%s] into reg %i\n",macro[k],k);
+			fprintf(stderr,"Copy macro [%s] into reg %i\n",macro[k],k);
 #endif
 #if MACRO
 			if(k+1>lmacros) lmacros=k+1;
@@ -152,20 +152,20 @@ void Sinit(u* s){
 		SS('@'){
 			ui k=sd[--lsd];
 #if VERBOSE
-	 			printf("Exec macro %d [%s]\n",k,macro[k]);
+	 			fprintf(stderr,"Exec macro %d [%s]\n",k,macro[k]);
 #endif
 			Sinit(macro[k]);
 		}
 		SS('K') lsd=0;
 		SS('G'){
 #if VERBOSE
-			printf("Get value %i from ram @%x\n", *ptr,ptr-ram);
+			fprintf(stderr,"Get value %i from ram @%x\n", *ptr,ptr-ram);
 #endif
 			sd[lsd++]=*ptr;
 		}
 		SS('P'){
 #if VERBOSE
-			printf("Move value %i into ram @%x\n", sd[lsd-1],ptr-ram);
+			fprintf(stderr,"Move value %i into ram @%x\n", sd[lsd-1],ptr-ram);
 #endif
 			*ptr=(u)(sd[--lsd]&0xff);
 		}
@@ -175,7 +175,7 @@ void Sinit(u* s){
 		SS('B') ptr--;
 		SS('E'){
 #if VERBOSE
-			printf("Move ram pointer @%x\n",sd[lsd-1]);
+			fprintf(stderr,"Move ram pointer @%x\n",sd[lsd-1]);
 #endif			
 			ptr=ram+sd[--lsd];
 		}
@@ -192,7 +192,7 @@ void Sinit(u* s){
 			}
 		}
 		else {
-			printf("WARNING: %c unknown\n", s[i]);
+			fprintf(stderr,"WARNING: %c unknown\n", s[i]);
 		}
 	}
 }
@@ -201,14 +201,7 @@ void Sinit(u* s){
 int main(_,__){
 	ptr=ram;
 	printf("Calculate first 10 fibonacci numbers (with RAM)\n");
-	Sinit("x1Px1Qxa(GBGA+Q)r");
-	printf("Stack [%i]\n=========\n",lsd);
-	for(ui j=0;j<lsd;j++) printf("%i\n",sd[j]);
-	printf("RAM\n===\n");
-	for(ui k=0;k<10;k++){
-		for(ui j=0;j<20;j++) printf("%i ",ram[10*k+j]);
-		printf("\n");
-	}
+	Sinit("x1Px1Qxa(GBGA+Q)r.");
 	return 0;
 }
 #endif

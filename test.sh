@@ -8,7 +8,7 @@ function datamatrix_test {
   dmsize="$3"
 
   python datamatrix.py "$msg" | tail -n $dmsize >tmp.out 
-  if [ "$(./datamatrix "$msg" | tail -n $dmsize | diff tmp.out -)" ]; then
+  if [ "$(./datamatrix "$msg" 2>/dev/null | tail -n $dmsize | diff tmp.out -)" ]; then
     echo "$testname Test Failed!"
     OK=0
   fi

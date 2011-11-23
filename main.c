@@ -26,6 +26,7 @@ main(ui iv,char **V){
 		"QZDx400G+E" // goto glog position
 		"x300-" // calculate i (of alog[i])
 		"PE]xffx0rx400ExffPx0Q"); // run macro 255 times and put spcial value 0 and ff in glog
+	Sinit("."); // Dump
 	
 	encodeASCII(V[1]);
 
