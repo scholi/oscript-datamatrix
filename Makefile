@@ -1,6 +1,5 @@
 GCC=gcc
 DEBUG=yes
-NOSTD=no
 
 repo=ioccc
 
@@ -12,9 +11,6 @@ ifeq ($(DEBUG),yes)
 	CFLAGS=-g -ansi -std=c99 -std=gnu99 -D DEBUG -Wall
 else
 	CFLAGS=-ansi -std=c99 -std=gnu99 -Wall
-  ifeq ($(NOSTD),yes)
-	  CFLAGS+=-fno-builtin -nodefaultlibs -D NO_STD_ON_x32
-  endif
 endif
 
 all: datamatrix

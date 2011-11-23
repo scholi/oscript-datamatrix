@@ -1,11 +1,6 @@
 #ifndef H_HEADERS
 #define H_HEADERS
 
-#ifndef NO_STD_ON_x32
-#include <stdio.h>
-#include<stdlib.h>
-#endif
-
 #define f(m) for(int i=0;i < m ;i++)
 #define MO(ro,co) f(8)module(ro,co,c,7-i)
 
@@ -65,10 +60,5 @@ void encodeASCII(u*);
 u* getSize(ui);
 void ps();
 void Sinit();
-
-#ifdef NO_STD_ON_x32
-ui printf(u*);
-ui printfl(u*,ui);
-#endif
 
 #endif
