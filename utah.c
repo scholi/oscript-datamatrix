@@ -1,9 +1,6 @@
 #include "headers.h"
 
 void utah(int row,int col,u c){
-  
-	verb=0;
-
 	ram[0x110] = c;
 	ram[0x111] = col&0xff;
 	ram[0x112] = row&0xff;

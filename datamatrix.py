@@ -2,7 +2,7 @@
 # *-* encoding: utf-8 *-*
 
 import math
-import Image
+#import Image
 
 # Convention: datamatrix refer to the visual object you see, data-matrix refer to the matrix contaning the data, without the alignement lines (lower+left filled line & upper+right dashed line)
 
@@ -313,21 +313,22 @@ class DataMatrix:
 			self.display+=[1]*(self.ncol+2*self.dataRegion[1])
 	def showDMAscii(self):
 		for i in xrange(self.ncol+2*self.dataRegion[1]):
-			ch = [" ", "█"]
+			ch = [" ", "#"]
 			xx = i*(self.nrow+2*self.dataRegion[0])
 			yy = self.nrow+2*self.dataRegion[0]
 			print "".join(map(lambda x: ch[x], self.display[xx:xx+yy]))
 
 	def showDM(self):
-		# create an image from self.display
-		im=Image.new("1",(self.ncol+2*self.dataRegion[1],self.nrow+2*self.dataRegion[0]))
+		pass
+# create an image from self.display
+		#im=Image.new("1",(self.ncol+2*self.dataRegion[1],self.nrow+2*self.dataRegion[0]))
 		# remember, in self.display, 1="binary 1", so it means black which is color 0 ⇒ the data are inverted
-		im.putdata([1-z for z in self.display])
+		#im.putdata([1-z for z in self.display])
 		# zoom factor to display larger datamatrix
-		z=8
-		im=im.resize((z*(self.ncol+2*self.dataRegion[1]),z*(self.nrow+2*self.dataRegion[0])))
-		im.save("datamatrix.png","PNG")
-		del im
+		#z=8
+		#im=im.resize((z*(self.ncol+2*self.dataRegion[1]),z*(self.nrow+2*self.dataRegion[0])))
+		#im.save("datamatrix.png","PNG")
+		#del im
 	def process(self):
 		# This create the entire datamatrix out of self.data
 		# As the function encode(self) is not yet ready, you have to use

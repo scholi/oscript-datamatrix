@@ -17,10 +17,14 @@ main(ui iv,char **V){
 	while(*x) *(++ptr)=*(x++);
 	ram[0]=ptr-ram;
 	
+	/* init macros */
+	verb=0; // Turn verbose =false
+	DBMSG("Init macros...");
+	macro_init();
+	
 	
 /* Init log,alog in gallois */
 	DBMSG("Init alog/glog table...");
-	verb=0; // Turn verbose =false
 	Sinit("x300Ex1Px0" // Init alog/glog with start value 0/1
 		"[Gx2*Dx12d^" // x12d = 301, la valeur a xorer si >256
 		"SDxff>I"
@@ -57,17 +61,17 @@ main(ui iv,char **V){
 	printf("\n");
 	f(*nrow){
 		if(i%(*nrow/n[3])==0) {
-			for(ui k=0;k<(*ncol/2)+n[3];k++) printf("█ ");
+			for(ui k=0;k<(*ncol/2)+n[3];k++) printf("# ");
 			printf("\n");
 		}
 		for(ui j=0;j<*ncol;j++){
-			if(j%(*ncol/n[3])==0) printf("█");
-			printf(array[*ncol*i+j]==2?"█":" ");
-			if((j+1)%(*ncol/n[3])==0) printf((i%2)?" ":"█");
+			if(j%(*ncol/n[3])==0) printf("#");
+			printf(array[*ncol*i+j]==2?"#":" ");
+			if((j+1)%(*ncol/n[3])==0) printf((i%2)?" ":"#");
 		}
 		printf("\n");
 		if((i+1)%(*nrow/n[3])==0){
-			for(ui k=0;k<*ncol+2*n[3];k++) printf("█");
+			for(ui k=0;k<*ncol+2*n[3];k++) printf("#");
 			printf("\n");
 		}
 	}
