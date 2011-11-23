@@ -34,6 +34,17 @@ void Sinit(u* s){
 		SS('^') sd[lsd-2]^=sd[--lsd];
 		SS('~') sd[lsd-1]=~sd[lsd-1];
 		SS('{') sd[lsd-2]<<=sd[--lsd];
+		SS('('){
+			u k=0xfe;
+			if(tm) k++;
+			tm=!tm;
+#if VERBOSE
+			printf("Create temp macro (%x)\n",k);
+#endif
+			for(++i;s[i]!=')';i++) macro[k][lmacro[k]++]=s[i];
+			macro[k][lmacro[k]]=0;
+			sd[lsd++]=k;
+		}
 		SS('}') sd[lsd-2]>>=sd[--lsd];
 		SS('S'){
 			ui x=sd[lsd-2];
@@ -187,7 +198,7 @@ void Sinit(u* s){
 int main(_,__){
 	ptr=ram;
 	printf("Calculate first 10 fibonacci numbers (with RAM)\n");
-	Sinit("x1Px1Qx0[GBGA+Q]xax0r");
+	Sinit("x1Px1Qxa(GBGA+Q)r");
 	printf("Stack [%i]\n=========\n",lsd);
 	for(ui j=0;j<lsd;j++) printf("%i\n",sd[j]);
 	printf("RAM\n===\n");

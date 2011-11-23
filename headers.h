@@ -40,8 +40,9 @@ ui lsd;
 
 u ram[1024000];
 u *ptr;
-u macro[26][1024];
-ui lmacro[26];
+u macro[256][1024];
+ui lmacro[256];
+u tm;
 #if MACRO
 ui lmacros;
 #endif
