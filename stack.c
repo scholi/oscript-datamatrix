@@ -123,7 +123,7 @@ void Sinit(u* s){
 			fprintf(stderr,"\n");
 #endif
 #if MACRO
-			fprintf(stderr,stderr,"macro (%d): ",lmacros);
+			fprintf(stderr,"macro (%d): ",lmacros);
 			for(ui j=0;j<lmacros;j++) fprintf(stderr,"%i: [%s]\n",j,macro[j]);
 			fprintf(stderr,"\n");
 #endif
