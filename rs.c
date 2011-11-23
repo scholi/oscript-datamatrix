@@ -4,7 +4,7 @@ u mul(u a,u b){
   ram[0x110]=a;
   ram[0x111]=b;
 //  return alog[(glog[a]+glog[b])%255];
-  verb=1;
+  verb=0;
   Sinit("x110EG" // Push a to the stack
 	"AG" // Push b to the stack
 	"x2C*x0=x1S-x3x2R" // test if a or b == 0 (if yes, keep 0 at the bottom of stack, otherwiose keep 1)

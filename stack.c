@@ -226,7 +226,12 @@ void Sinit(u* s){
 			*ptr=(u)(sd[--lsd]&0xff);
 		}
 		SS('p') --lsd;
-		SS('Q') *(++ptr)=sd[--lsd];
+		SS('Q') {
+			*(++ptr)=sd[--lsd];
+#if VERBOSE
+			if(verb) fprintf(stderr,"\e[34mQ\e[0m: inc ptr to %x and put value %i\n",ptr-ram,sd[lsd]);
+#endif
+		}
 		SS('A'){
 #if VERBOSE
 			if(verb) fprintf(stderr,"\e[34mPTR++\e[0m: new pos: %x\n",ptr+1-ram);
