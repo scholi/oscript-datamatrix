@@ -9,26 +9,31 @@ void Sinit(u* s){
 				v+=(s[i]>='a')?s[i]+10-'a':s[i]-'0';
 			}
 #if VERBOSE
- 				if(verb) fprintf(stderr,"Push value %i into stack\n", v);
+ 				if(verb) fprintf(stderr,"\e[32mPush\e[0m value %i into stack\n", v);
 #endif
 			sd[lsd++]=v;
 			i--;
 		}
 		SS('+'){
 #if VERBOSE
- 			if(verb) fprintf(stderr,"ADD\n");
+ 			if(verb) fprintf(stderr,"\e[31mADD\e[0m: %i + %i => %i\n",sd[lsd-2],sd[lsd-1],sd[lsd-2]+sd[lsd-1]);
 #endif
 			sd[lsd-2]+=sd[--lsd];
 		}
 		SS('-'){
 #if VERBOSE
- 			if(verb) fprintf(stderr,"SUB\n");
+ 			if(verb) fprintf(stderr,"\e[31mSUB\e[0m\n");
 #endif
 			sd[lsd-2]-=sd[--lsd];
 		}
 		SS('*') sd[lsd-2]*=sd[--lsd];
 		SS('/') sd[lsd-2]/=sd[--lsd];
-		SS('%') sd[lsd-2]%=sd[--lsd];
+		SS('%'){
+#if VERBOSE
+ 			if(verb) fprintf(stderr,"\e[31mMOD\e[0m: %i mod %i => %i\n",sd[lsd-2],sd[lsd-1],sd[lsd-2]%sd[lsd-1]);
+#endif
+			sd[lsd-2]%=sd[--lsd];
+		}
 		SS('&') sd[lsd-2]&=sd[--lsd];
 		SS('|') sd[lsd-2]|=sd[--lsd];
 		SS('^') sd[lsd-2]^=sd[--lsd];
@@ -159,23 +164,33 @@ void Sinit(u* s){
 		SS('K') lsd=0;
 		SS('G'){
 #if VERBOSE
-			if(verb) fprintf(stderr,"Get value %i from ram @%x\n", *ptr,ptr-ram);
+			if(verb) fprintf(stderr,"\e[33mGET\e[0m value %i from ram @%x\n", *ptr,ptr-ram);
 #endif
 			sd[lsd++]=*ptr;
 		}
 		SS('P'){
 #if VERBOSE
-			if(verb) fprintf(stderr,"Move value %i into ram @%x\n", sd[lsd-1],ptr-ram);
+			if(verb) fprintf(stderr,"\e[33mPUT\e[0m value %i into ram @%x\n", sd[lsd-1],ptr-ram);
 #endif
 			*ptr=(u)(sd[--lsd]&0xff);
 		}
 		SS('p') --lsd;
 		SS('Q') *(++ptr)=sd[--lsd];
-		SS('A')	ptr++;
-		SS('B') ptr--;
+		SS('A'){
+#if verbose
+			if(verb) fprintf(stderr,"\e[34mPTR++\e[0m: new pos: %x\n",ptr+1-ram);
+#endif
+			ptr++;
+		}
+		SS('B'){
+#if verbose
+			if(verb) fprintf(stderr,"\e[34mPTR--\e[0m: new pos: %x\n",ptr-1-ram);
+#endif
+			ptr--;
+		}
 		SS('E'){
 #if VERBOSE
-			if(verb) fprintf(stderr,"Move ram pointer @%x\n",sd[lsd-1]);
+			if(verb) fprintf(stderr,"\e[34mMOVE\e[0m ram pointer @%x\n",sd[lsd-1]);
 #endif			
 			ptr=ram+sd[--lsd];
 		}
