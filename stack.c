@@ -109,7 +109,7 @@ void Sinit(u* s){
 		}
 		SS('='){
 #if VERBOSE
-			fprintf(stderr,"\e[31m==\e[0m %i == %i => %i\n",sd[lsd-1],sd[lsd-2],sd[lsd-1]==sd[lsd-2]);
+			if (verb) fprintf(stderr,"\e[31m==\e[0m %i == %i => %i\n",sd[lsd-1],sd[lsd-2],sd[lsd-1]==sd[lsd-2]);
 #endif
 			if(sd[lsd-2]==sd[--lsd]) sd[lsd-1]=1;
 			else sd[lsd-1]=0;
