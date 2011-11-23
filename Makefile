@@ -8,7 +8,7 @@ SOURCES=$(wildcard *.c)
 OBJS=$(SOURCES:.c=.o)
 
 ifeq ($(DEBUG),yes)
-	CFLAGS=-g -ansi -std=c99 -std=gnu99 -D DEBUG -Wall
+	CFLAGS=-g -ansi -std=c99 -std=gnu99 -D DEBUG -Wall -D VERBOSE -D MACRO -D RAM -D STACK
 else
 	CFLAGS=-ansi -std=c99 -std=gnu99 -Wall
 endif

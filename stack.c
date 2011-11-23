@@ -1,9 +1,12 @@
 #include "headers.h"
-
 void Sinit(u* s){
-	fprintf(stderr,"\e[36mRUN\e[0m oscript: %s\n",s);
+#if VERBOSE
+	if(verb) fprintf(stderr,"\e[36mRUN\e[0m oscript: %s\n",s);
+#endif
 	for(ui i=0;s[i];i++){
-		fprintf(stderr,"\e[37mPARSE\e[0m byte %c\n",s[i]);
+#if VERBOSE
+		if(verb) fprintf(stderr,"\e[37mPARSE\e[0m byte %c\n",s[i]);
+#endif
 		if(s[i]=='x'){
 			ui v=0;
 			for(++i;(s[i]>='0'&&s[i]<='9')||(s[i]>='a'&&s[i]<='f');i++){
@@ -167,7 +170,7 @@ void Sinit(u* s){
 		}
 
 		SS('.') {
-			if(lsd>0) if(verb) fprintf(stderr,"%d\n", sd[lsd-1]);
+			if(lsd>0) printf("%i\n", sd[lsd-1]);
 #if STACK
 			if(verb) fprintf(stderr,"stack (%d): ",lsd);
 			for(ui j=0;j<lsd;j++) if(verb) fprintf(stderr,"%i ",sd[j]);
@@ -281,10 +284,11 @@ void Sinit(u* s){
 }
 
 #ifdef STANDALONE
-int main(_,__){
+int main(int I_,char** V){
 	ptr=ram;
-	printf("Calculate first 10 fibonacci numbers (with RAM)\n");
-	Sinit("x1Px1Qxa(GBGA+Q)r.");
+/*	printf("Calculate first 10 fibonacci numbers (with RAM)\n");
+	Sinit("x1Px1Qxa(GBGA+Q)r.");*/
+	Sinit(V[1]);
 	return 0;
 }
 #endif

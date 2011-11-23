@@ -16,8 +16,17 @@ u mul(u a,u b){
 }
 
 ui* PolyRS(u n, ui* poly){
-  poly[0]=1;
-  f(n){  
+/*   ram[0x110]=n;
+  poly=ram+0x120; // poly point to ram reserverd for output of functions
+  Sinit("x120Ex1P" // poly[0]=1
+	"x0xaDNGMx1" // vals for the loop (from 0 -> n)
+	"(" // start macro
+	"GQ" // poly[i+1]=poly[i]
+	""
+	")F" // loop macro
+*/
+poly[0]=1;
+f(n){  
     poly[i+1]=poly[i];
     for(int j=i;j>=1;j--)
       poly[j]=poly[j-1]^(mul(poly[j],alog[i+1]));
