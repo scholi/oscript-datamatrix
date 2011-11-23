@@ -169,7 +169,7 @@ void Sinit(u* s){
 			}
 		}
 		SS('#') {
-			if(lsd>0) printf("%c\n", sd[lsd-1]);
+			if(lsd>0) printf("%c", sd[lsd-1]);
 		}
 		SS('.') {
 			if(lsd>0) printf("%i\n", sd[lsd-1]);
