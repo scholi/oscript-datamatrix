@@ -14,7 +14,7 @@ u mul(u a,u b){
 	"x400+EG" // get glog[b]
 	"Sx400+EG" // get glog[a]
 	"+xff%x" // mod 255
-	"300+G"); // get alog[(glog[a]+glog[b])%255)]
+	"300+EG"); // get alog[(glog[a]+glog[b])%255)]
   return sd[--lsd];
 }
 
