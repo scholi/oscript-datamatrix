@@ -27,10 +27,18 @@ Detail of RAM space 1xx
 102 n[2]=#of RS MC
 103 
 104
-105
-106
-107
-108
-109
-10a
-10b
+...
+110 -> 11f used to pass argument to a function
+120 -> 12f used to return argument to a function
+
+Exemple
+======
+
+void mul(){
+	Sinit("x110EGAG*x9MP");
+}
+
+ram[0x110]=a;
+ram[0x111]=b;
+mul();
+printf("a * b = %i",ram[0x120]);

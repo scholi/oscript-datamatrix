@@ -128,10 +128,13 @@ void Sinit(u* s){
 			printf("\n");
 #endif
 #if MEM
-			printf("mem	: ");
+			printf("mem:\n");
 			for(ui j=0;j<7;j++){
-				f(256) printf("%x ",ram[j*256+i]);
-				printf("\n");
+				f(16){
+					for(ui k=0;k<16;k++) printf("%02x ",ram[j*256+i*16+k]);
+					printf("\n");
+				}
+				printf("\n\n");
 			}
 #endif
 		}
