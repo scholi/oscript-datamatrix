@@ -28,19 +28,54 @@ void Sinit(u* s){
 #endif
 			sd[lsd-2]-=sd[--lsd];
 		}
-		SS('*') sd[lsd-2]*=sd[--lsd];
-		SS('/') sd[lsd-2]/=sd[--lsd];
+		SS('*'){
+#if VERBOSE
+ 			if(verb) fprintf(stderr,"\e[31mMUL\e[0m: %i * %i => %i\n",sd[lsd-1],sd[lsd-2],sd[lsd-1]*sd[lsd-2]);
+#endif
+			sd[lsd-2]*=sd[--lsd];
+		}
+		SS('/'){
+#if VERBOSE
+ 			if(verb) fprintf(stderr,"\e[31mDIV\e[0m\n");
+#endif
+			sd[lsd-2]/=sd[--lsd];
+		}
 		SS('%'){
 #if VERBOSE
  			if(verb) fprintf(stderr,"\e[31mMOD\e[0m: %i mod %i => %i\n",sd[lsd-2],sd[lsd-1],sd[lsd-2]%sd[lsd-1]);
 #endif
 			sd[lsd-2]%=sd[--lsd];
 		}
-		SS('&') sd[lsd-2]&=sd[--lsd];
-		SS('|') sd[lsd-2]|=sd[--lsd];
-		SS('^') sd[lsd-2]^=sd[--lsd];
-		SS('~') sd[lsd-1]=~sd[lsd-1];
-		SS('{') sd[lsd-2]<<=sd[--lsd];
+		SS('&'){
+#if VERBOSE
+ 			if(verb) fprintf(stderr,"\e[31mAND\e[0m\n");
+#endif
+			sd[lsd-2]&=sd[--lsd];
+		}
+		SS('|'){
+#if VERBOSE
+ 			if(verb) fprintf(stderr,"\e[31mOR\e[0m\n");
+#endif
+			sd[lsd-2]|=sd[--lsd];
+		}
+		SS('^'){
+#if VERBOSE
+ 			if(verb) fprintf(stderr,"\e[31mXOR\e[0m\n");
+#endif
+			sd[lsd-2]^=sd[--lsd];
+		}
+		SS('~'){
+#if VERBOSE
+ 			if(verb) fprintf(stderr,"\e[31mNOT\e[0m\n");
+#endif
+			sd[lsd-1]=~sd[lsd-1];
+		}
+		SS('{'){
+#if VERBOSE
+ 			if(verb) fprintf(stderr,"\e[31m<<\e[0m\n");
+#endif
+			sd[lsd-2]<<=sd[--lsd];
+		}
 		SS('('){
 			u k=0xfe;
 			if(tm) k++;
@@ -70,6 +105,9 @@ void Sinit(u* s){
 			else sd[lsd-1]=0;
 		}
 		SS('='){
+#if VERBOSE
+			fprintf(stderr,"\e[31m==\e[0m %i == %i => %i\n",sd[lsd-1],sd[lsd-2],sd[lsd-1]==sd[lsd-2]);
+#endif
 			if(sd[lsd-2]==sd[--lsd]) sd[lsd-1]=1;
 			else sd[lsd-1]=0;
 		}
@@ -79,12 +117,15 @@ void Sinit(u* s){
 		}
 		SS('D'){
 #if VERBOSE
-			if(verb) fprintf(stderr,"DUP (%i)\n",sd[lsd-1]);
+			if(verb) fprintf(stderr,"\e[35mDUP\e[0m (%i)\n",sd[lsd-1]);
 #endif
 			sd[lsd++]=sd[lsd-1];
 		}
 		SS('C'){
 			ui l=sd[--lsd];
+#if VERBOSE
+			if(verb) fprintf(stderr,"\e[35mCOPY\e[0m %i elts\n",l);
+#endif
 			for(ui j=0;j<l;j++) sd[lsd++]=sd[lsd-l];
 		}
 		SS('K') {
@@ -210,6 +251,28 @@ void Sinit(u* s){
 				sd[lsd++]=j;
 				Sinit(macro[k]);
 			}
+		}
+		SS('R'){
+			u k=sd[--lsd];
+			u n=sd[--lsd];
+#if VERBOSE
+			if(verb){
+				fprintf(stderr,"\e[35mROLL %i elts %i times: [ ",n,k);
+				f(n) fprintf(stderr,"%i ",sd[lsd-1-i]);
+				fprintf(stderr,"] → [ ");
+			}
+#endif
+			for(u j=0;j<k;j++){
+				u t=sd[lsd-n];
+				f(n-1) sd[lsd-n+i]=sd[lsd-n+i+1];
+				sd[lsd-1]=t;
+			}
+#if VERBOSE
+			if(verb){
+				f(n) fprintf(stderr,"%i ",sd[lsd-1-i]);
+				fprintf(stderr,"]\n");
+			}
+#endif
 		}
 		else {
 			if(verb) fprintf(stderr,"WARNING: %c unknown\n", s[i]);
