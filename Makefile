@@ -30,7 +30,7 @@ test:
 	@bash test.sh
 
 stack: stack.c
-	$(GCC) -g -o stack -D STANDALONE -std=gnu99 $<
+	$(GCC) $(CFLAGS) -D STANDALONE -o stack $<
 
 mrproper: clean
 	rm -f datamatrix

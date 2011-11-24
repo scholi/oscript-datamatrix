@@ -292,6 +292,24 @@ void Sinit(u* s){
 
 #ifdef STANDALONE
 int main(int I_,char** V){
+
+  if (I_!=2) {
+    printf("Usage : %s [-i|oscript_string]\n",V[0]);
+    return 0;
+  }
+
+  if (I_==2 && V[1][0]=='-' && V[1][1]=='i') {
+    verb=1;
+    u buf[256];
+    printf("o>\no> oscript command line interpreter v0.1\no>\no> ");
+    while (fgets(buf,256,stdin)) { // die if someone floods the buffer ;)
+      strtok(buf, "\n");
+      Sinit(buf);
+      printf("o> ");
+    }
+    return 0;
+  }
+
 	ptr=ram;
 /*	printf("Calculate first 10 fibonacci numbers (with RAM)\n");
 	Sinit("x1Px1Qxa(GBGA+Q)r.");*/
