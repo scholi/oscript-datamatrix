@@ -93,7 +93,7 @@ void Sinit(u* s){
 		SS('}') sd[lsd-2]>>=sd[--lsd];
 		SS('S'){
 #if VERBOSE
-			if(verb) fprintf(stderr,"\e[35mSWAP: %i ↔ %i \n",sd[lsd-2],sd[lsd-1]);
+			if(verb) fprintf(stderr,"\e[35mSWAP\e[0m %i ↔ %i \n",sd[lsd-2],sd[lsd-1]);
 #endif
 			ui x=sd[lsd-2];
 			sd[lsd-2]=sd[lsd-1];
@@ -291,24 +291,27 @@ void Sinit(u* s){
 }
 
 #ifdef STANDALONE
+die(u**m) {
+	printf("Usage : %s [-i|-iv|oscript_string]\n",m[0]);
+  exit(0);
+}
+
 int main(int I_,char** V){
 
-  if (I_!=2) {
-    printf("Usage : %s [-i|oscript_string]\n",V[0]);
-    return 0;
-  }
+	if (I_!=2) die(V);
 
-  if (I_==2 && V[1][0]=='-' && V[1][1]=='i') {
-    verb=1;
-    u buf[256];
-    printf("o>\no> oscript command line interpreter v0.1\no>\no> ");
-    while (fgets(buf,256,stdin)) { // die if someone floods the buffer ;)
-      strtok(buf, "\n");
-      Sinit(buf);
-      printf("o> ");
-    }
-    return 0;
-  }
+	if (I_==2 && V[1][0]=='-') {
+		if (V[1][1]!='i') die(V);
+		verb = V[1][2]=='v';
+		u buf[256];
+		printf("o>\no> oscript cli v0.1%s\no>\no> ",verb?" [debug]":"");
+		while (fgets(buf,256,stdin)) { // die if someone floods the buffer ;)
+			strtok(buf, "\n");
+			Sinit(buf);
+			printf("o> ");
+		}
+		return 0;
+	}
 
 	ptr=ram;
 /*	printf("Calculate first 10 fibonacci numbers (with RAM)\n");
