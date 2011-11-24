@@ -1,4 +1,5 @@
 #include "headers.h"
+
 main(ui iv,char **V){
 	/* Init pointers to have valid code even if not
 	 * everything translated in oscript */
@@ -20,7 +21,7 @@ main(ui iv,char **V){
 	/* init macros */
 	verb=0; // Turn verbose =false
 	DBMSG("Init macros...");
-	macro_init();
+	macros_init();
 	
 	
 /* Init log,alog in gallois */

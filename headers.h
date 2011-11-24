@@ -46,6 +46,7 @@ ui lmacros;
 #endif
 
 /* functions headers */
+void macros_init();
 void RS(u);
 void module(int,int,u,u);
 void utah(int,int,u);
