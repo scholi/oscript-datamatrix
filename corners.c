@@ -26,15 +26,11 @@ void corner1(u c){
 		"x1-"               // remove 1
 		"x111EGDx3=~x1&Sx4-*"  // (i!=3)*(i-4)
 		"x111EGx3<I"       // i<3?
-		);
 
-		// get values from stack back to c
-		// and call module
-		int arg1 = (int)sd[--lsd];
-		int arg2 = (int)sd[--lsd];
-		char arg3 = (char)sd[--lsd];
-
-		module(arg1,arg2,arg3,7-i);
+    "x7G-"    // push 7-i. stack : c row col shift
+    "x4x3RS." // reorder args for module
+    "x2@"     // call module
+    );
 #endif
 	}
 	Sinit("p"); // pop c from stack
@@ -67,15 +63,11 @@ void corner2(u c){
 		"x100EGx111EGx3-+" // nrow +i - 3
 		"x111EGx7="       // i==7
 		"x111EGx3<I"      // i<3?
-		);
 
-		// get values from stack back to c
-		// and call module
-		int arg1 = (int)sd[--lsd];
-		int arg2 = (int)sd[--lsd];
-		char arg3 = (char)sd[--lsd];
-
-		module(arg1,arg2,arg3,7-i);
+    "x7G-"    // push 7-i. stack : c row col shift
+    "x4x3RS." // reorder args for module
+    "x2@"     // call module
+    );
 #endif
 	}
 	Sinit("p"); // pop c from stack
@@ -104,15 +96,11 @@ void corner3(u c){
 		"x100EGx111EGx3-+"      // nrow+i-3
 		"x111EGDx4=~x1&Sx4-*"   // (i!=4)*(i-4)
 		"x111EGx4<I"            // i<4?
+
+    "x7G-"    // push 7-i. stack : c row col shift
+    "x4x3RS." // reorder args for module
+    "x2@"     // call module
 		);
-
-		// get values from stack back to c
-		// and call module
-		int arg1 = (int)sd[--lsd];
-		int arg2 = (int)sd[--lsd];
-		char arg3 = (char)sd[--lsd];
-
-		module(arg1,arg2,arg3,7-i);
 #endif
 	}
 	Sinit("p"); // pop c from stack
@@ -143,15 +131,11 @@ void corner4(u c){
 		"x100EGx1-"      // nrow-1
 		"x111EGx2-x3/"   // i==7
 		"x111EGx2<I"     // i<2?
+
+    "x7G-"    // push 7-i. stack : c row col shift
+    "x4x3RS." // reorder args for module
+    "x2@"     // call module
 		);
-
-		// get values from stack back to c
-		// and call module
-		int arg1 = (int)sd[--lsd];
-		int arg2 = (int)sd[--lsd];
-		char arg3 = (char)sd[--lsd];
-
-		module(arg1,arg2,arg3,7-i);
 #endif
 	}
 	Sinit("p"); // pop c from stack
