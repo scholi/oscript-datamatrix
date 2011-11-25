@@ -12,12 +12,12 @@ u mul(u a,u b){
 }
 
 unsigned short* PolyRS(u n){
-	ram[0x110]=n;
+	sd[lsd++]=n;
 	unsigned short *poly=ram+0x120; // poly point to ram reserverd for output of functions
 	/* WARNING poly stores unsigne SHORT and use 2 bytes per value in little endian */
 	verb=0;
 	Sinit("x120Ex1Px0QB" // poly[0]=1=0x0001={0x01,0x00}
-	"x0x10DNGSMx1" // (0 n 1)
+	"x0Sx1" // (0 n 1)
 	"x0["
 	"Dx2*x120+E" // ptr @poly[i] (i)
 	"GAQBGAQx3N" // poly[i+1]=poly[i] and ptr @poly[i]
