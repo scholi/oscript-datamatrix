@@ -8,7 +8,11 @@ void Sinit(u* s){
 #endif
 	for(ui i=0;s[i];i++){
 #if VERBOSE
-		if(verb) fprintf(stderr,"\e[37mPARSE\e[0m byte %c \t%u\t%x\n",s[i],lsd,ptr-ram);
+		if(verb){
+			fprintf(stderr,"\e[37mPARSE\e[0m byte %c \t%u\t%x\t[",s[i],lsd,ptr-ram);
+			f(lsd) fprintf(stderr, "%i ",sd[i]);
+			fprintf(stderr,"]\n");
+		}
 #endif
 		if(s[i]=='x'){
 			ui v=0;
@@ -96,6 +100,7 @@ void Sinit(u* s){
 			u k=0xfe;
 			if(tm) k++;
 			tm=!tm;
+			lmacro[k]=0;
 #if VERBOSE
 			if(verb) fprintf(stderr,"Create temp macro (%x)\n",k);
 #endif
@@ -189,7 +194,7 @@ void Sinit(u* s){
 
 			for (;count>0;count--) {
 #if VERBOSE
-				if(verb) fprintf(stderr,"Execute macro %d [%s]\n", m, macro[m]);
+				if(verb) fprintf(stderr,"Execute macro %d [%s] (remaining %i times)\n", m, macro[m],count);
 #endif
 				Sinit(macro[m]);
 			}
@@ -320,6 +325,9 @@ void Sinit(u* s){
 #endif			
 			lsd-=4;
 			for(;j<b;j+=c){
+#if VERBOSE	
+			if(verb) fprintf(stderr,"\e[31mLOOP\e[0m i=%i\n",j);
+#endif
 				sd[lsd++]=j;
 				Sinit(macro[k]);
 			}

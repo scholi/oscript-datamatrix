@@ -15,30 +15,32 @@ unsigned short* PolyRS(u n){
 	ram[0x110]=n;
 	unsigned short *poly=ram+0x120; // poly point to ram reserverd for output of functions
 	/* WARNING poly stores unsigne SHORT and use 2 bytes per value in little endian */
-/*	"x0x10DNGSMx1" // vals for the loop (from 0 -> n)
-	"x0[" // start macro
-	"ZSDx301+EG" // get alog[i+1] (z i a)
-	"x3x1RESx1-" // move ptr back and put i-1 in front
-	"(D" // start Loop-j and DUP alog[i+1]
-	"GAGx8{|A" // get poly[j]
-	"x1@" // mul in Gallois of alog[i+1] and poly[j]
-	"Dxff&Sx8}BG^AQx3NG^AQBB" // get poly[j-1] and xor
-	")rp" // loop i times and pop the remaining alog[i+1]
-	"]x0F"); // for loop
-*/
-//	poly[0]=1;
-	Sinit("x120Ex1Px0QB"); // poly[0]=1=0x0001={0x01,0x00}
-	f(n){
-		DBMSG("Poly loop %i",i);
-		verb=1;
-		Sinit("GAQBGAQB"); // poly[i+1]=poly[i]
-		verb=0;
-//		poly[i+1]=poly[i];
-		for(int j=i;j>=1;j--)
-			poly[j]=poly[j-1]^(mul(poly[j],alog[i+1]));
-		poly[0]=mul(poly[0],alog[i+1]);
+	verb=1;
+	Sinit("x120Ex1Px0QB" // poly[0]=1=0x0001={0x01,0x00}
+	); f(n){
+	sd[lsd++]=i;
+	Sinit(
+	"Dx2*x120+E" // ptr @poly[i] (i)
+	"GAQBGAQx3N" // poly[i+1]=poly[i] and ptr @poly[i]
+	"ZSD" // Stack: z i i
+	"x301+EG" // get alog[i+1] (z i alog[i+1])
+	"x3x1RE" // (i alog[i+1]) move ptr back @poly[i]
+	"S" // (alog[i+1] i)
+	);
+	ui m=sd[--lsd];
+	for(int j=0;j<m;j++){
+			Sinit("x0[D" // dup alog[i+1]
+			"GAGx8{|BB" // get poly[j], ptr @poly[j-1]
+			"x1@" // mul in gallois
+			"Dxff&Sx8}" // ( mul&0xff mul>>8 )
+			"G^AQx3NG^AQBB]x0@" // poly[j]=poly[j-1]^mul
+			);
+//			poly[j]=poly[j-1]^sd[--lsd];
+		}
+		Sinit("x121EGx8{BG|x1@" // mul(poly[0],alog[i+1])
+		"Dxff&Px8}Q");
+//		poly[0]=mul(poly[0],sd[--lsd]);
 	}
-
 	verb=0;
 	return poly;
 }
