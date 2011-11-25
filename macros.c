@@ -41,5 +41,31 @@ void macros_init(){
   // 
   // module() macros END
   //
+
+  Sinit("x5[" // Init macro5. for utah loop
+  "Px3C"     // copy args  c, col, row
+	// Build second argument of module (col)
+	"S"         // we need col
+  "x25"       // push x25
+	"G"         // get counter i (set ptr)
+	"}x1&-"     // -=(0x25>>i)&1
+	"x6f"
+	"G"         // get counter i (ptr has not changed)
+	"}x1&-"     // -=(0x6f>>i)&i (same as above, optimize!)
+	// Build first argument of module (row)
+	"S"         // switch second argument and col (c,arg2,row)
+	"D"         // copy row
+	"G"         // get counter i
+	"x5<-"      // build false value
+	"S"         // swap to get a copy of row
+	"x2-S"      // build true value
+	"G"         // get counter i
+	"x2<I"      // test and if
+  // module needs : shift c row col
+  // FIXME : initial rotate in module can be avoided here
+  "x7G-"      // push 7-i. stack : c row col shift
+  "x4x3RS"   // reorder args for module
+  "x2@]"     // call module
+  );
 }
 
