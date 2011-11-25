@@ -1,10 +1,12 @@
 #include "headers.h"
 void corner1(u c){
-	ram[0x110] = c;
-	Sinit("x110EG"); // push c on stack
+
+	// push c on stack
+	sd[lsd++] = c;
 
 	for (int i=0;i<8;++i) {
 
+		// TODO keep i on stack if possible
 		ram[0x111] = i;
 
 #if 0
@@ -24,15 +26,13 @@ void corner1(u c){
 		"x1-"               // remove 1
 		"x111EGDx3=~x1&Sx4-*"  // (i!=3)*(i-4)
 		"x111EGx3<I"       // i<3?
-
-		"x111EQQQ"  // put curr stack arg3=c,arg2,arg1 in memory
 		);
 
-		// get values from oscript back to c
+		// get values from stack back to c
 		// and call module
-		int arg1 = (int)(char)ram[0x112];
-		int arg2 = (int)(char)ram[0x113];
-		char arg3 = ram[0x114];
+		int arg1 = (int)sd[--lsd];
+		int arg2 = (int)sd[--lsd];
+		char arg3 = (char)sd[--lsd];
 
 		module(arg1,arg2,arg3,7-i);
 #endif
@@ -41,8 +41,9 @@ void corner1(u c){
 }
 
 void corner2(u c){
-	ram[0x110] = c;
-	Sinit("x110EG"); // push c on stack
+
+	// push c on stack
+	sd[lsd++] = c;
 
 	for (int i=0;i<8;++i) {
 
@@ -61,24 +62,18 @@ void corner2(u c){
 		"x111EG"      // get counter i
 		"Dx7=-+"      // +i-(i==7)
 		"x111EGx3<I" // i<3?
-		);
 
-		Sinit(
 		// build first argument
 		"x100EGx111EGx3-+" // nrow +i - 3
 		"x111EGx7="       // i==7
 		"x111EGx3<I"      // i<3?
 		);
 
-		Sinit(
-		"x111EQQQ"  // put curr stack arg3=c,arg2,arg1 in memory
-		);
-
-		// get values from oscript back to c
+		// get values from stack back to c
 		// and call module
-		int arg1 = (int)(char)ram[0x112];
-		int arg2 = (int)(char)ram[0x113];
-		char arg3 = ram[0x114];
+		int arg1 = (int)sd[--lsd];
+		int arg2 = (int)sd[--lsd];
+		char arg3 = (char)sd[--lsd];
 
 		module(arg1,arg2,arg3,7-i);
 #endif
@@ -87,8 +82,9 @@ void corner2(u c){
 }
 void corner3(u c){
 #warning "!!!! corner3(u) The tests do currently not cover this case!!!!"
-	ram[0x110] = c;
-	Sinit("x110EG"); // push c on stack
+
+	// push c on stack
+	sd[lsd++] = c;
 
 	for (int i=0;i<8;++i) {
 
@@ -108,15 +104,13 @@ void corner3(u c){
 		"x100EGx111EGx3-+"      // nrow+i-3
 		"x111EGDx4=~x1&Sx4-*"   // (i!=4)*(i-4)
 		"x111EGx4<I"            // i<4?
-
-		"x111EQQQ"  // put curr stack arg3=c,arg2,arg1 in memory
 		);
 
-		// get values from oscript back to c
+		// get values from stack back to c
 		// and call module
-		int arg1 = (int)(char)ram[0x112];
-		int arg2 = (int)(char)ram[0x113];
-		char arg3 = ram[0x114];
+		int arg1 = (int)sd[--lsd];
+		int arg2 = (int)sd[--lsd];
+		char arg3 = (char)sd[--lsd];
 
 		module(arg1,arg2,arg3,7-i);
 #endif
@@ -126,8 +120,9 @@ void corner3(u c){
 
 void corner4(u c){
 #warning "!!!! corner4(u) The tests do currently not cover this case!!!!"
-	ram[0x110] = c;
-	Sinit("x110EG"); // push c on stack
+
+	// push c on stack
+	sd[lsd++] = c;
 
 	for (int i=0;i<8;++i) {
 
@@ -150,15 +145,11 @@ void corner4(u c){
 		"x111EGx2<I"     // i<2?
 		);
 
-		Sinit(
-		"x111EQQQ"  // put curr stack arg3=c,arg2,arg1 in memory
-		);
-
-		// get values from oscript back to c
+		// get values from stack back to c
 		// and call module
-		int arg1 = (int)(char)ram[0x112];
-		int arg2 = (int)(char)ram[0x113];
-		char arg3 = ram[0x114];
+		int arg1 = (int)sd[--lsd];
+		int arg2 = (int)sd[--lsd];
+		char arg3 = (char)sd[--lsd];
 
 		module(arg1,arg2,arg3,7-i);
 #endif
