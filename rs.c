@@ -15,33 +15,23 @@ unsigned short* PolyRS(u n){
 	ram[0x110]=n;
 	unsigned short *poly=ram+0x120; // poly point to ram reserverd for output of functions
 	/* WARNING poly stores unsigne SHORT and use 2 bytes per value in little endian */
-	verb=1;
+	verb=0;
 	Sinit("x120Ex1Px0QB" // poly[0]=1=0x0001={0x01,0x00}
-	); f(n){
-	sd[lsd++]=i;
-	Sinit(
+	"x0x10DNGSMx1" // (0 n 1)
+	"x0["
 	"Dx2*x120+E" // ptr @poly[i] (i)
 	"GAQBGAQx3N" // poly[i+1]=poly[i] and ptr @poly[i]
 	"ZSD" // Stack: z i i
 	"x301+EG" // get alog[i+1] (z i alog[i+1])
 	"x3x1RE" // (i alog[i+1]) move ptr back @poly[i]
 	"S" // (alog[i+1] i)
-	);
-	ui m=sd[--lsd];
-	for(int j=0;j<m;j++){
-			Sinit("x0[D" // dup alog[i+1]
-			"GAGx8{|BB" // get poly[j], ptr @poly[j-1]
-			"x1@" // mul in gallois
-			"Dxff&Sx8}" // ( mul&0xff mul>>8 )
-			"G^AQx3NG^AQBB]x0@" // poly[j]=poly[j-1]^mul
-			);
-//			poly[j]=poly[j-1]^sd[--lsd];
-		}
-		Sinit("x121EGx8{BG|x1@" // mul(poly[0],alog[i+1])
-		"Dxff&Px8}Q");
-//		poly[0]=mul(poly[0],sd[--lsd]);
-	}
-	verb=0;
+	"(D" // dup alog[i+1]
+	"GAGx8{|BB" // get poly[j], ptr @poly[j-1]
+	"x1@" // mul in gallois
+	"Dxff&Sx8}" // ( mul&0xff mul>>8 )
+	"G^AQx3NG^AQBB)r" // poly[j]=poly[j-1]^mul
+	"x121EGx8{BG|x1@" // mul(poly[0],alog[i+1])
+	"Dxff&Px8}Q]x0F"); // set to poly[0]
 	return poly;
 }
 
