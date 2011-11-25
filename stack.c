@@ -1,11 +1,14 @@
 #include "headers.h"
+
+#define SU(n) if(lsd<n) fprintf(stdout,"\e[31mSTACK UNDERFLOW\e[0m\n")
+
 void Sinit(u* s){
 #if VERBOSE
 	if(verb) fprintf(stderr,"\e[36mRUN\e[0m oscript: %s\n",s);
 #endif
 	for(ui i=0;s[i];i++){
 #if VERBOSE
-		if(verb) fprintf(stderr,"\e[37mPARSE\e[0m byte %c\n",s[i]);
+		if(verb) fprintf(stderr,"\e[37mPARSE\e[0m byte %c \t%u\t%x\n",s[i],lsd,ptr-ram);
 #endif
 		if(s[i]=='x'){
 			ui v=0;
@@ -20,62 +23,72 @@ void Sinit(u* s){
 			i--;
 		}
 		SS('+'){
+			SU(2);
 #if VERBOSE
  			if(verb) fprintf(stderr,"\e[31mADD\e[0m: %i + %i => %i\n",sd[lsd-2],sd[lsd-1],sd[lsd-2]+sd[lsd-1]);
 #endif
 			sd[lsd-2]+=sd[--lsd];
 		}
 		SS('-'){
+			SU(2);
 #if VERBOSE
  			if(verb) fprintf(stderr,"\e[31mSUB\e[0m\n");
 #endif
 			sd[lsd-2]-=sd[--lsd];
 		}
 		SS('*'){
+			SU(2);
 #if VERBOSE
  			if(verb) fprintf(stderr,"\e[31mMUL\e[0m: %i * %i => %i\n",sd[lsd-1],sd[lsd-2],sd[lsd-1]*sd[lsd-2]);
 #endif
 			sd[lsd-2]*=sd[--lsd];
 		}
 		SS('/'){
+			SU(2);
 #if VERBOSE
  			if(verb) fprintf(stderr,"\e[31mDIV\e[0m\n");
 #endif
 			sd[lsd-2]/=sd[--lsd];
 		}
 		SS('%'){
+			SU(2);
 #if VERBOSE
  			if(verb) fprintf(stderr,"\e[31mMOD\e[0m: %i mod %i => %i\n",sd[lsd-2],sd[lsd-1],sd[lsd-2]%sd[lsd-1]);
 #endif
 			sd[lsd-2]%=sd[--lsd];
 		}
 		SS('&'){
+			SU(2);
 #if VERBOSE
  			if(verb) fprintf(stderr,"\e[31mAND\e[0m\n");
 #endif
 			sd[lsd-2]&=sd[--lsd];
 		}
 		SS('|'){
+			SU(2);
 #if VERBOSE
- 			if(verb) fprintf(stderr,"\e[31mOR\e[0m\n");
+ 			if(verb) fprintf(stderr,"%i \e[31mOR\e[0m %i = %i\n",sd[lsd-2],sd[lsd-1],sd[lsd-2]|sd[lsd-1]);
 #endif
 			sd[lsd-2]|=sd[--lsd];
 		}
 		SS('^'){
+			SU(2);
 #if VERBOSE
  			if(verb) fprintf(stderr,"\e[31mXOR\e[0m\n");
 #endif
 			sd[lsd-2]^=sd[--lsd];
 		}
 		SS('~'){
+			SU(1);
 #if VERBOSE
  			if(verb) fprintf(stderr,"\e[31mNOT\e[0m\n");
 #endif
 			sd[lsd-1]=~sd[lsd-1];
 		}
 		SS('{'){
+			SU(2);
 #if VERBOSE
- 			if(verb) fprintf(stderr,"\e[31m<<\e[0m\n");
+ 			if(verb) fprintf(stderr,"%i \e[31m<<\e[0m %i = %i\n",sd[lsd-2],sd[lsd-1],sd[lsd-2]<<sd[lsd-1]);
 #endif
 			sd[lsd-2]<<=sd[--lsd];
 		}
@@ -90,8 +103,12 @@ void Sinit(u* s){
 			macro[k][lmacro[k]]=0;
 			sd[lsd++]=k;
 		}
-		SS('}') sd[lsd-2]>>=sd[--lsd];
+		SS('}'){
+			SU(2);
+			sd[lsd-2]>>=sd[--lsd];
+		}
 		SS('S'){
+			SU(2);
 #if VERBOSE
 			if(verb) fprintf(stderr,"\e[35mSWAP\e[0m %i ↔ %i \n",sd[lsd-2],sd[lsd-1]);
 #endif
@@ -100,14 +117,17 @@ void Sinit(u* s){
 			sd[lsd-1]=x;
 		}
 		SS('>'){
+			SU(2);
 			if(sd[lsd-2]>sd[--lsd]) sd[lsd-1]=1;
 			else sd[lsd-1]=0;
 		}
 		SS('<'){
+			SU(2);
 			if(sd[lsd-2]<sd[--lsd]) sd[lsd-1]=1;
 			else sd[lsd-1]=0;
 		}
 		SS('='){
+			SU(2);
 #if VERBOSE
 			if (verb) fprintf(stderr,"\e[31m==\e[0m %i == %i => %i\n",sd[lsd-1],sd[lsd-2],sd[lsd-1]==sd[lsd-2]);
 #endif
@@ -115,17 +135,21 @@ void Sinit(u* s){
 			else sd[lsd-1]=0;
 		}
 		SS('I'){
+			SU(3);
 			if(sd[--lsd]) lsd--;
 			else sd[lsd-2]=sd[--lsd];
 		}
 		SS('D'){
+			SU(1);
 #if VERBOSE
 			if(verb) fprintf(stderr,"\e[35mDUP\e[0m (%i)\n",sd[lsd-1]);
 #endif
 			sd[lsd++]=sd[lsd-1];
 		}
 		SS('C'){
+			SU(1);
 			ui l=sd[--lsd];
+			SU(l);
 #if VERBOSE
 			if(verb) fprintf(stderr,"\e[35mCOPY\e[0m %i elts\n",l);
 #endif
@@ -138,6 +162,7 @@ void Sinit(u* s){
 #endif
 		}
 	 	SS('i') {
+			SU(3);
 			ui o1 = sd[--lsd];
 			ui o2 = sd[--lsd];
 			ui t = sd[--lsd];
@@ -155,6 +180,7 @@ void Sinit(u* s){
 		}
 		// for loop
 		SS('r') {
+			SU(2);
 			ui m = sd[--lsd];
 			ui count = sd[--lsd];
 #if VERBOSE
@@ -169,9 +195,11 @@ void Sinit(u* s){
 			}
 		}
 		SS('#') {
+			SU(1);
 			if(lsd>0) printf("%c", sd[lsd-1]);
 		}
 		SS('.') {
+			SU(1);
 			if(lsd>0) printf("%i\n", sd[lsd-1]);
 #if STACK
 			if(verb) fprintf(stderr,"stack (%d): ",lsd);
@@ -196,6 +224,7 @@ void Sinit(u* s){
 		}
 		SS('['){
 			u k=sd[--lsd];
+			lmacro[k]=0;
 			for(++i;s[i]!=']';i++) macro[k][lmacro[k]++]=s[i];
 			macro[k][lmacro[k]]=0;
 #if VERBOSE
@@ -206,11 +235,15 @@ void Sinit(u* s){
 #endif
 		}
 		SS('@'){
+			SU(1);
 			ui k=sd[--lsd];
 #if VERBOSE
 	 			if(verb) fprintf(stderr,"Exec macro %d [%s]\n",k,macro[k]);
 #endif
+			u t=verb;
+			if(k==1) verb=0;
 			Sinit(macro[k]);
+			verb=t;
 		}
 		SS('K') lsd=0;
 		SS('G'){
@@ -220,13 +253,21 @@ void Sinit(u* s){
 			sd[lsd++]=*ptr;
 		}
 		SS('P'){
+			SU(1);
 #if VERBOSE
 			if(verb) fprintf(stderr,"\e[33mPUT\e[0m value %i into ram @%x\n", sd[lsd-1],ptr-ram);
 #endif
 			*ptr=(u)(sd[--lsd]&0xff);
 		}
-		SS('p') --lsd;
+		SS('p'){
+			SU(1);
+#if VERBOSE
+			if(verb) fprintf(stderr,"\e[32mPOP\e[0m value %i\n", sd[lsd-1]);
+#endif
+			--lsd;
+		}
 		SS('Q') {
+			SU(1);
 			*(++ptr)=sd[--lsd];
 #if VERBOSE
 			if(verb) fprintf(stderr,"\e[34mQ\e[0m: inc ptr to %x and put value %i\n",ptr-ram,sd[lsd]);
@@ -245,17 +286,38 @@ void Sinit(u* s){
 			ptr--;
 		}
 		SS('E'){
+			SU(1);
 #if VERBOSE
 			if(verb) fprintf(stderr,"\e[34mMOVE\e[0m ram pointer @%x\n",sd[lsd-1]);
 #endif			
 			ptr=ram+sd[--lsd];
 		}
-		SS('M') ptr+=sd[--lsd];
-		SS('N') ptr-=sd[--lsd];
-		SS('Z') sd[lsd++]=(ui)(ptr-ram);
+		SS('M'){
+			SU(1);
+#if VERBOSE
+			if(verb) fprintf(stderr,"\e[34mMOVE FWD\e[0m %i bytes in ram. New pos @%x\n",sd[lsd-1],ptr-ram+sd[lsd-1]);
+#endif			
+			ptr+=sd[--lsd];
+		}
+		SS('N'){
+			SU(1);
+#if VERBOSE
+			if(verb) fprintf(stderr,"\e[34mMOVE BCK\e[0m %i bytes in ram. New pos @%x\n",sd[lsd-1],ptr-ram-sd[lsd-1]);
+#endif			
+			ptr-=sd[--lsd];
+		}
+		SS('Z'){
+#if VERBOSE
+			if(verb) fprintf(stderr,"\e[31mGET ram pointer position (%x) into stack\n",ptr-ram);
+#endif			
+			sd[lsd++]=(ui)(ptr-ram);
+		}
 		SS('F'){
-			i++;
+			SU(4);
 			ui j=sd[lsd-4], b=sd[lsd-3], c=sd[lsd-2], k=sd[lsd-1];
+#if VERBOSE
+			if(verb) fprintf(stderr,"\e[31mFOR\e[0m on macro #%i from %i till %i with step of %i\n",k,j,b,c);
+#endif			
 			lsd-=4;
 			for(;j<b;j+=c){
 				sd[lsd++]=j;
@@ -263,8 +325,10 @@ void Sinit(u* s){
 			}
 		}
 		SS('R'){
+			SU(2);
 			u k=sd[--lsd];
 			u n=sd[--lsd];
+			SU(n);
 #if VERBOSE
 			if(verb){
 				fprintf(stderr,"\e[35mROLL %i elts %i times: [ ",n,k);
@@ -273,7 +337,7 @@ void Sinit(u* s){
 			}
 #endif
 			for(u j=0;j<k;j++){
-				u t=sd[lsd-n];
+				ui t=sd[lsd-n];
 				f(n-1) sd[lsd-n+i]=sd[lsd-n+i+1];
 				sd[lsd-1]=t;
 			}

@@ -1,6 +1,7 @@
 #include "headers.h"
 
 u mul(u a,u b){
+  verb=0;
   ram[0x110]=a;
   ram[0x111]=b;
 //  return alog[(glog[a]+glog[b])%255];
@@ -15,19 +16,17 @@ unsigned short* PolyRS(u n){
   ram[0x110]=n;
   unsigned short *poly=ram+0x120; // poly point to ram reserverd for output of functions
   /* WARNING poly stores unsigne SHORT and use 2 bytes per value in little endian */
-/*  Sinit("x120Ex1Px0Q" // poly[0]=1=0x0001={0x01,0x00}
-	"x0xaDNGMx1" // vals for the loop (from 0 -> n)
+/*  Sinit("x120Ex1Px0QB" // poly[0]=1=0x0001={0x01,0x00}
+	"x0x10DNGSMx1" // vals for the loop (from 0 -> n)
 	"x0[" // start macro
-	"Gx8{BG|D" // grab SHORT poly[i]
-	"0xff&AQ" // poly[i+1]=poly[i], push LSB
-	"x8}Qx3N" // poly[i+1]=poly[i], push MSB and set ptr back on poly[i]
-	"D(" // DUP i, loop i times
-	"ZSx301+EGE" // Get alog[i+1]
-	"Gx8{AG|B" // get poly[j]
+	"GAQBGAQx3N" // poly[i+1]=poly[i]
+	"ZSDx301+EG" // get alog[i+1] (z i a)
+	"x3x1RESx1-" // move ptr back and put i-1 in front
+	"(D" // start Loop-j and DUP alog[i+1]
+	"GAGx8{|A" // get poly[j]
 	"x1@" // mul in Gallois of alog[i+1] and poly[j]
-	"BGBGx8{|^A" // get poly[j-1] and xor
-	"Dxff&Qx8}QBB" // set this to poly[j] and dec ptr (ie => j--)
-	")r"
+	"Dxff&Sx8}BG^AQx3NG^AQBB" // get poly[j-1] and xor
+	")rp" // loop i times and pop the remaining alog[i+1]
 	"]x0F"); // for loop
 */
 	poly[0]=1;
@@ -37,6 +36,7 @@ f(n){
       poly[j]=poly[j-1]^(mul(poly[j],alog[i+1]));
     poly[0]=mul(poly[0],alog[i+1]);
   }
+
   verb=0;
   return poly;
 }

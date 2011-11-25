@@ -1,5 +1,6 @@
 GCC=gcc
 DEBUG=yes
+SDEBUG=no
 
 repo=ioccc
 
@@ -8,12 +9,17 @@ SOURCES=$(wildcard *.c)
 OBJS=$(SOURCES:.c=.o)
 
 ifeq ($(DEBUG),yes)
-	CFLAGS=-g -ansi -std=c99 -std=gnu99 -D DEBUG -Wall -DVERBOSE=1 -DMEM=0 -DSTACK=1 -DMACRO=0
+	CFLAGS=-g -ansi -std=c99 -std=gnu99 -D DEBUG -Wall -DVERBOSE -DSTACK
 else
 	CFLAGS=-ansi -std=c99 -std=gnu99 -Wall
 endif
 
+ifeq ($(SDEBUG),yes)
+	CFLAGS+= -DMEM -DSTACK
+endif
+
 all: datamatrix
+	./datamatrix "Hello"
 	
 datamatrix: $(OBJS)
 	$(GCC) -o datamatrix $^
