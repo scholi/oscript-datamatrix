@@ -1,13 +1,5 @@
 #include "headers.h"
 
-u mul(u a,u b){
-	verb=0;
-	sd[lsd++]=a;
-	sd[lsd++]=b;
-	Sinit("x1@"); // Execute macro 1 (mul in gallois)
-	return sd[--lsd];
-}
-
 void RS(u nc){
 	/* Calculate Reed-Solomon error code from self.data and append it to self.data */
 	u *wd=data+(*ldata);
