@@ -34,7 +34,7 @@ unsigned short* PolyRS(u n){
 
 void RS(u nc){
 	/* Calculate Reed-Solomon error code from self.data and append it to self.data */
-	u wd[nc+1];
+	u *wd=data+(*ldata);
 	u k;
 	f(nc+1) wd[i]=0;
 	/* coeff RS polynome */
@@ -44,6 +44,6 @@ void RS(u nc){
 		k=wd[0]^data[i];
 		for(int j=0;j<nc;j++) wd[j]=wd[j+1]^mul(k,poly[nc-j-1]);
 	}
-	f(nc) data[(*ldata)++]=wd[i];
+	ldata+=nc;
 }
 
