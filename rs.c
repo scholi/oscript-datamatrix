@@ -2,12 +2,9 @@
 
 u mul(u a,u b){
 	verb=0;
-	ram[0x110]=a;
-	ram[0x111]=b;
-//	return alog[(glog[a]+glog[b])%255];
-	Sinit("Zx110EG" // Push a to the stack
-	"AG" // Push b to the stack
-	"x1@SE"); // Execute macro 1 (mul in gallois)
+	sd[lsd++]=a;
+	sd[lsd++]=b;
+	Sinit("x1@"); // Execute macro 1 (mul in gallois)
 	return sd[--lsd];
 }
 
