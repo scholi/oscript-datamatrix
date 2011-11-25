@@ -1,10 +1,12 @@
 #include "headers.h"
 void corner1(u c){
-	ram[0x110] = c;
-	Sinit("x110EG"); // push c on stack
+
+	// push c on stack
+	sd[lsd++] = c;
 
 	for (int i=0;i<8;++i) {
 
+		// TODO keep i on stack if possible
 		ram[0x111] = i;
 
 #if 0
@@ -24,15 +26,13 @@ void corner1(u c){
 		"x1-"               // remove 1
 		"x111EGDx3=~x1&Sx4-*"  // (i!=3)*(i-4)
 		"x111EGx3<I"       // i<3?
-
-		"x111EQQQ"  // put curr stack arg3=c,arg2,arg1 in memory
 		);
 
-		// get values from oscript back to c
+		// get values from stack back to c
 		// and call module
-		int arg1 = (int)(char)ram[0x112];
-		int arg2 = (int)(char)ram[0x113];
-		char arg3 = ram[0x114];
+		int arg1 = (int)sd[--lsd];
+		int arg2 = (int)sd[--lsd];
+		char arg3 = (char)sd[--lsd];
 
 		module(arg1,arg2,arg3,7-i);
 #endif
