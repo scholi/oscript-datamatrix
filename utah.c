@@ -19,7 +19,7 @@ void utah(int row,int col,u c){
     Sinit(
 	  "x3C"     // copy args  c, col, row
 
-	  // Build second argument of module
+	  // Build second argument of module (col)
 		"S"         // we need col
     "x25"       // push x25
 		"x113EG"    // get counter i (set ptr)
@@ -28,7 +28,7 @@ void utah(int row,int col,u c){
 		"G"         // get counter i (ptr has not changed)
 		"}x1&-"     // -=(0x6f>>i)&i (same as above, optimize!)
 
-		// Build first argument of module
+		// Build first argument of module (row)
 		"S"         // switch second argument and col (c,arg2,row)
 		"D"         // copy row
 		"G"         // get counter i
@@ -39,12 +39,22 @@ void utah(int row,int col,u c){
 		"x2<I"      // test and if
 		);
 
+#if 0
 		// get values from oscript back to c
 		// and call module
 		int arg1 = sd[--lsd];
 		int arg2 = sd[--lsd];
 		char arg3 = sd[--lsd];
 		module(arg1,arg2,arg3,7-i);
+#else
+    // module needs : shift c row col
+    // FIXME : initial rotate in module can be avoided here
+    Sinit(
+    "x7G-"    // push 7-i. stack : c row col shift
+    "x4x3RS." // reorder args for module
+    "x2@"     // call module
+    );
+#endif
 	}
 
   // cleanup c,col,row on stack
