@@ -35,15 +35,29 @@ unsigned short* PolyRS(u n){
 void RS(u nc){
 	/* Calculate Reed-Solomon error code from self.data and append it to self.data */
 	u *wd=data+(*ldata);
-	u k;
-	f(nc+1) wd[i]=0;
+	sd[lsd++]=nc;
+	Sinit("DD" // (nc nc nc)
+	"x200EGM" // ptr @wd[0]-1 (nc nc nc)
+	"(x0Q)r" // wd[i]=0, i=0..nc (nc nc) 
+	);
 	/* coeff RS polynome */
-	unsigned short* poly;
-	poly=PolyRS(nc);
-	f(*ldata){
-		k=wd[0]^data[i];
-		for(int j=0;j<nc;j++) wd[j]=wd[j+1]^mul(k,poly[nc-j-1]);
-	}
-	ldata+=nc;
+	PolyRS(sd[--lsd]); // (nc)
+	/* WARNING <!> polynome @ram[0x120] is unsigned short!!!
+	 * poly[i] = ram[0x120+2*i] | ram[0x121+2*i]<<8
+	 */
+	Sinit("x0x200EGx1x0D[" // (nc 0 nc 1) FOR i
+		"x201+EG" // data[i] (nc data[i])
+		"x200EG" // ldata (nc data[i] ldata)
+		"MAG" // data[ldata]=wd[0] (nc data[i] wd[0])
+		"^S" // k=wd[0]^data[i] (k nc)
+		"Dx0Sx1(" // (k nc 0 nc 1) FOR j
+		"x3C" //  (k nc j k nc j)
+		"-x2*x11e+EGAGx8{|" // poly[nc-j-1] (k nc j k poly[nc-j-1])
+		"x1@" // (k nc j mul(k,poly[nc-j-1]))
+		"Sx200EG+MAAG^" // (k nc mul^wd[j+1])
+		"BP)F" // set to wd[j] (k nc)
+		"Sp]Fp"); // pop remaining k (nc)
+	verb=0;
+	*ldata+=nc;
 }
 
