@@ -21,3 +21,4 @@ Detail of RAM space 1xx
 104
 ...
 120 -> 1c8 array of 84 unsigned short for poly
+1c8 -> 1d6 Lookup table for data Size 

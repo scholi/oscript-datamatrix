@@ -4,7 +4,7 @@ main(ui iv,char **V){
 	/* Init pointers to have valid code even if not
 	 * everything translated in oscript */
 	DBMSG("Init pointers to ram...");
-	ldata=ram+0x200;
+	ldata=(u*)(ram+0x200);
 	data=ram+0x201;
 	alog=ram+0x300;
 	glog=ram+0x400;
@@ -36,7 +36,12 @@ main(ui iv,char **V){
 	encodeASCII(V[1]);
 
 	/* TotalSize,DataSize,RS Size,#Regions,#blocks */
-	ui* n=getSize(*ldata);
+	getSize(*ldata);
+	u n[4];
+	f(4){
+		n[3-i]=sd[--lsd];
+		DBMSG("n[%i]=%u",3-i,n[3-i]);
+	}
 	DBMSG("RS size = %i",n[2]);
 	*ncol=*nrow=n[0];
 

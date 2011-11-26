@@ -57,7 +57,7 @@ void corner4(u);
 void mapDataMatrix();
 void fill();
 void encodeASCII(u*);
-u* getSize(ui);
+void getSize(ui);
 void ps();
 void Sinit();
 

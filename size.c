@@ -1,23 +1,26 @@
 #include "headers.h"
 
-/* TotalSize,DataSize,RS Size,#Regions */
-ui s[][4]={{8,3,5,1},
-  {10,5,7,1},
-  {12,8,10,1},
-  {14,12,12,1},
-  {16,18,14,1},
-  {18,22,18,1},
-  {20,30,20,1},
-  {22,36,24,1},
-  {24,44,28,1},
-  {28,62,36,2},
-  {32,86,42,2},
-  {36,114,48,2},
-  {40,144,56,2},
-  {44,174,68,2}};
 
-u* getSize(ui l){
-  f(14)
-    if(s[i][1]>=l)
-        return s[i];
+void getSize(ui l){
+	u* s = ram+0x1c8;
+	Sinit("x1c8DE" // goto right pos in RAM
+	"x3Px5Qx8QxcQx12Qx16Qx1eQx24Qx2cQx3eQx56Qx72Qx90QxaeQE"); // put values of data length
+	f(9){ // loop for the single region
+		if(s[i]>=l){
+			sd[lsd++]=8+2*i; // matrix size
+			sd[lsd++]=s[i]; // data size
+			sd[lsd++]=(u)((8+2*i)*(8+2*i)/8)-s[i]; // RS size = total size - data size
+			sd[lsd++]=1; // # of regions
+			return;
+		}
+	}
+	f(5){ // loop for the 2x2 regions
+		if(s[9+i]>=l){
+			sd[lsd++]=28+4*i; // matrix size
+			sd[lsd++]=s[9+i]; // data size
+			sd[lsd++]=(u)((28+4*i)*(28+4*i)/8)-s[9+i]; // RS size
+			sd[lsd++]=2; // # of regions
+			return;
+		}
+	}
 }
