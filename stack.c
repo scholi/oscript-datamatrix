@@ -166,7 +166,7 @@ void Sinit(u* s){
 			lmacros=0;
 #endif
 		}
-		SS('c'){ // Pick element
+		SS('z'){ // Pick element
 			SU(1);
 			ui k=sd[--lsd];
 			if(k>0){
