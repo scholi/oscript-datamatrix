@@ -166,6 +166,14 @@ void Sinit(u* s){
 			lmacros=0;
 #endif
 		}
+		SS('c'){ // Pick element
+			SU(1);
+			ui k=sd[--lsd];
+			if(k>0){
+				SU(k);
+				sd[lsd++]=sd[lsd-k];
+			}
+		}
 	 	SS('i') {
 			SU(3);
 			ui o1 = sd[--lsd];
