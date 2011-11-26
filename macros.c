@@ -34,7 +34,7 @@ void macros_init(){
   Sinit("x4["
 	// FIXME : improve the copy 5 elements and pop 4, to get to the 5th stack elem!!!!
 	"x100EG"			    		// get nrow -> row col nrow
-	"(p)x3x5Cppppx80<I@"  // if (r>128 [wrap]) then macro3 else (pop nrow)
+	"(p)x3x5zx80<I@"  // if (r>128 [wrap]) then macro3 else (pop nrow)
 												// => "newrow newcol"
 	"S]"									// => newcol newrow
   );
