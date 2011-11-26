@@ -43,7 +43,8 @@ void macros_init(){
   //
 
   Sinit("x5[" // Init macro5. for utah loop
-  "Px3C"     // copy args  c, col, row
+  "x113E"     // move pointer to where i will be stored in ram
+  "Px3C"      // Put i in ram and copy args  c, col, row
 	// Build second argument of module (col)
 	"S"         // we need col
   "x25"       // push x25
@@ -67,5 +68,81 @@ void macros_init(){
   "x4x3RS"   // reorder args for module
   "x2@]"     // call module
   );
+
+	// DEBUG THIS
+#warning "debug this!"
+	Sinit("x6[" // Init macro6. corner1
+	"x111EPD" // start by putting i in ram and copying c
+	// build second argument
+	"x111EG"      // get counter i
+	"x100EG"      // get ncol
+	"x1-"         // remove 1
+	"x3x111EG=-"  // -(i==3)
+	"x111EGx3<I"  // i<3?
+	// build first argument
+	"x100EG"            // get nrow
+	"x1-"               // remove 1
+	"x111EGDx3=~x1&Sx4-*"  // (i!=3)*(i-4)
+	"x111EGx3<I"       // i<3?
+
+  "x7G-"    // push 7-i. stack : c row col shift
+  "x4x3RS" // reorder args for module
+  "x2@"     // call module
+	"]"
+	);
+
+	Sinit("x7[" // Init macro7. corner2
+	  "x111EPD" // start by putting i in ram and copying c
+		// build second argument
+		"x0"          // push 0
+		"x100EG"      // get ncol
+		"x7-"
+		"x111EG"      // get counter i
+		"Dx7=-+"      // +i-(i==7)
+		"x111EGx3<I" // i<3?
+		// build first argument
+		"x100EGx111EGx3-+" // nrow +i - 3
+		"x111EGx7="       // i==7
+		"x111EGx3<I"      // i<3?
+
+    "x7G-"    // push 7-i. stack : c row col shift
+    "x4x3RS" // reorder args for module
+    "x2@"     // call module
+		"]"
+	);
+
+	Sinit("x8[" // Init macro8. corner3
+	  "x111EPD" // start by putting i in ram and copying c
+		// build second argument
+		"x0"                    // 0
+		"x100EGx1-x111EGx3=-"   // ncol-1-(i==3)
+		"x111EGx3<I"            // i<3?
+		// build first argument
+		"x100EGx111EGx3-+"      // nrow+i-3
+		"x111EGDx4=~x1&Sx4-*"   // (i!=4)*(i-4)
+		"x111EGx4<I"            // i<4?
+
+    "x7G-"    // push 7-i. stack : c row col shift
+    "x4x3RS." // reorder args for module
+    "x2@"     // call module
+		"]"
+	);
+	Sinit("x9[" // Init macro9. corner4
+	  "x111EPD" // start by putting i in ram and copying c
+		// build second argument
+		"x111EG"         // get i
+		"Dx2-x3%x3-"     // (i-2)%3-3
+		"x100EG+*"       // +ncol
+		// build first argument
+		"x100EGx1-"      // nrow-1
+		"x111EGx2-x3/"   // i==7
+		"x111EGx2<I"     // i<2?
+
+    "x7G-"    // push 7-i. stack : c row col shift
+    "x4x3RS." // reorder args for module
+    "x2@"     // call module
+		"]"
+	);
+
 }
 
