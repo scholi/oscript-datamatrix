@@ -3,13 +3,14 @@ size.c
 map.c
 
 M:
-module.c
 ps.c
-utah.c
-corners.c
+map.c (1/2)
 
 later:
 main.c
 
 Done:
 rs.c
+module.c
+utah.c
+corners.c
