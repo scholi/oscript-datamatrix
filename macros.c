@@ -69,8 +69,7 @@ void macros_init(){
   "x2@]"     // call module
   );
 
-	// DEBUG THIS
-#warning "debug this!"
+	// FIXME This can for sure be shortened (merge cornerX) by reusing code
 	Sinit("x6[" // Init macro6. corner1
 	"x111EPD" // start by putting i in ram and copying c
 	// build second argument
@@ -143,6 +142,5 @@ void macros_init(){
     "x2@"     // call module
 		"]"
 	);
-
 }
 
