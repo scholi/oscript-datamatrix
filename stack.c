@@ -207,6 +207,9 @@ void Sinit(u* ss){
 			SU(2);
 			ui m = sd[--lsd];
 			ui count = sd[--lsd];
+			u mm[256]; // Prevent overwriting function when nested
+			for(h=0;macro[m][h];h++) mm[h]=macro[m][h];
+			mm[h]=0;
 #if VERBOSE
 			if(verb) fprintf(stderr,"Execute macro %d [%s], %d times\n", m, macro[m],count);
 #endif
@@ -215,7 +218,7 @@ void Sinit(u* ss){
 #if VERBOSE
 				if(verb) fprintf(stderr,"Execute macro %d [%s] (remaining %i times)\n", m, macro[m],count);
 #endif
-				Sinit(macro[m]);
+				Sinit(mm);
 			}
 		}
 		SS('#') {

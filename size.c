@@ -2,7 +2,6 @@
 
 
 void getSize(){
-	verb=1;
 	Sinit("x200EG" // Put ldata in stack
 	"x1c8DE" // goto right pos in RAM
 	"x3Px5Qx8QxcQx12Qx16Qx1eQx24Qx2cQx3eQx56Qx72Qx90QxaeQE" // put values of data length (l)
@@ -31,5 +30,4 @@ void getSize(){
 	"x0x5x1(Sx0(px0)i)F" // For #2 (2x2 regions sizes)
 	"px5x1Rp"
 	);
-	verb=0;
 }
