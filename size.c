@@ -2,6 +2,7 @@
 
 
 void getSize(){
+	verb=1;
 	Sinit("x200EG" // Put ldata in stack
 	"x1c8DE" // goto right pos in RAM
 	"x3Px5Qx8QxcQx12Qx16Qx1eQx24Qx2cQx3eQx56Qx72Qx90QxaeQE" // put values of data length (l)
@@ -19,9 +20,7 @@ void getSize(){
 	"x2zG" // (l i l s[i])
 	">(pAx1)xaci" // <= => !> (l i l>s[i]) (x1 is to continue to run the for)
 	"]"
-	"xaa[px0]" // pop i and add break code 0
-	"xab[Sx0xaai]" // Run macro #0 defined aoove if for not breaked otherwise pop i
-	"x0x9x1xabF" // For #1 (single region sizes)
+	"x0x9x1(Sx0(px0)i)F" // For #1 (single region sizes)
 	"xac[" // set macro to be run in the first loop
 	"x4*x1c+D" // MS=matrix size ( l MS MS)
 	"GS" // DS=data size (l MS DS MS)
@@ -29,7 +28,8 @@ void getSize(){
 	"x2" // # of regions
 	"x0" // Break code
 	"]"
-	"x0x5x1xabF" // For #2 (2x2 regions sizes)
+	"x0x5x1(Sx0(px0)i)F" // For #2 (2x2 regions sizes)
 	"px5x1Rp"
 	);
+	verb=0;
 }

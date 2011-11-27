@@ -3,7 +3,12 @@
 #define SU(n) if(lsd<n) fprintf(stdout,"\e[31mSTACK UNDERFLOW\e[0m\n")
 #define H(x) sd[lsd-2] x sd[--lsd];
 
-void Sinit(u* s){
+void Sinit(u* ss){
+	// Copy string to do infinity nesting of macro without error
+	u s[256];
+	u h;
+	for(h=0;ss[h];h++) s[h]=ss[h];
+	s[h]=0;
 #if VERBOSE
 	if(verb) fprintf(stderr,"\e[36mRUN\e[0m oscript: %s\n",s);
 #endif
@@ -108,10 +113,10 @@ void Sinit(u* s){
 				if(s[i]=='(') ct++;
 				else if(s[i]==')') ct--;
 			}
+			macro[k][lmacro[k]]=0;
 #if VERBOSE
 			if(verb) fprintf(stderr,"Create temp macro (%s)\n",macro[k]);
 #endif
-			macro[k][lmacro[k]]=0;
 			sd[lsd++]=k;
 		}
 		SS('}'){
@@ -339,6 +344,10 @@ void Sinit(u* s){
 		SS('F'){
 			SU(4);
 			ui j=sd[lsd-4], b=sd[lsd-3], c=sd[lsd-2], k=sd[lsd-1];
+			u m[256];
+			// Copy macro to prevent overwriting when nested
+			for(h=0;macro[k][h];h++) m[h]=macro[k][h];
+			m[h]=0;
 #if VERBOSE
 			if(verb) fprintf(stderr,"\e[31mFOR\e[0m on macro #%i from %i till %i with step of %i\n",k,j,b,c);
 #endif			
@@ -348,7 +357,7 @@ void Sinit(u* s){
 			if(verb) fprintf(stderr,"\e[31mLOOP\e[0m i=%i\n",j);
 #endif
 				sd[lsd++]=j;
-				Sinit(macro[k]);
+				Sinit(m);
 			}
 		}
 		SS('R'){
