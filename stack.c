@@ -1,6 +1,7 @@
 #include "headers.h"
 
 #define SU(n) if(lsd<n) fprintf(stdout,"\e[31mSTACK UNDERFLOW\e[0m\n")
+#define H(x) sd[lsd-2] x sd[--lsd];
 
 void Sinit(u* s){
 #if VERBOSE
@@ -31,35 +32,35 @@ void Sinit(u* s){
 #if VERBOSE
  			if(verb) fprintf(stderr,"\e[31mADD\e[0m: %i + %i => %i\n",sd[lsd-2],sd[lsd-1],sd[lsd-2]+sd[lsd-1]);
 #endif
-			sd[lsd-2]+=sd[--lsd];
+			H(+=);
 		}
 		SS('-'){
 			SU(2);
 #if VERBOSE
  			if(verb) fprintf(stderr,"\e[31mSUB\e[0m\n");
 #endif
-			sd[lsd-2]-=sd[--lsd];
+			H(-=);
 		}
 		SS('*'){
 			SU(2);
 #if VERBOSE
  			if(verb) fprintf(stderr,"\e[31mMUL\e[0m: %i * %i => %i\n",sd[lsd-1],sd[lsd-2],sd[lsd-1]*sd[lsd-2]);
 #endif
-			sd[lsd-2]*=sd[--lsd];
+			H(*=);
 		}
 		SS('/'){
 			SU(2);
 #if VERBOSE
  			if(verb) fprintf(stderr,"\e[31mDIV\e[0m\n");
 #endif
-			sd[lsd-2]/=sd[--lsd];
+			H(/=);
 		}
 		SS('%'){
 			SU(2);
 #if VERBOSE
  			if(verb) fprintf(stderr,"\e[31mMOD\e[0m: %i mod %i => %i\n",sd[lsd-2],sd[lsd-1],sd[lsd-2]%sd[lsd-1]);
 #endif
-			sd[lsd-2]%=sd[--lsd];
+			H(%=);
 		}
 		SS('&'){
 			SU(2);
@@ -176,8 +177,8 @@ void Sinit(u* s){
 		}
 	 	SS('i') {
 			SU(3);
-			ui o1 = sd[--lsd];
 			ui o2 = sd[--lsd];
+			ui o1 = sd[--lsd];
 			ui t = sd[--lsd];
 			if (t) {
 #if VERBOSE
