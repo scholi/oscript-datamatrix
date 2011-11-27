@@ -98,14 +98,19 @@ void Sinit(u* s){
 			sd[lsd-2]<<=sd[--lsd];
 		}
 		SS('('){
+			ui ct=0;
 			u k=0xfe;
 			if(tm) k++;
 			tm=!tm;
 			lmacro[k]=0;
+			for(++i;!(s[i]==')' && ct==0);i++){
+				macro[k][lmacro[k]++]=s[i];
+				if(s[i]=='(') ct++;
+				else if(s[i]==')') ct--;
+			}
 #if VERBOSE
-			if(verb) fprintf(stderr,"Create temp macro (%x)\n",k);
+			if(verb) fprintf(stderr,"Create temp macro (%s)\n",macro[k]);
 #endif
-			for(++i;s[i]!=')';i++) macro[k][lmacro[k]++]=s[i];
 			macro[k][lmacro[k]]=0;
 			sd[lsd++]=k;
 		}
@@ -237,9 +242,14 @@ void Sinit(u* s){
 #endif
 		}
 		SS('['){
+			ui ct=0;
 			u k=sd[--lsd];
 			lmacro[k]=0;
-			for(++i;s[i]!=']';i++) macro[k][lmacro[k]++]=s[i];
+			for(++i;!(s[i]==']'&&ct==0);i++){
+				macro[k][lmacro[k]++]=s[i];
+				if(s[i]=='(') ct++;
+				else if(s[i]==')') ct--;
+			}
 			macro[k][lmacro[k]]=0;
 #if VERBOSE
 			if(verb) fprintf(stderr,"Copy macro [%s] into reg %i\n",macro[k],k);
