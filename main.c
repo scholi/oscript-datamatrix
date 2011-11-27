@@ -36,7 +36,7 @@ main(ui iv,char **V){
 	encodeASCII(V[1]);
 
 	/* TotalSize,DataSize,RS Size,#Regions,#blocks */
-	getSize(*ldata);
+	getSize();
 	u n[4];
 	f(4){
 		n[3-i]=sd[--lsd];

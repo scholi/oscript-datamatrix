@@ -1,10 +1,9 @@
 #include "headers.h"
 
 
-void getSize(ui l){
-	sd[lsd++]=l;
-	u* s = ram+0x1c8;
-	Sinit("x1c8DE" // goto right pos in RAM
+void getSize(){
+	Sinit("x200EG" // Put ldata in stack
+	"x1c8DE" // goto right pos in RAM
 	"x3Px5Qx8QxcQx12Qx16Qx1eQx24Qx2cQx3eQx56Qx72Qx90QxaeQE" // put values of data length (l)
 	"x1"	/* As no brakes exists in oscript,
 		 * we have to add a "True" value to be checked
