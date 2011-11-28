@@ -1,5 +1,4 @@
 O:
-encode.c
 
 M:
 ps.c
@@ -9,6 +8,7 @@ later:
 main.c
 
 Done:
+encode.c
 size.c
 rs.c
 module.c

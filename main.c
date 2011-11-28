@@ -17,7 +17,7 @@ main(ui iv,char **V){
 	DBMSG("Load msg into ram...");
 	u *x=V[1]; ptr=ram;
 	while(*x) *(++ptr)=*(x++);
-	*(++ptr)=0;
+	*(ptr+1)=0;
 	ram[0]=ptr-ram;
 	/* init macros */
 	verb=0; // Turn verbose =false

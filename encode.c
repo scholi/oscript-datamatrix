@@ -6,7 +6,7 @@ void encodeASCII(){
 	Sinit(
 	"xad[ZSx200EGx1+DPMPE]" // data[ldata++]=stack[-1]
 	"x0~" // Put -1 for l
-	"x0EGx1-" // (lmsg)
+	"x0EG" // (lmsg)
 	"(" // LOOP through msg[i]
 	"A" // Advance pointer to right position
 	"Gx7f>" // Is msg[i]>127 : extended ASCII ?
