@@ -55,46 +55,17 @@ void mapDataMatrix(){
 		}
 #endif
 
-fprintf(stderr, "BEFORE WHILE c=%d row=%d col=%d\n",c,row,col);
-#if 1
-		do{
-			Sinit( // stack : c col row
-			"x2CS" // c col row row col
-			"(x0x8x1x5Fx3x1Rx1+x3x2R)()" // row col ()1 ()2
-			"x4x2Rx100EG"      // ()1 ()2 row col nrow
-			"x3Cx3x1R*+"       // ()1 ()2 row col nrow col+nrow*row
-			"x500+EGx0"        // !array[col+nrow*row]
-			                   // ()1 ()2 row col nrow t1
-			"=x3x1Rx80<&"      // ()1 ()2 row nrow t3
-	    "x3x2Rx2C<"		     // ()1 ()2 t3 row nrow t4
-			"x3x2Rpx80>|&"     // ()1 ()2 t7 -- t7=(row<(*nrow)) && (col>=0) && (!array[row*(*ncol)+col])
-			"I@"               // if exec ()1 or ()2, stack is c row col
-				                 // after exec stack : row col newc
-			);
-
-			// stack c row col
-			// row -= 2; col += 2;
-      Sinit("x2-Sx2+S");
-      // oscript->vars sync
-      row = sd[lsd-1];
-      col = sd[lsd-2];
-      c = sd[lsd-3];
-		} while((row>=0) && (col<(*ncol)));
-#else
-		// run macro 10 ... not working yet
-		Sinit("xa@");
-#endif
-		// stack c row col
-		// row+=1; col += 3;
-		Sinit("x1+Sx3+S");
+		// run macro 10 (do while loop)
+		Sinit(
+		"xa@"      // run macro 10 (do while loop)
+		"x1+Sx3+S" // row+=1, col+=3
+		           // stack : c row col
+		);
 
     // oscript->vars sync
     row = sd[lsd-1];
     col = sd[lsd-2];
     c = sd[lsd-3];
-
-fprintf(stderr, "AFTER WHILE c=%d row=%d col=%d\n",c,row,col);
-
 
 		do{
 			if((row>=0) && (col<*ncol) && (!array[row*(*ncol)+col])) {

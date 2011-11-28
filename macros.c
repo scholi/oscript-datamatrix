@@ -156,8 +156,8 @@ void macros_init(){
 		"I@"               // if exec ()1 or ()2, stack is c row col
 			                 // after exec stack : newc col row
      "x2-Sx2+S"        // row-=2, col+=2
-//		 "x2CSDDx0>Sx0=|Sx80<&SDx100EG<Sx80>|&" // (row>=0) && (col<(*ncol))
-		 "x2CDx0>Sx0=|Sx100EG<&"
+		 "x2CDDx0>Sx0=|Sx80<&SDx100EG<Sx80>|&" // (row>=0) && (col<(*ncol))
+		                                       // caution : unsigned! 0<=row<0x80, ncol>col>0x80
 		 "xa()x3x1RI@"            // if above true, run macro10, () otherwise
 		 "]"
 	);
