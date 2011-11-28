@@ -202,7 +202,9 @@ class DataMatrix:
 					d.append(130+l*10+int(data[i]))
 					l=-1
 			else:
-				if l>-1: d.append(ord('0')+l+1)
+				if l>-1:
+					d.append(ord('0')+l+1)
+					l=-1
 				d.append(ord(data[i])+1)
 		if l>=0: d.append(ord('0')+l+1)
 		self.data+=d
