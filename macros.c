@@ -164,5 +164,6 @@ void macros_init(){
 	);
 	
 	// Macro xac is reserved for size.c
+	// Macro xad is reserved for enocde.c
 }
 

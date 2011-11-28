@@ -17,8 +17,8 @@ main(ui iv,char **V){
 	DBMSG("Load msg into ram...");
 	u *x=V[1]; ptr=ram;
 	while(*x) *(++ptr)=*(x++);
+	*(++ptr)=0;
 	ram[0]=ptr-ram;
-	
 	/* init macros */
 	verb=0; // Turn verbose =false
 	DBMSG("Init macros...");
@@ -34,8 +34,8 @@ main(ui iv,char **V){
 		"x300-" // calculate i (of alog[i])
 		"PE]xffx0rx400ExffPx0Q"); // run macro 255 times and put spcial value 0 and ff in glog
 	
-	encodeASCII(V[1]);
-
+	encodeASCII();
+	DBMSG("Encoded msg is: %s",data);
 	/* TotalSize,DataSize,RS Size,#Regions,#blocks */
 	getSize();
 
