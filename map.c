@@ -37,14 +37,9 @@ void mapDataMatrix(){
 		"Sx4x3RI"     // swap, roll, s.t. : c ()1 ()2 t3, and if
 		"@"           // run ()1 or ()2 with c stil on stack
 		"x4x1Rp"      // roll and pop old c => row col newc
-		"x3x2R"       // prepare for next if => newc row col
+		"x3x2RS"       // prepare for next if => newc col row
 		);
 		//////////////////////
-#if 1
-		col = (int)(char)sd[--lsd];
-		row = (int)(char)sd[--lsd];
-		c = (char)sd[--lsd];
-#endif
 
 #if 0
 		DEACTIVATED
@@ -61,52 +56,65 @@ void mapDataMatrix(){
 #endif
 
 		do{
-#if 0
-		Sinit( // stack : c row col
-		"x2C" // c row col row col
-		"(x0x8x1x5Fx3x1Rx1+)()" // row col ()1 ()2
-		"x4x2Rx100EG"      // ()1 ()2 row col nrow
-		"x3Cx3x1R*+."      // ()1 ()2 row col nrow col+nrow*row
-		"x500+EGx0="       // !array[col+nrow*row]
-		                   // ()1 ()2 row col nrow t1
-		"x3x1Rx80<&"       // ()1 ()2 row nrow t3
-    "x3x2Rx2C<"		     // ()1 ()2 t3 row nrow t4
-		"x3x2Rpx80>|&"     // ()1 ()2 t7
-		"I@"               // if exec ()1 or ()2, stack is c row col
-		                   // after exec stack : row col newc
-//		"x3x2R" (reactivate this for the next if in oscript)
-     );
-
-		// pop stack -> c vars
-		c = (char)sd[--lsd];
-		col = (int)(char)sd[--lsd];
-		row = (int)(char)sd[--lsd];
+#if 1
+			Sinit( // stack : c col row
+			"x2CS" // c col row row col
+			"(x0x8x1x5Fx3x1Rx1+x3x2R)()" // row col ()1 ()2
+			"x4x2Rx100EG"      // ()1 ()2 row col nrow
+			"x3Cx3x1R*+"       // ()1 ()2 row col nrow col+nrow*row
+			"x500+EGx0"        // !array[col+nrow*row]
+			                   // ()1 ()2 row col nrow t1
+			"=x3x1Rx80<&"      // ()1 ()2 row nrow t3
+	    "x3x2Rx2C<"		     // ()1 ()2 t3 row nrow t4
+			"x3x2Rpx80>|&"     // ()1 ()2 t7
+			"I@"               // if exec ()1 or ()2, stack is c row col
+				                 // after exec stack : row col newc
+			);
 #else
 			if((row<(*nrow)) && (col>=0) && (!array[row*(*ncol)+col])) {
-				sd[lsd++] = c++; sd[lsd++] = col; sd[lsd++] = row;
-				Sinit("x0x8x1x5Fppp");  // for i=0..8 utah(...), cleanup stack
+				Sinit("x0x8x1x5Fx3x1Rx1+x3x2R");  // for i=0..8 utah(...)
 			}
 #endif
-			row -= 2; col += 2;
-
-#if 0
-			sd[lsd++] = (u)c;
-			sd[lsd++] = (ui)(u)row;
-			sd[lsd++] = (ui)(u)col;
-#endif
-
+			// stack c row col
+			// row -= 2; col += 2;
+      Sinit("x2-Sx2+S");
+      // oscript->vars sync
+      row = sd[lsd-1];
+      col = sd[lsd-2];
+      c = sd[lsd-3];
 		} while((row>=0) && (col<(*ncol)));
-		row+=1; col += 3;
+
+		// stack c row col
+		// row+=1; col += 3;
+		Sinit("x1+Sx3+S");
+    // oscript->vars sync
+    row = sd[lsd-1];
+    col = sd[lsd-2];
+    c = sd[lsd-3];
 
 		do{
 			if((row>=0) && (col<*ncol) && (!array[row*(*ncol)+col])) {
-				sd[lsd++] = c++; sd[lsd++] = col; sd[lsd++] = row;
-				Sinit("x0x8x1x5Fppp");  // for i=0..8 utah(...), cleanup stack
+				Sinit("x0x8x1x5Fx3x1Rx1+x3x2R");  // for i=0..8 utah(...)
 			}	
-			row += 2; col -= 2;
+
+			// stack c row col
+			// row += 2; col -= 2;
+      Sinit("x2+Sx2-S");
+      // oscript->vars sync
+      row = sd[lsd-1];
+      col = sd[lsd-2];
+      c = sd[lsd-3];
+
 		} while((row<*nrow) && (col>=0));
-		row += 3; col +=1;
-	
+
+		// stack c row col
+		// row += 3; col += 1;
+		Sinit("x3+Sx1+S");
+    // oscript->vars sync
+    row = sd[lsd-1];
+    col = sd[lsd-2];
+    c = sd[lsd-3];
+
 	} while((row <*nrow) || (col < *ncol));
 
 	if((*nrow*(*ncol))%8) {
