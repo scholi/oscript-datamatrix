@@ -68,9 +68,23 @@ void mapDataMatrix(){
     c = sd[lsd-3];
 
 		do{
+#if 0
 			if((row>=0) && (col<*ncol) && (!array[row*(*ncol)+col])) {
 				Sinit("x0x8x1x5Fx3x1Rx1+x3x2R");  // for i=0..8 utah(...)
 			}	
+#else
+			Sinit(
+			// stack c col row
+			"x2C."                      // c col row col row
+			"x2Cx100EG*+."              // c col row col row row*n+col
+			"x500+EGx0=."               // c col row col row !array[row*n+col]
+			"x3x2R."                    // move t1 out of the way => c col row t1 col row
+			"DDx0>Sx0=|Sx80<&."         // row >= 0? => c col row t1 col t4&t5
+			"SDx100EG<Sx80>|&&."        // col<ncol => c col row tfinal
+			"(x0x8x1x5Fx3x1Rx1+x3x2R)"  // true
+			"()i"                       // false
+			);
+#endif
 
 			// stack c row col
 			// row += 2; col -= 2;
