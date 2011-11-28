@@ -221,17 +221,18 @@ void Sinit(u* ss){
 				Sinit(mm);
 			}
 		}
+    // FIXME : we may win a few characters by automatically popping the printed char a int
 		SS('#') {
 			SU(1);
 			if(lsd>0) printf("%c", sd[lsd-1]);
 		}
 		SS('.') {
 			SU(1);
-			if(lsd>0) printf("%i\n", sd[lsd-1]);
+			if(lsd>0) printf("%i ", sd[lsd-1]);
 #if STACK
-			if(verb) fprintf(stderr,"stack (%d): ",lsd);
-			for(ui j=0;j<lsd;j++) if(verb) fprintf(stderr,"%i ",sd[j]);
-			if(verb) fprintf(stderr,"\n");
+			if (verb) { fprintf(stderr,"stack (%d): ",lsd);
+			for(ui j=0;j<lsd;j++) fprintf(stderr,"%i ",sd[j]);
+			fprintf(stderr,"\n"); }
 #endif
 #if MACRO
 			if(verb) fprintf(stderr,"macro (%d): ",lmacros);

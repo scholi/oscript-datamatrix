@@ -54,9 +54,11 @@ main(ui iv,char **V){
 	mapDataMatrix();
 
 	/* PS file creation */
+#if DISABLED
 	ps();
+#endif
 
-	/* display Matrix */
+  /* display Matrix */
 	printf("\n");
 	f(*nrow){
 		if(i%(*nrow/n[3])==0) {
@@ -74,5 +76,6 @@ main(ui iv,char **V){
 			printf("\n");
 		}
 	}
+
 	return 0;
 }
