@@ -55,50 +55,16 @@ void mapDataMatrix(){
 		}
 #endif
 
-		// run macro 10 (do while loop)
 		Sinit(
 		"xa@"      // run macro 10 (do while loop)
 		"x1+Sx3+S" // row+=1, col+=3
 		           // stack : c row col
+
+		"xb@"      // run macro 11 (do while loop)
+		"x3+Sx1+S" // row += 3; col += 1;
+		           // stack c row col
 		);
 
-    // oscript->vars sync
-    row = sd[lsd-1];
-    col = sd[lsd-2];
-    c = sd[lsd-3];
-
-		do{
-#if 0
-			if((row>=0) && (col<*ncol) && (!array[row*(*ncol)+col])) {
-				Sinit("x0x8x1x5Fx3x1Rx1+x3x2R");  // for i=0..8 utah(...)
-			}	
-#else
-			Sinit(
-			// stack c col row
-			"x2C."                      // c col row col row
-			"x2Cx100EG*+."              // c col row col row row*n+col
-			"x500+EGx0=."               // c col row col row !array[row*n+col]
-			"x3x2R."                    // move t1 out of the way => c col row t1 col row
-			"DDx0>Sx0=|Sx80<&."         // row >= 0? => c col row t1 col t4&t5
-			"SDx100EG<Sx80>|&&."        // col<ncol => c col row tfinal
-			"(x0x8x1x5Fx3x1Rx1+x3x2R)"  // true
-			"()i"                       // false
-			);
-#endif
-
-			// stack c row col
-			// row += 2; col -= 2;
-      Sinit("x2+Sx2-S");
-      // oscript->vars sync
-      row = sd[lsd-1];
-      col = sd[lsd-2];
-      c = sd[lsd-3];
-
-		} while((row<*nrow) && (col>=0));
-
-		// stack c row col
-		// row += 3; col += 1;
-		Sinit("x3+Sx1+S");
     // oscript->vars sync
     row = sd[lsd-1];
     col = sd[lsd-2];

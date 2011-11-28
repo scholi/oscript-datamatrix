@@ -162,7 +162,25 @@ void macros_init(){
 		 "xa()x3x1RI@"            // if above true, run macro10, () otherwise
 		 "]"
 	);
-	
+
+	// map. second do while loop
+  Sinit("xb["
+		".x2C"                      // c col row col row
+		"x2Cx100EG*+"               // c col row col row row*n+col
+		"x500+EGx0="                // c col row col row !array[row*n+col]
+		"x3x2R"                     // move t1 out of the way => c col row t1 col row
+		"DDx0>Sx0=|Sx80<&"          // row >= 0? => c col row t1 col t4&t5
+		"SDx100EG<Sx80>|&&"         // col<ncol => c col row tfinal
+		"(x0x8x1x5Fx3x1Rx1+x3x2R)"  // true
+		"()i"                       // false
+	  "x2+Sx2-S" 	                // row += 2; col -= 2;
+
+		"x2CSDDx0>Sx0=|Sx80<&SDx100EG<Sx80>|&" // condition : (row<*nrow) && (col>=0)
+		                                       // => c col row m11 () t
+		"xb()x3x1RI@"
+		"]"
+	);
+
 	// Macro xac is reserved for size.c
 	// Macro xad is reserved for enocde.c
 }
