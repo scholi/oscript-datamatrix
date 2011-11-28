@@ -181,6 +181,48 @@ void macros_init(){
 		"]"
 	);
 
+	// macro 13
+	// big do while loop in map
+	Sinit("xc[" // stack : c row col
+		// CORNER 1 ///////////
+		"x3C" // c row col c row col
+		"(x0x8x1x6Fx1+)()" // c row col ()1 ()2
+		"x5x3R"       // ()1 ()2 c row col
+		"x0=S"        // ()1 ()2 c t1 row
+		"x100EG=&S"   // get nrow and compare, ... => ()1 ()2 t3 c
+		"x4x3RI"      // roll, s.t. : c ()1 ()2 t3, and if
+		"@"           // run ()1 or ()2 with c stil on stack
+		"x4x1Rp"      // roll and pop old c => row col newc
+		"x3x2R"       // prepare for next if => newc row col
+
+		// CORNER 2 ///////////
+		"x3C" // c row col c row col
+		"(x0x8x1x7Fx1+)()" // c row col ()1 ()2
+		"x5x3R"       // ()1 ()2 c row col
+		"x0=S"        // ()1 ()2 c t1 row
+		"x100EGx2-=&" // t1 &= (nrow-2)==row
+		"Gx4%x0>&"    // t1 &= ncol%4!=0
+		"Sx4x3RI"     // swap, roll, s.t. : c ()1 ()2 t3, and if
+		"@"           // run ()1 or ()2 with c stil on stack
+		"x4x1Rp"      // roll and pop old c => row col newc
+		"x3x2RS"      // prepare for next if => newc col row
+
+		"xa@"         // run macro 10 (do while loop)
+		"x1+Sx3+S"    // row+=1, col+=3
+		              // stack : c row col
+
+		"xb@"         // run macro 11 (do while loop)
+		"x3+Sx1+SS"   // row += 3; col += 1;
+		              // stack c row col
+
+	  "x2C"         // build while condition
+		"Dx100EG<Sx80>|"	  // (col < *ncol));
+		"SDx100EG<Sx80>|"   //  (row <*nrow) 
+		"|"	// or
+		"xc()x3x1RI@" // run macro 11 again if necessary
+		"]"
+	);
+
 	// Macro xac is reserved for size.c
 	// Macro xad is reserved for enocde.c
 }
