@@ -32,7 +32,7 @@ clean:
 
 .PHONY:  mrproper clean push pull test
 
-test:
+test: datamatrix
 	@bash test.sh
 
 stack: stack.c
