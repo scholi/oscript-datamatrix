@@ -121,7 +121,7 @@ void macros_init(){
 		"x111EGx4<I"            // i<4?
 
     "x7G-"    // push 7-i. stack : c row col shift
-    "x4x3RS." // reorder args for module
+    "x4x3RS"  // reorder args for module
     "x2@"     // call module
 		"]"
 	);
@@ -137,9 +137,29 @@ void macros_init(){
 		"x111EGx2<I"     // i<2?
 
     "x7G-"    // push 7-i. stack : c row col shift
-    "x4x3RS." // reorder args for module
+    "x4x3RS"  // reorder args for module
     "x2@"     // call module
 		"]"
+	);
+
+	// map. for first do while loop
+	Sinit("xa["
+		"x2CS" // c col row row col
+		"(x0x8x1x5Fx3x1Rx1+x3x2R)()" // row col ()1 ()2
+		"x4x2Rx100EG"      // ()1 ()2 row col nrow
+		"x3Cx3x1R*+"       // ()1 ()2 row col nrow col+nrow*row
+		"x500+EGx0"        // !array[col+nrow*row]
+		                   // ()1 ()2 row col nrow t1
+		"=x3x1Rx80<&"      // ()1 ()2 row nrow t3
+	   "x3x2Rx2C<"		     // ()1 ()2 t3 row nrow t4
+		"x3x2Rpx80>|&"     // ()1 ()2 t7
+		"I@"               // if exec ()1 or ()2, stack is c row col
+			                 // after exec stack : newc col row
+     "x2-Sx2+S"        // row-=2, col+=2
+//		 "x2CSDDx0>Sx0=|Sx80<&SDx100EG<Sx80>|&" // (row>=0) && (col<(*ncol))
+		 "x2CDx0>Sx0=|Sx100EG<&"
+		 "xa()x3x1RI@"            // if above true, run macro10, () otherwise
+		 "]"
 	);
 }
 
