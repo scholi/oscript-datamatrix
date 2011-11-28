@@ -11,6 +11,7 @@ main(ui iv,char **V){
 	ncol=ram+0x100;
 	nrow=ram+0x100;
 	array=ram+0x500;
+	u *n=ram+0x100;
 
 	if(iv!=2) return 1;
 	DBMSG("Load msg into ram...");
@@ -37,13 +38,6 @@ main(ui iv,char **V){
 
 	/* TotalSize,DataSize,RS Size,#Regions,#blocks */
 	getSize();
-	u n[4];
-	f(4){
-		n[3-i]=sd[--lsd];
-		DBMSG("n[%i]=%u",3-i,n[3-i]);
-	}
-	DBMSG("RS size = %i",n[2]);
-	*ncol=*nrow=n[0];
 
 	/* Padd data	*/
 	 /* If not all the data fill de datamatrix, a 254 MC should be added to mark the end of data */

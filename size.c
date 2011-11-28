@@ -13,6 +13,7 @@ void getSize(){
 	"GS" // DS=data size (l MS DS MS)
 	"D*x8/G-" // RS size = total size - data size (l MS DS RS=MS^2-s[i])
 	"x1" // # of regions
+	"x103EPBPBPBP" // Write n[] into x100-x103 RAM
 	"x0" // Break code
 	"]" // perform if
 	"x0[" // set macro to be run in the first loop
@@ -25,9 +26,10 @@ void getSize(){
 	"GS" // DS=data size (l MS DS MS)
 	"D*x8/G-" // RS size = total size - data size (l MS DS RS=MS^2-s[i])
 	"x2" // # of regions
+	"x103EPBPBPBP" // Write n[] into x100-x103 RAM
 	"x0" // Break code
 	"]"
 	"x0x5x1(Sx0(px0)i)F" // For #2 (2x2 regions sizes)
-	"px5x1Rp"
+	"p" // po pldata
 	);
 }
