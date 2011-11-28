@@ -141,5 +141,8 @@ void macros_init(){
     "x2@"     // call module
 		"]"
 	);
+
+	// Macro xac is reserved for size.c
+	
 }
 
