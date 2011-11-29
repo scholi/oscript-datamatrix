@@ -22,27 +22,24 @@ void ps(ui r){
         "x100EGx2+"  // %i %i 4 [%i 0 0 %i 0 -%i]\n{<\n
         "..x4.px5b#p.x0..S-.x0.S-.x0xax3cx7bxax5dx0@"
         "p"
-        "x30x66x100EGx2/x1+(#S#S)rpp"); // print 0f0f... (first row)
+        "x30x66x100EGx2/x1+(S#S#)rpp"); // print 0f0f... (first row)
 
 	printf("\n");
+
+#if 0
 	f(*nrow){
 		printf("0");
-
-#if 1
 		for(int j=0;j<*ncol;j++){
 			printf("%c",(array[i*(*ncol)+j]==1)?'f':'0');
 		}
-#else
-    // FIXME. don't know what's wrong ... yet ;)
-    sd[lsd++] = i;
-    Sinit(
-    "x100EGDx3z*x500+E(GAx1=(x30)(x66)i#p)r"
-    );
-    Sinit("p");
-#endif
-
 		printf("%c\n",(i%2)?'f':'0');
 	}
+#else
+    Sinit(
+    "x0x100EGx1(x30#px100EGDx3z*x500+E(GAx1=(x66)(x30)i#p)rDx2%(x66)(x30)i#xa#ppp)F"
+    );
+#endif
+
 
   Sinit(
     "x30x100EGx2+(#)rp" // final 0000 line
