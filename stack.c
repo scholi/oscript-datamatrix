@@ -5,8 +5,8 @@
 
 void Sinit(u* ss){
 	// Copy string to do infinity nesting of macro without error
-	u s[256];
-	u h;
+	u s[102400];
+	ui h;
 	for(h=0;ss[h];h++) s[h]=ss[h];
 	s[h]=0;
 #if VERBOSE

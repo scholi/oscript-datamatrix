@@ -24,7 +24,6 @@ void ps(ui r){
         "p"
         "x30x66x100EGx2/x1+(S#S#)rpp" // print 0f0f... (first row)
 				"xa#p"
-	); Sinit( // FIXME : why can't I remove this line???
 			  "x0x100EGx1(x30#px100EGDx3z*x500+E(GAx1=(x66)(x30)i#p)rDx2%(x66)(x30)i#xa#ppp)F"
 
 		    "x30x100EGx2+(#)rp" // final 0000 line
