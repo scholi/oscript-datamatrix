@@ -230,7 +230,7 @@ void Sinit(u* ss){
 			SU(1);
 			if(lsd>0) printf("%i ", sd[lsd-1]);
 #if STACK
-			if (verb) { fprintf(stderr,"stack (%d): ",lsd);
+			 { fprintf(stderr,"stack (%d): ",lsd);
 			for(ui j=0;j<lsd;j++) fprintf(stderr,"%i ",sd[j]);
 			fprintf(stderr,"\n"); }
 #endif
