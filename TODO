@@ -1,8 +1,6 @@
 O:
 
 M:
-ps.c
-map.c
 
 later:
 main.c
@@ -14,3 +12,6 @@ rs.c
 module.c
 utah.c
 corners.c
+ps.c
+map.c
+
