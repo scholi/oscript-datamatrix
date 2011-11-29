@@ -54,7 +54,7 @@ main(ui iv,char **V){
 	mapDataMatrix();
 
 	/* PS file creation */
-#if DISABLED
+#if 1 // DISABLED
 	ps();
 #endif
 
