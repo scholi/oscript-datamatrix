@@ -3,8 +3,9 @@
 typedef unsigned char u;
 typedef unsigned int ui;
 
-#define SS(x) if(s[i]==x)
+#define O(x) if(s[i]==x)
 #define H(x) sd[lsd-2] x sd[--lsd];
+#define A(x) if(s[i]==#x[0]) sd[lsd-2] x ## = sd[--lsd];
 
 ui sd[1024];
 ui lsd;
@@ -16,144 +17,139 @@ ui lmacro[256];
 u tm;
 
 void Sinit(u* ss){
-	// Copy string to do infinity nesting of macro without error
-	u s[102400];
-	ui h;
-	for(h=0;ss[h];h++) s[h]=ss[h];
-	s[h]=0;
-	for(ui i=0;s[i];i++){
-		if(s[i]=='x'){
-			ui v=0;
-			for(++i;(s[i]>='0'&&s[i]<='9')||(s[i]>='a'&&s[i]<='f');i++){
-				v=v<<4;
-				v+=(s[i]>='a')?s[i]+10-'a':s[i]-'0';
-			}
-			sd[lsd++]=v;
-			i--;
-		}
-		SS('+')	H(+=);
-		SS('-')	H(-=);
-		SS('*')	H(*=);
-		SS('/') H(/=);
-		SS('%') H(%=);
-		SS('&') sd[lsd-2]&=sd[--lsd];
-		SS('|')	sd[lsd-2]|=sd[--lsd];
-		SS('^')	sd[lsd-2]^=sd[--lsd];
-		SS('~') sd[lsd-1]=~sd[lsd-1];
-		SS('{') sd[lsd-2]<<=sd[--lsd];
-		SS('('){
-			ui ct=0;
-			u k=0xfe;
-			if(tm) k++;
-			tm=!tm;
-			lmacro[k]=0;
-			for(++i;!(s[i]==')' && ct==0);i++){
-				macro[k][lmacro[k]++]=s[i];
-				if(s[i]=='(') ct++;
-				else if(s[i]==')') ct--;
-			}
-			macro[k][lmacro[k]]=0;
-			sd[lsd++]=k;
-		}
-		SS('}'){
-			sd[lsd-2]>>=sd[--lsd];
-		}
-		SS('S'){
-			ui x=sd[lsd-2];
-			sd[lsd-2]=sd[lsd-1];
-			sd[lsd-1]=x;
-		}
-		SS('>'){
-			if(sd[lsd-2]>sd[--lsd]) sd[lsd-1]=1;
-			else sd[lsd-1]=0;
-		}
-		SS('<'){
-			if(sd[lsd-2]<sd[--lsd]) sd[lsd-1]=1;
-			else sd[lsd-1]=0;
-		}
-		SS('='){
-			if(sd[lsd-2]==sd[--lsd]) sd[lsd-1]=1;
-			else sd[lsd-1]=0;
-		}
-		SS('I'){
-			if(sd[--lsd]) lsd--;
-			else sd[lsd-2]=sd[--lsd];
-		}
-		SS('D')	sd[lsd++]=sd[lsd-1];
-		SS('C'){
-			ui l=sd[--lsd];
-			for(ui j=0;j<l;j++) sd[lsd++]=sd[lsd-l];
-		}
-		SS('z'){ // Pick element
-			ui k=sd[--lsd];
-			if(k>0)	sd[lsd++]=sd[lsd-k];
-		}
-	 	SS('i') {
-			ui o2 = sd[--lsd];
-			ui o1 = sd[--lsd];
-			ui t = sd[--lsd];
-			if (t) Sinit(macro[o1]);
-			else Sinit(macro[o2]);
-		}
-		// for loop
-		SS('r') {
-			ui m = sd[--lsd];
-			ui count = sd[--lsd];
-			u mm[256]; // Prevent overwriting function when nested
-			for(h=0;macro[m][h];h++) mm[h]=macro[m][h];
-			mm[h]=0;
+// Copy string to do infinity nesting of macro without error
+u s[102400];
+ui h;
+for(h=0;ss[h];h++) s[h]=ss[h];
+s[h]=0;
+for(ui i=0;s[i];i++){
+if(s[i]=='x'){
+ui v=0;
+for(++i;(s[i]>='0'&&s[i]<='9')||(s[i]>='a'&&s[i]<='f');i++){
+v=v<<4;
+v+=(s[i]>='a')?s[i]+10-'a':s[i]-'0';
+}
+sd[lsd++]=v;
+i--;
+}
 
-			for (;count>0;count--)
-				Sinit(mm);
-		}
-		SS('#') {
-			if(lsd>0) printf("%c", sd[lsd-1]);
-		}
-		SS('['){
-			ui ct=0;
-			u k=sd[--lsd];
-			lmacro[k]=0;
-			for(++i;!(s[i]==']'&&ct==0);i++){
-				macro[k][lmacro[k]++]=s[i];
-				if(s[i]=='(') ct++;
-				else if(s[i]==')') ct--;
-			}
-			macro[k][lmacro[k]]=0;
-		}
-		SS('@'){
-			ui k=sd[--lsd];
-			Sinit(macro[k]);
-		}
-		SS('G')	sd[lsd++]=*ptr;
-		SS('P')	*ptr=(u)(sd[--lsd]&0xff);
-		SS('p')	--lsd;
-		SS('Q') *(++ptr)=sd[--lsd];
-		SS('A') ++ptr;
-		SS('B')	ptr--;
-		SS('E') ptr=ram+sd[--lsd];
-		SS('M')	ptr+=sd[--lsd];
-		SS('N') ptr-=sd[--lsd];
-		SS('Z')	sd[lsd++]=(ui)(ptr-ram);
-		SS('F'){
-			ui j=sd[lsd-4], b=sd[lsd-3], c=sd[lsd-2], k=sd[lsd-1];
-			u m[256];
-			for(h=0;macro[k][h];h++) m[h]=macro[k][h];
-			m[h]=0;
-			lsd-=4;
-			for(;j<b;j+=c){
-				sd[lsd++]=j;
-				Sinit(m);
-			}
-		}
-		SS('R'){
-			u k=sd[--lsd];
-			u n=sd[--lsd];
-			for(u j=0;j<k;j++){
-				ui t=sd[lsd-n];
-				f(n-1) sd[lsd-n+i]=sd[lsd-n+i+1];
-				sd[lsd-1]=t;
-			}
-		}
-	}
+A(+)A(-)A(*)A(/)A(%)A(&)A(|)A(^)
+
+O('~') sd[lsd-1]=~sd[lsd-1];
+O('{') sd[lsd-2]<<=sd[--lsd];
+O('('){
+ui ct=0;
+u k=0xfe;
+if(tm) k++;
+tm=!tm;
+lmacro[k]=0;
+for(++i;!(s[i]==')' && ct==0);i++){
+macro[k][lmacro[k]++]=s[i];
+if(s[i]=='(') ct++;
+else if(s[i]==')') ct--;
+}
+macro[k][lmacro[k]]=0;
+sd[lsd++]=k;
+}
+O('}'){
+sd[lsd-2]>>=sd[--lsd];
+}
+O('S'){
+ui x=sd[lsd-2];
+sd[lsd-2]=sd[lsd-1];
+sd[lsd-1]=x;
+}
+O('>'){
+if(sd[lsd-2]>sd[--lsd]) sd[lsd-1]=1;
+else sd[lsd-1]=0;
+}
+O('<'){
+if(sd[lsd-2]<sd[--lsd]) sd[lsd-1]=1;
+else sd[lsd-1]=0;
+}
+O('='){
+if(sd[lsd-2]==sd[--lsd]) sd[lsd-1]=1;
+else sd[lsd-1]=0;
+}
+O('I'){
+if(sd[--lsd]) lsd--;
+else sd[lsd-2]=sd[--lsd];
+}
+O('D')sd[lsd++]=sd[lsd-1];
+O('C'){
+ui l=sd[--lsd];
+for(ui j=0;j<l;j++) sd[lsd++]=sd[lsd-l];
+}
+O('z'){ // Pick element
+ui k=sd[--lsd];
+if(k>0)sd[lsd++]=sd[lsd-k];
+}
+ O('i') {
+ui o2 = sd[--lsd];
+ui o1 = sd[--lsd];
+ui t = sd[--lsd];
+if (t) Sinit(macro[o1]);
+else Sinit(macro[o2]);
+}
+// for loop
+O('r') {
+ui m = sd[--lsd];
+ui count = sd[--lsd];
+u mm[256]; // Prevent overwriting function when nested
+for(h=0;macro[m][h];h++) mm[h]=macro[m][h];
+mm[h]=0;
+
+for (;count>0;count--)
+Sinit(mm);
+}
+O('#') {
+if(lsd>0) printf("%c", sd[lsd-1]);
+}
+O('['){
+ui ct=0;
+u k=sd[--lsd];
+lmacro[k]=0;
+for(++i;!(s[i]==']'&&ct==0);i++){
+macro[k][lmacro[k]++]=s[i];
+if(s[i]=='(') ct++;
+else if(s[i]==')') ct--;
+}
+macro[k][lmacro[k]]=0;
+}
+O('@'){
+ui k=sd[--lsd];
+Sinit(macro[k]);
+}
+O('G')sd[lsd++]=*ptr;
+O('P')*ptr=(u)(sd[--lsd]&0xff);
+O('p')--lsd;
+O('Q') *(++ptr)=sd[--lsd];
+O('A') ++ptr;
+O('B')ptr--;
+O('E') ptr=ram+sd[--lsd];
+O('M')ptr+=sd[--lsd];
+O('N') ptr-=sd[--lsd];
+O('Z')sd[lsd++]=(ui)(ptr-ram);
+O('F'){
+ui j=sd[lsd-4], b=sd[lsd-3], c=sd[lsd-2], k=sd[lsd-1];
+u m[256];
+for(h=0;macro[k][h];h++) m[h]=macro[k][h];
+m[h]=0;
+lsd-=4;
+for(;j<b;j+=c){
+sd[lsd++]=j;
+Sinit(m);
+}
+}
+O('R'){
+u k=sd[--lsd];
+u n=sd[--lsd];
+for(u j=0;j<k;j++){
+ui t=sd[lsd-n];
+f(n-1) sd[lsd-n+i]=sd[lsd-n+i+1];
+sd[lsd-1]=t;
+}
+}
+}
 }
 

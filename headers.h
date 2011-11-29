@@ -31,7 +31,7 @@ u *array;
 u *nrow;
 u *ncol;
 
-#define SS(x) else if(s[i]==x)
+#define SS(x) if(s[i]==x)
 
 ui sd[1024];
 ui lsd;
