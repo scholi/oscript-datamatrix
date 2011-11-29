@@ -53,29 +53,17 @@ main(ui iv,char **V){
 	/* put data into matrix */
 	mapDataMatrix();
 
+#if DISABLED
 	/* PS file creation */
-#if 1 // DISABLED
 	ps();
 #endif
 
-  /* display Matrix */
-	printf("\n");
-	f(*nrow){
-		if(i%(*nrow/n[3])==0) {
-			for(ui k=0;k<(*ncol/2)+n[3];k++) printf("# ");
-			printf("\n");
-		}
-		for(ui j=0;j<*ncol;j++){
-			if(j%(*ncol/n[3])==0) printf("#");
-			printf(array[*ncol*i+j]==2?"#":" ");
-			if((j+1)%(*ncol/n[3])==0) printf((i%2)?" ":"#");
-		}
-		printf("\n");
-		if((i+1)%(*nrow/n[3])==0){
-			for(ui k=0;k<*ncol+2*n[3];k++) printf("#");
-			printf("\n");
-		}
-	}
+	Sinit(
+      "x23x20x100EGx2/x1+(S#S#)rpp" // print # # ... (first row)
+			"xa#p"
+		  "x0x100EGx1(x23#px100EGDx3z*x500+E(GAx1=(x20)(x23)i#p)rDx2%(x20)(x23)i#xa#ppp)F"
+		  "x23x100EGx2+(#)rpxa#p" // final ### line
+  );
 
 	return 0;
 }
