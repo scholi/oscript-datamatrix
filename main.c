@@ -13,7 +13,7 @@
 Y char u;Y int ui;
 u*ptr;u ram[666];main(ui iv,u**x){
 ptr=ram;while(*x[1])*(++ptr)=*(x[1]++);*(ptr+1)=0;ram[0]=ptr-ram;
-Sinit("x1[Zx3x2Rx2C*x0=x1S-x3x2RSx400+EGSx400+EG+xff%x300+EG*SE]"
+S("x1[Zx3x2Rx2C*x0=x1S-x3x2RSx400+EGSx400+EG+xff%x300+EG*SE]"
 "x2[x2x4rx4x2Rx200+EGS}x1&x1+x3x2RS"B"*+"H"P]x3[Dx4Dx4x1R+x8%-"
 "Sx4x1R+x3x2R+]x4["B"(p)x3x5zx80<I@S]x5[x113EPx3CSx25G}x1&-x6fG"
 "}x1&-SDGx5<-Sx2-SGx2<Ix7G-x4x3RSx2@]x6["I A B"x1-"

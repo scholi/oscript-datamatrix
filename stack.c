@@ -16,7 +16,7 @@ u macro[256][1024];
 ui lmacro[256];
 u tm;
 
-void Sinit(u* ss){
+void S(u* ss){
   // Copy string to do infinity nesting of macro without error
   u s[102400];
   ui h=0;
@@ -35,8 +35,8 @@ void Sinit(u* ss){
     A(+)A(-)A(*)A(/)A(%)A(&)A(|)A(^)
 
     O('~') sd[lsd-1]=~sd[lsd-1];
-    O('{') sd[lsd-2]<<=sd[--lsd];
-    O('}') sd[lsd-2]>>=sd[--lsd];
+    O('{') H(<<=);
+    O('}') H(>>=);
     O('('){
       ui ct=0;
       u k=0xfe;
@@ -81,12 +81,8 @@ void Sinit(u* ss){
       ui k=sd[--lsd];
       if(k>0)sd[lsd++]=sd[lsd-k];
     }
-    O('i') {
-      ui o2 = sd[--lsd];
-      ui o1 = sd[--lsd];
-      ui t = sd[--lsd];
-      if (t) Sinit(macro[o1]);
-      else Sinit(macro[o2]);
+    O('i') { S("x3x1RI");
+      S(macro[sd[--lsd]]);
     }
     // for loop
     O('r') {
@@ -97,7 +93,7 @@ void Sinit(u* ss){
       mm[h]=0;
 
       for (;count>0;count--)
-        Sinit(mm);
+        S(mm);
     }
     O('#') {
       if(lsd>0) printf("%c", sd[lsd-1]);
@@ -115,7 +111,7 @@ void Sinit(u* ss){
     }
     O('@'){
       ui k=sd[--lsd];
-      Sinit(macro[k]);
+      S(macro[k]);
     }
     O('G')sd[lsd++]=*ptr;
     O('P')*ptr=(u)(sd[--lsd]&0xff);
@@ -135,7 +131,7 @@ void Sinit(u* ss){
       lsd-=4;
       for(;j<b;j+=c){
         sd[lsd++]=j;
-        Sinit(m);
+        S(m);
       }
     }
     O('R'){
