@@ -1,3 +1,4 @@
+
 #define f(m) for(int i=0;i < m ;i++)
 
 typedef unsigned char u;
@@ -11,7 +12,7 @@ typedef unsigned int ui;
 ui sd[1024];
 ui lsd;
 
-u ram[1024000];
+u ram[102400];
 u *ptr;
 u macro[256][1024];
 ui lmacro[256];
@@ -68,15 +69,27 @@ void S(u* ss){
 		}
 		O('D')sd[lsd++]=sd[lsd-1];
 		O('C'){
+/*			printf("STACK: ");
+			for(h=0;h<lsd;h++) printf("%i ",sd[h]);
+			printf("\nCOPY %i elts\n",sd[lsd-1]);*/
+//			S("D1+S(DzS)rp");
 			ui l=sd[--lsd];
 			for(ui j=0;j<l;j++) sd[lsd++]=sd[lsd-l];
+/*			printf("STACK: ");
+			for(h=0;h<lsd;h++) printf("%i ",sd[h]);
+			printf("\n");*/
 		}
 		O('z'){ // Pick element
 			ui k=sd[--lsd];
+//			printf("PICK elt %i @ pos -%i\n",sd[lsd-k],k);
 			if(k>0)sd[lsd++]=sd[lsd-k];
+/*			printf("STACK: ");
+			for(h=0;h<lsd;h++) printf("%i ",sd[h]);
+			printf("\n");*/
+			
 		}
-		O('i') { S("x3x1RI");
-			S(macro[sd[--lsd]]);
+		O('i') { S("x3x1RI@");
+//			S(macro[sd[--lsd]]);
 		}
 		// for loop
 		O('r') {

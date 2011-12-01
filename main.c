@@ -1,6 +1,6 @@
 #define Y typedef unsigned
 Y char u;Y int ui;
-u*ptr;u ram[666];main(ui iv,u** _){
+u*ptr;u ram[666];main(u iv,u** _){
 ptr=ram;while(*_[1])*(++ptr)=*(_[1]++);*(ptr+1)=0;ram[0]=ptr-ram;
 S(
 "11[111EPD0x100EG7-111EG]"
