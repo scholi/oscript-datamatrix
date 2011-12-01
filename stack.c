@@ -22,15 +22,18 @@ void S(u* ss){
 	ui h=0;
 	for(;s[h]=ss[h];h++); s[h]=0;
 	for(ui i=0;s[i];i++){
-		if(s[i]=='x'){
-			ui v=0;
-			for(++i;(s[i]>47&&s[i]<58)||(s[i]>96&&s[i]<103);i++){
-				v=v<<4;
-				v+=(s[i]>='a')?s[i]+10-'a':s[i]-'0';
-			}
+		ui v=0;
+		for(h=0;(s[i]>47&&s[i]<58)||(s[i]>96&&s[i]<103);i++){
+			v=v<<4;
+			v+=(s[i]>='a')?s[i]+10-'a':s[i]-'0';
+			h++;
+		}
+		if(h){
 			sd[lsd++]=v;
 			--i;
 		}
+		for(v=0;s[i]==32;i++);
+		if(v){ sd[lsd++]=v; --i; }
 		A(+)A(-)A(*)A(/)A(%)A(&)A(|)A(^)
 
 		O('~'){ sd[lsd-1]=~sd[lsd-1]; }
