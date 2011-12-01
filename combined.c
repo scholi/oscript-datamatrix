@@ -1,7 +1,7 @@
 #define Y typedef unsigned
 Y char u;Y int ui;
 
-#define C A[--B]
+#define E A[--B]
 #define B(x) A[B-x]
 #define f(m) for(int i=0;i < m ;i++)
 #define O(x) else if(s[i]==x)
@@ -10,12 +10,12 @@ Y char u;Y int ui;
 #define Q(x,y) O(x){ B(2)=(B(2) y E )?1:0; }
 
 ui A[1024],B,l[256];
-u r[1024000],*p,C[256][1024],t,h;
+u r[1024000],*p,C[256][1024],t;
 
 void S(u* ss){
 	u s[102400];
-	h=0;
-	for(;s[h]=ss[h];h++); s[h]=0;
+	ui h=0;
+	for(;s[h]=ss[h];h++);
 	for(ui i=0;s[i];i++){
 		ui v=0;
 		for(h=0;(s[i]>47&&s[i]<58)||(s[i]>96&&s[i]<103);i++){
