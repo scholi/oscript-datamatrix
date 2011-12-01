@@ -22,9 +22,10 @@ void S(u* ss){
   ui h=0;
   for(;s[h]=ss[h];h++);
   for(ui i=0;s[i];i++){
-    if(s[i]=='x'){
+
+    if((s[i]>47&&s[i]<58)||(s[i]>96&&s[i]<103)){
       ui v=0;
-      for(++i;(s[i]>='0'&&s[i]<='9')||(s[i]>='a'&&s[i]<='f');i++){
+      for(;(s[i]>47&&s[i]<58)||(s[i]>96&&s[i]<103);i++){
         v=v<<4;
         v+=(s[i]>='a')?s[i]+10-'a':s[i]-'0';
       }
@@ -104,8 +105,8 @@ void S(u* ss){
       lmacro[k]=0;
       for(++i;!(s[i]==']'&&ct==0);i++){
         macro[k][lmacro[k]++]=s[i];
-        if(s[i]=='(') ct++;
-        else if(s[i]==')') ct--;
+        if(s[i]=='[') ct++;
+        else if(s[i]==']') ct--;
       }
       macro[k][lmacro[k]]=0;
     }
