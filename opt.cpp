@@ -2,7 +2,6 @@
 #include <vector>
 #include <algorithm>
 using namespace std;
-#define rep(i,n) for (int i=0;i<n;++i)
 typedef vector<int> vi;
 typedef vector<vi> vii;
 
@@ -18,8 +17,8 @@ const int l = 55;
 #endif
 
 const int k = 3;
-char res[3];
-char com[3];
+char res[k];
+char com[k];
 
 int level=0;
 void combi(int pos) {
@@ -50,8 +49,25 @@ void subset(const char* c, int set, int pos) {
   }
 }
 
+char r[k];
+void rep(const char* c, int pos) {
+  if (k==pos) {
+    for (int i=0;i<k;++i)
+      cout << r[i];
+    cout << endl;
+    return;
+  }
+  for (int j=0;j<l;++j) {
+    r[pos] = c[j];
+    rep(c, pos+1);
+  }
+}
+
 int main(int argc, char** argv) {
-  subset(x, 0, 0);
+  // subset(x, 0, 0);
+  
+  rep(x, 0);
+
   return 0;
 }
 
