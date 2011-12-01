@@ -6,6 +6,7 @@ typedef unsigned int ui;
 #define O(x) else if(s[i]==x)
 #define H(x) sd[lsd-2] x sd[--lsd];
 #define A(x) else if(s[i]==#x[0]){ sd[lsd-2] x ## = sd[--lsd]; }
+#define Q(x,y) O(x){ sd[lsd-2]=(sd[lsd-2] y sd[--lsd])?1:0; }
 
 ui sd[1024];
 ui lsd;
@@ -58,18 +59,9 @@ void S(u* ss){
 			sd[lsd-2]=sd[lsd-1];
 			sd[lsd-1]=x;
 		}
-		O('>'){
-			if(sd[lsd-2]>sd[--lsd]) sd[lsd-1]=1;
-			else sd[lsd-1]=0;
-		}
-		O('<'){
-			if(sd[lsd-2]<sd[--lsd]) sd[lsd-1]=1;
-			else sd[lsd-1]=0;
-		}
-		O('='){
-			if(sd[lsd-2]==sd[--lsd]) sd[lsd-1]=1;
-			else sd[lsd-1]=0;
-		}
+		Q('>',>)
+		Q('<',<)
+		Q('=',==)
 		O('I'){
 			if(sd[--lsd]) lsd--;
 			else sd[lsd-2]=sd[--lsd];
