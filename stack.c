@@ -3,9 +3,9 @@
 typedef unsigned char u;
 typedef unsigned int ui;
 
-#define O(x) if(s[i]==x)
+#define O(x) else if(s[i]==x)
 #define H(x) sd[lsd-2] x sd[--lsd];
-#define A(x) if(s[i]==#x[0]) sd[lsd-2] x ## = sd[--lsd];
+#define A(x) else if(s[i]==#x[0]){ sd[lsd-2] x ## = sd[--lsd]; }
 
 ui sd[1024];
 ui lsd;
@@ -31,12 +31,11 @@ void S(u* ss){
 			sd[lsd++]=v;
 			--i;
 		}
-
 		A(+)A(-)A(*)A(/)A(%)A(&)A(|)A(^)
 
-		O('~') sd[lsd-1]=~sd[lsd-1];
-		O('{') H(<<=)
-		O('}') H(>>=)
+		O('~'){ sd[lsd-1]=~sd[lsd-1]; }
+		O('{'){ H(<<=) } 
+		O('}'){ H(>>=) }
 		O('('){
 			ui ct=0;
 			u k=0xfe;
@@ -113,16 +112,16 @@ void S(u* ss){
 			ui k=sd[--lsd];
 			S(macro[k]);
 		}
-		O('G')sd[lsd++]=*ptr;
-		O('P')*ptr=(u)(sd[--lsd]&0xff);
-		O('p') if(lsd) --lsd;
-		O('Q') *(++ptr)=sd[--lsd];
-		O('A') ++ptr;
-		O('B')ptr--;
-		O('E') ptr=ram+sd[--lsd];
-		O('M')ptr+=sd[--lsd];
-		O('N') ptr-=sd[--lsd];
-		O('Z')sd[lsd++]=(ui)(ptr-ram);
+		O('G'){ sd[lsd++]=*ptr; }
+		O('P'){*ptr=(u)(sd[--lsd]&0xff); }
+		O('p'){ if(lsd) --lsd; }
+		O('Q'){ *(++ptr)=sd[--lsd]; }
+		O('A'){ ++ptr; }
+		O('B'){ ptr--; }
+		O('E'){ ptr=ram+sd[--lsd]; }
+		O('M'){ ptr+=sd[--lsd]; }
+		O('N'){ ptr-=sd[--lsd]; }
+		O('Z'){ sd[lsd++]=(ui)(ptr-ram); }
 		O('F'){
 			ui j=sd[lsd-4], b=sd[lsd-3], c=sd[lsd-2], k=sd[lsd-1];
 			u m[256];
