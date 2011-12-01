@@ -104,8 +104,8 @@ void S(u* ss){
       lmacro[k]=0;
       for(++i;!(s[i]==']'&&ct==0);i++){
         macro[k][lmacro[k]++]=s[i];
-        if(s[i]=='(') ct++;
-        else if(s[i]==')') ct--;
+        if(s[i]=='[') ct++;
+        else if(s[i]==']') ct--;
       }
       macro[k][lmacro[k]]=0;
     }
