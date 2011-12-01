@@ -1,19 +1,20 @@
 #define Y typedef unsigned
 Y char u;Y int ui;
 
+#define C A[--B]
 #define B(x) A[B-x]
 #define f(m) for(int i=0;i < m ;i++)
 #define O(x) else if(s[i]==x)
-#define H(x) B(2) x A[--B];
-#define A(x) else if(s[i]==#x[0]){ B(2) x ## = A[--B]; }
-#define Q(x,y) O(x){ B(2)=(B(2) y A[--B])?1:0; }
+#define H(x) B(2) x E ;
+#define A(x) else if(s[i]==#x[0]){ B(2) x ## = E ; }
+#define Q(x,y) O(x){ B(2)=(B(2) y E )?1:0; }
 
 ui A[1024],B,l[256];
-u r[1024000],*p,C[256][1024],t;
+u r[1024000],*p,C[256][1024],t,h;
 
 void S(u* ss){
 	u s[102400];
-	ui h=0;
+	h=0;
 	for(;s[h]=ss[h];h++); s[h]=0;
 	for(ui i=0;s[i];i++){
 		ui v=0;
@@ -56,24 +57,24 @@ void S(u* ss){
 		Q('<',<)
 		Q('=',==)
 		O('I'){
-			if(A[--B]) B--;
-			else B(2)=A[--B];
+			if(E ) B--;
+			else B(2)=E ;
 		}
 		O('D')A[B++]=B(1);
 		O('C'){
-			ui l=A[--B];
+			ui l=E ;
 			f(l) A[B++]=B(l);
 		}
 		O('z'){
-			ui k=A[--B];
+			ui k=E ;
 			if(k>0)A[B++]=B(k);
 		}
 		O('i') { S("x3x1RI");
-			S(C[A[--B]]);
+			S(C[E ]);
 		}
 		O('r') {
-			ui m = A[--B];
-			ui c = A[--B];
+			ui m = E ;
+			ui c = E ;
 			u M[256];
 			for(h=0;C[m][h];h++) M[h]=C[m][h];
 			M[h]=0;
@@ -86,7 +87,7 @@ void S(u* ss){
 		}
 		O('['){
 			ui ct=0;
-			u k=A[--B];
+			u k=E ;
 			l[k]=0;
 			for(++i;!(s[i]==']'&&ct==0);i++){
 				C[k][l[k]++]=s[i];
@@ -96,18 +97,18 @@ void S(u* ss){
 			C[k][l[k]]=0;
 		}
 		O('@'){
-			ui k=A[--B];
+			ui k=E ;
 			S(C[k]);
 		}
 		O('G'){ A[B++]=*p; }
-		O('P'){*p=(u)(A[--B]&0xff); }
+		O('P'){*p=(u)(E &0xff); }
 		O('p'){ if(B) --B; }
-		O('Q'){ *(++p)=A[--B]; }
+		O('Q'){ *(++p)=E ; }
 		O('A'){ ++p; }
 		O('B'){ p--; }
-		O('E'){ p=r+A[--B]; }
-		O('M'){ p+=A[--B]; }
-		O('N'){ p-=A[--B]; }
+		O('E'){ p=r+E ; }
+		O('M'){ p+=E ; }
+		O('N'){ p-=E ; }
 		O('Z'){ A[B++]=(ui)(p-r); }
 		O('F'){
 			ui j=A[B-4], b=A[B-3], c=B(2), k=B(1);
@@ -121,8 +122,7 @@ void S(u* ss){
 			}
 		}
 		O('R'){
-			u k=A[--B];
-			u n=A[--B];
+			u k=E , n=E ;
 			f(k){
 				ui t=B(n);
 				f(n-1) B(n+i)=B(n+i+1);
