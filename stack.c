@@ -32,7 +32,7 @@ void S(u* ss){
 			sd[lsd++]=v;
 			--i;
 		}
-		for(v=0;s[i]==32;i++);
+		for(v=0;s[i]==32;i++) v++;
 		if(v){ sd[lsd++]=v; --i; }
 		A(+)A(-)A(*)A(/)A(%)A(&)A(|)A(^)
 
