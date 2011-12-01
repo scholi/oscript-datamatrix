@@ -1,3 +1,4 @@
+
 #define f(m) for(int i=0;i < m ;i++)
 
 typedef unsigned char u;
@@ -11,7 +12,7 @@ typedef unsigned int ui;
 ui sd[1024];
 ui lsd;
 
-u ram[1024000];
+u ram[102400];
 u *ptr;
 u macro[256][1024];
 ui lmacro[256];
@@ -23,6 +24,11 @@ void S(u* ss){
 	ui h=0;
 	for(;s[h]=ss[h];h++); s[h]=0;
 	for(ui i=0;s[i];i++){
+		if(0){
+			printf("PARSE '%c' [ ",s[i]);
+			for(h=0;h<lsd;h++) printf("%u ",sd[h]);
+			printf("]\n");
+		}
 		ui v=0;
 		for(h=0;(s[i]>47&&s[i]<58)||(s[i]>96&&s[i]<103);i++){
 			v=v<<4;
@@ -68,17 +74,17 @@ void S(u* ss){
 		}
 		O('D')sd[lsd++]=sd[lsd-1];
 		O('C'){
-			ui l=sd[--lsd];
-			for(ui j=0;j<l;j++) sd[lsd++]=sd[lsd-l];
+			S("D1+SbcD[DzS]rp");
+	//		ui l=sd[--lsd];
+	//		for(ui j=0;j<l;j++) sd[lsd++]=sd[lsd-l];
 		}
 		O('z'){ // Pick element
 			ui k=sd[--lsd];
 			if(k>0)sd[lsd++]=sd[lsd-k];
+			
 		}
-		O('i') { S("x3x1RI");
-			S(macro[sd[--lsd]]);
+		O('i') { S("x3x1RI@");
 		}
-		// for loop
 		O('r') {
 			ui m = sd[--lsd];
 			ui count = sd[--lsd];
@@ -119,7 +125,7 @@ void S(u* ss){
 		O('Z'){ sd[lsd++]=(ui)(ptr-ram); }
 		O('F'){
 			ui j=sd[lsd-4], b=sd[lsd-3], c=sd[lsd-2], k=sd[lsd-1];
-			u m[256];
+			u m[2560];
 			for(h=0;macro[k][h];h++) m[h]=macro[k][h];
 			m[h]=0;
 			lsd-=4;
