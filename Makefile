@@ -2,12 +2,6 @@ GCC=gcc
 DEBUG=yes
 SDEBUG=no
 
-repo=ioccc
-
-HEADERS=
-SOURCES=main.c
-OBJS=$(SOURCES:.c=.o)
-
 ifeq ($(DEBUG),yes)
 	CFLAGS=-g -ansi -std=c99 -std=gnu99 -D DEBUG -Wall -DVERBOSE -DSTACK
 else
@@ -21,11 +15,8 @@ endif
 all: datamatrix
 	./datamatrix "Hello"
 	
-datamatrix: $(OBJS)
-	$(GCC) -o datamatrix $^
-
-%.o: %.c headers.h
-	$(GCC) -c $(CFLAGS) $<
+datamatrix: main.c stack.c
+	$(GCC) $(CFLAGS) -o datamatrix $<
 
 clean:
 	rm -f $(OBJS)
