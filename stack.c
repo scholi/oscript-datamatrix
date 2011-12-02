@@ -64,11 +64,9 @@ void S(u* ss){
 		Q('=',==)
 		O('I'){ S("D1S-3 R*3  R*+");
 		}
-		O('D')sd[lsd++]=sd[lsd-1];
+		O('D'){ S(" z"); }
 		O('C'){
 			S("D1+SbcD[DzS]rp");
-	//		ui l=sd[--lsd];
-	//		for(ui j=0;j<l;j++) sd[lsd++]=sd[lsd-l];
 		}
 		O('z'){ // Pick element
 			ui k=sd[--lsd];
