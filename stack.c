@@ -1,31 +1,22 @@
-
 #define f(m) for(int i=0;i < m ;i++)
-
-typedef unsigned char u;
-typedef unsigned int ui;
-
+#define g(v,t) for(v=0;t;v++)
 #define O(x) else if(s[i]==x)
-#define D(n) sd[l-n]
-#define L sd[--l]
+#define D(n) B[l-n]
+#define L B[--l]
+#define P B[l++]
 #define H(x) D(2) x L;
-#define A(x) else if(s[i]==#x[0]){ D(2) x ## = L; }
+#define A(x) O(#x[0]){ D(2) x ## = L; }
 #define Q(x,y) O(x){ D(2)=(D(2) y L)?1:0; }
+#define K(a,b) ui ct=h=0;for(++i;!(s[i]==b && ct==0);i++){ M[k][h++]=s[i];ct+=(s[i]==a); ct-=(s[i]==b);}M[k][h]=0;
 
-#define K(a,b) ui ct=h=0;for(++i;!(s[i]==b && ct==0);i++){ macro[k][h++]=s[i];ct+=(s[i]==a); ct-=(s[i]==b);}macro[k][h]=0;
-
-ui sd[1024];
-ui l,v,h;
-
-u ram[102400],*ptr=ram;
-u macro[256][1024];
-u tm;
+ui B[1024],l;
+u R[102400],*p,M[256][1024],tm;
 
 void S(u* ss){
-	// Copy string to do infinity nesting of macro without error
-	u s[102400];
-	h=0;
-	for(;s[h]=ss[h];h++);
-	for(ui i=0;s[i];i++){
+	u s[102400],k;
+	ui i,h,v;
+	g(h,s[h]=ss[h]);
+	g(i,s[i]){
 		v=0;
 		for(h=0;(s[i]>47&&s[i]<58)||(s[i]>96&&s[i]<103);i++){
 			v=v<<4;
@@ -33,22 +24,21 @@ void S(u* ss){
 			h++;
 		}
 		if(h){
-			sd[l++]=v;
+			P=v;
 			--i;
 		}
-		for(v=0;s[i]==32;i++) v++;
-		if(v){ sd[l++]=v; --i; }
+		g(v,s[i]==32) i++;
+		if(v){ P=v; --i; }
 		A(+)A(-)A(*)A(/)A(%)A(&)A(|)A(^)
 
 		O('~'){ S("0 -^"); }
 		O('{'){ H(<<=) } 
 		O('}'){ H(>>=) }
 		O('('){
-			u k=0xfe;
-			if(tm) k++;
+			k=254+tm;
 			tm=!tm;
 			K('(',')')
-			sd[l++]=k;
+			P=k;
 		}
 		O('S'){ S("2 R"); }
 		Q('>',>)
@@ -57,18 +47,13 @@ void S(u* ss){
 		O('I'){ S("D1S-3 R*3  R*+");
 		}
 		O('D'){ S(" z"); }
-		O('C'){
-			S("D1+SbcD[DzS]rp");
-		}
-		O('z'){ // Pick element
-      D(1)=D(1-D(1));
-		}
-		O('i') { S("x3x1RI@");
-		}
+		O('C'){ S("D1+SbcD[DzS]rp"); }
+		O('z'){ D(1)=D(1-D(1));	}
+		O('i') { S("x3x1RI@"); }
 		O('r') {
 			ui m=L,c=L;
-			u mm[256]; // Prevent overwriting function when nested
-			for(h=0;mm[h]=macro[m][h];h++);
+			u mm[256];
+			for(h=0;mm[h]=M[m][h];h++);
 			for (;c;c--) S(mm);
 		}
 		O('#') { printf("%c", D(1)); }
@@ -76,31 +61,31 @@ void S(u* ss){
 			u k=L;
 			K('[',']')
 		}
-		O('@'){ S(macro[L]); }
-		O('G'){ sd[l++]=*ptr; }
-		O('P'){*ptr=(u)(L&0xff); }
+		O('@'){ S(M[L]); }
+		O('G'){ P=*p; }
+		O('P'){*p=(u)(L&0xff); }
 		O('p'){ if(l) --l; }
-		O('Q'){ *(++ptr)=L; }
-		O('A'){ ++ptr; }
-		O('B'){ ptr--; }
-		O('E'){ ptr=ram+L; }
-		O('M'){ ptr+=L; }
-		O('N'){ ptr-=L; }
-		O('Z'){ sd[l++]=(ui)(ptr-ram); }
+		O('Q'){ *(++p)=L; }
+		O('A'){ ++p; }
+		O('B'){ p--; }
+		O('E'){ p=R+L; }
+		O('M'){ p+=L; }
+		O('N'){ p-=L; }
+		O('Z'){ P=(ui)(p-R); }
 		O('F'){
 			ui j=D(4),b=D(3),c=D(2),k=D(1);
 			u m[2560];
-			for(h=0;m[h]=macro[k][h];h++);
+			g(h,m[h]=M[k][h]);
 			l-=4;
 			for(;j<b;j+=c){
-				sd[l++]=j;
+				P=j;
 				S(m);
 			}
 		}
 		O('R'){
 			u k=L;
 			u n=L;
-			for(u j=0;j<k;j++){
+			g(h,h<k){
 				ui t=D(n);
 				f(n-1) D(n+i)=D(n+i+1);
 				D(1)=t;

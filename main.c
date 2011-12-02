@@ -1,7 +1,8 @@
 #define Y typedef unsigned
 Y char u;Y int ui;
-u*ptr;u ram[666];main(u iv,u** _){
-ptr=ram;while(*_[1])*(++ptr)=*(_[1]++);*(ptr+1)=0;ram[0]=ptr-ram;
+#include "stack.c"
+main(u iv,u** _){
+p=R;while(*_[1])*(++p)=*(_[1]++);*(p+1)=0;R[0]=p-R;
 S(
 "11[111EPD0x100EG7-111EG]"
 "12[+DGSD*8/G- 103EPBPBPBP0]"
