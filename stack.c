@@ -5,12 +5,14 @@ typedef unsigned char u;
 typedef unsigned int ui;
 
 #define O(x) else if(s[i]==x)
-#define H(x) sd[lsd-2] x sd[--lsd];
-#define A(x) else if(s[i]==#x[0]){ sd[lsd-2] x ## = sd[--lsd]; }
-#define Q(x,y) O(x){ sd[lsd-2]=(sd[lsd-2] y sd[--lsd])?1:0; }
+#define D(n) sd[l-n]
+#define L sd[--l]
+#define H(x) D(2) x L;
+#define A(x) else if(s[i]==#x[0]){ D(2) x ## = L; }
+#define Q(x,y) O(x){ D(2)=(D(2) y L)?1:0; }
 
 ui sd[1024];
-ui lsd;
+ui l;
 
 u ram[102400];
 u *ptr;
@@ -25,7 +27,7 @@ void S(u* ss){
 	for(ui i=0;s[i];i++){
 		if(0){
 			printf("PARSE '%c' [ ",s[i]);
-			for(h=0;h<lsd;h++) printf("%u ",sd[h]);
+			for(h=0;h<l;h++) printf("%u ",sd[h]);
 			printf("]\n");
 		}
 		ui v=0;
@@ -35,11 +37,11 @@ void S(u* ss){
 			h++;
 		}
 		if(h){
-			sd[lsd++]=v;
+			sd[l++]=v;
 			--i;
 		}
 		for(v=0;s[i]==32;i++) v++;
-		if(v){ sd[lsd++]=v; --i; }
+		if(v){ sd[l++]=v; --i; }
 		A(+)A(-)A(*)A(/)A(%)A(&)A(|)A(^)
 
 		O('~'){ S("0 -^"); }
@@ -56,7 +58,7 @@ void S(u* ss){
 				else if(s[i]==')') ct--;
 			}
 			macro[k][h]=0;
-			sd[lsd++]=k;
+			sd[l++]=k;
 		}
 		O('S'){ S("2 R"); }
 		Q('>',>)
@@ -69,67 +71,59 @@ void S(u* ss){
 			S("D1+SbcD[DzS]rp");
 		}
 		O('z'){ // Pick element
-			ui k=sd[--lsd];
-			if(k>0)sd[lsd++]=sd[lsd-k];
+			ui k=L;
+			if(k>0)sd[l++]=D(k);
 			
 		}
 		O('i') { S("x3x1RI@");
 		}
 		O('r') {
-			ui m = sd[--lsd];
-			ui count = sd[--lsd];
+			ui m=L,c=L;
 			u mm[256]; // Prevent overwriting function when nested
 			for(h=0;macro[m][h];h++) mm[h]=macro[m][h];
 			mm[h]=0;
-
-			for (;count>0;count--)
-				S(mm);
+			for (;c;c--) S(mm);
 		}
-		O('#') {
-			if(lsd>0) printf("%c", sd[lsd-1]);
-		}
+		O('#') { printf("%c", D(1)); }
 		O('['){
 			ui ct=h=0;
-			u k=sd[--lsd];
+			u k=L;
 			for(++i;!(s[i]==']'&&ct==0);i++){
 				macro[k][h++]=s[i];
-				if(s[i]=='[') ct++;
-				else if(s[i]==']') ct--;
+				ct+=(s[i]=='[');
+				ct-=(s[i]==']');
 			}
 			macro[k][h]=0;
 		}
-		O('@'){
-			ui k=sd[--lsd];
-			S(macro[k]);
-		}
-		O('G'){ sd[lsd++]=*ptr; }
-		O('P'){*ptr=(u)(sd[--lsd]&0xff); }
-		O('p'){ if(lsd) --lsd; }
-		O('Q'){ *(++ptr)=sd[--lsd]; }
+		O('@'){ S(macro[L]); }
+		O('G'){ sd[l++]=*ptr; }
+		O('P'){*ptr=(u)(L&0xff); }
+		O('p'){ if(l) --l; }
+		O('Q'){ *(++ptr)=L; }
 		O('A'){ ++ptr; }
 		O('B'){ ptr--; }
-		O('E'){ ptr=ram+sd[--lsd]; }
-		O('M'){ ptr+=sd[--lsd]; }
-		O('N'){ ptr-=sd[--lsd]; }
-		O('Z'){ sd[lsd++]=(ui)(ptr-ram); }
+		O('E'){ ptr=ram+L; }
+		O('M'){ ptr+=L; }
+		O('N'){ ptr-=L; }
+		O('Z'){ sd[l++]=(ui)(ptr-ram); }
 		O('F'){
-			ui j=sd[lsd-4], b=sd[lsd-3], c=sd[lsd-2], k=sd[lsd-1];
+			ui j=D(4),b=D(3),c=D(2),k=D(1);
 			u m[2560];
 			for(h=0;macro[k][h];h++) m[h]=macro[k][h];
 			m[h]=0;
-			lsd-=4;
+			l-=4;
 			for(;j<b;j+=c){
-				sd[lsd++]=j;
+				sd[l++]=j;
 				S(m);
 			}
 		}
 		O('R'){
-			u k=sd[--lsd];
-			u n=sd[--lsd];
+			u k=L;
+			u n=L;
 			for(u j=0;j<k;j++){
-				ui t=sd[lsd-n];
-				f(n-1) sd[lsd-n+i]=sd[lsd-n+i+1];
-				sd[lsd-1]=t;
+				ui t=D(n);
+				f(n-1) D(n+i)=D(n+i+1);
+				D(1)=t;
 			}
 		}
 	}
