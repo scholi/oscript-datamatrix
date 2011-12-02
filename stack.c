@@ -1,17 +1,17 @@
 #define f(m) for(int i=0;i < m ;i++)
 #define g(v,t) for(v=0;t;v++)
 #define O(x) else if(s[i]==x)
-#define D(n) sd[l-n]
-#define L sd[--l]
-#define P sd[l++]
+#define D(n) B[l-n]
+#define L B[--l]
+#define P B[l++]
 #define H(x) D(2) x L;
 #define A(x) O(#x[0]){ D(2) x ## = L; }
 #define Q(x,y) O(x){ D(2)=(D(2) y L)?1:0; }
 #define K(a,b) ui ct=h=0;for(++i;!(s[i]==b && ct==0);i++){ M[k][h++]=s[i];ct+=(s[i]==a); ct-=(s[i]==b);}M[k][h]=0;
 
-ui sd[1024],l;
+ui B[1024],l;
 
-u R[102400],*ptr,M[256][1024],tm;
+u R[102400],*p,M[256][1024],tm;
 
 void S(u* ss){
 	u s[102400],k;
@@ -63,16 +63,16 @@ void S(u* ss){
 			K('[',']')
 		}
 		O('@'){ S(M[L]); }
-		O('G'){ P=*ptr; }
-		O('P'){*ptr=(u)(L&0xff); }
+		O('G'){ P=*p; }
+		O('P'){*p=(u)(L&0xff); }
 		O('p'){ if(l) --l; }
-		O('Q'){ *(++ptr)=L; }
-		O('A'){ ++ptr; }
-		O('B'){ ptr--; }
-		O('E'){ ptr=R+L; }
-		O('M'){ ptr+=L; }
-		O('N'){ ptr-=L; }
-		O('Z'){ P=(ui)(ptr-R); }
+		O('Q'){ *(++p)=L; }
+		O('A'){ ++p; }
+		O('B'){ p--; }
+		O('E'){ p=R+L; }
+		O('M'){ p+=L; }
+		O('N'){ p-=L; }
+		O('Z'){ P=(ui)(p-R); }
 		O('F'){
 			ui j=D(4),b=D(3),c=D(2),k=D(1);
 			u m[2560];
