@@ -13,15 +13,15 @@ ui B[1024],l;
 u R[102400],*p,M[256][1024],tm;
 
 void S(u* ss){
-	u s[102400],k;
+	u s[10240],k;
 	ui i,h,v;
 	g(h,s[h]=ss[h]);
 	g(i,s[i]){
 		v=0;
-		for(h=0;(s[i]>47&&s[i]<58)||(s[i]>96&&s[i]<103);i++){
+		g(h,(s[i]>47&&s[i]<58)||(s[i]>96&&s[i]<103)){
 			v=v<<4;
 			v+=s[i]-(s[i]>96?87:48);
-			h++;
+			i++;
 		}
 		if(h){
 			P=v;
@@ -49,21 +49,21 @@ void S(u* ss){
 		O('D'){ S(" z"); }
 		O('C'){ S("D1+SbcD[DzS]rp"); }
 		O('z'){ D(1)=D(1-D(1));	}
-		O('i') { S("x3x1RI@"); }
+		O('i') { S("3 RI@"); }
 		O('r') {
 			ui m=L,c=L;
 			u mm[256];
 			for(h=0;mm[h]=M[m][h];h++);
-			for (;c;c--) S(mm);
+			for(;c;c--) S(mm);
 		}
-		O('#') { printf("%c", D(1)); }
+		O('#') { printf(D(1)); }
 		O('['){
 			u k=L;
 			K('[',']')
 		}
 		O('@'){ S(M[L]); }
 		O('G'){ P=*p; }
-		O('P'){*p=(u)(L&0xff); }
+		O('P'){*p=(u)(L&255); }
 		O('p'){ if(l) --l; }
 		O('Q'){ *(++p)=L; }
 		O('A'){ ++p; }
