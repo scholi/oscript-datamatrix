@@ -58,17 +58,11 @@ void S(u* ss){
 			macro[k][h]=0;
 			sd[lsd++]=k;
 		}
-		O('S'){
-			ui x=sd[lsd-2];
-			sd[lsd-2]=sd[lsd-1];
-			sd[lsd-1]=x;
-		}
+		O('S'){ S("2 R"); }
 		Q('>',>)
 		Q('<',<)
 		Q('=',==)
-		O('I'){
-			if(sd[--lsd]) lsd--;
-			else sd[lsd-2]=sd[--lsd];
+		O('I'){ S("D1S-3 R*3  R*+");
 		}
 		O('D')sd[lsd++]=sd[lsd-1];
 		O('C'){
