@@ -1,5 +1,6 @@
 
 #define f(m) for(int i=0;i < m ;i++)
+#define g(v,t) for(v=0;t;v++)
 
 typedef unsigned char u;
 typedef unsigned int ui;
@@ -14,7 +15,7 @@ typedef unsigned int ui;
 #define K(a,b) ui ct=h=0;for(++i;!(s[i]==b && ct==0);i++){ macro[k][h++]=s[i];ct+=(s[i]==a); ct-=(s[i]==b);}macro[k][h]=0;
 
 ui sd[1024];
-ui l,v,h;
+ui l;
 
 u ram[102400];
 u *ptr;
@@ -24,9 +25,9 @@ u tm;
 void S(u* ss){
 	// Copy string to do infinity nesting of macro without error
 	u s[102400];
-	h=0;
-	for(;s[h]=ss[h];h++); s[h]=0;
-	for(ui i=0;s[i];i++){
+	ui i,h,v;
+	g(h,s[h]=ss[h]); s[h]=0;
+	g(i,s[i]){
 		v=0;
 		for(h=0;(s[i]>47&&s[i]<58)||(s[i]>96&&s[i]<103);i++){
 			v=v<<4;
@@ -37,7 +38,7 @@ void S(u* ss){
 			sd[l++]=v;
 			--i;
 		}
-		for(v=0;s[i]==32;i++) v++;
+		g(v,s[i]==32) i++;
 		if(v){ sd[l++]=v; --i; }
 		A(+)A(-)A(*)A(/)A(%)A(&)A(|)A(^)
 
@@ -58,17 +59,12 @@ void S(u* ss){
 		O('I'){ S("D1S-3 R*3  R*+");
 		}
 		O('D'){ S(" z"); }
-		O('C'){
-			S("D1+SbcD[DzS]rp");
-		}
-		O('z'){ // Pick element
-      D(1)=D(1-D(1));
-		}
-		O('i') { S("x3x1RI@");
-		}
+		O('C'){ S("D1+SbcD[DzS]rp"); }
+		O('z'){ D(1)=D(1-D(1));	}
+		O('i') { S("x3x1RI@"); }
 		O('r') {
 			ui m=L,c=L;
-			u mm[256]; // Prevent overwriting function when nested
+			u mm[256];
 			for(h=0;mm[h]=macro[m][h];h++);
 			for (;c;c--) S(mm);
 		}
@@ -102,7 +98,7 @@ void S(u* ss){
 		O('R'){
 			u k=L;
 			u n=L;
-			for(u j=0;j<k;j++){
+			g(h,h<k){
 				ui t=D(n);
 				f(n-1) D(n+i)=D(n+i+1);
 				D(1)=t;
