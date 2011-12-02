@@ -11,8 +11,10 @@ typedef unsigned int ui;
 #define A(x) else if(s[i]==#x[0]){ D(2) x ## = L; }
 #define Q(x,y) O(x){ D(2)=(D(2) y L)?1:0; }
 
+#define K(a,b) ui ct=h=0;for(++i;!(s[i]==b && ct==0);i++){ macro[k][h++]=s[i];ct+=(s[i]==a); ct-=(s[i]==b);}macro[k][h]=0;
+
 ui sd[1024];
-ui l;
+ui l,v,h;
 
 u ram[102400];
 u *ptr;
@@ -22,15 +24,10 @@ u tm;
 void S(u* ss){
 	// Copy string to do infinity nesting of macro without error
 	u s[102400];
-	ui h=0;
+	h=0;
 	for(;s[h]=ss[h];h++); s[h]=0;
 	for(ui i=0;s[i];i++){
-		if(0){
-			printf("PARSE '%c' [ ",s[i]);
-			for(h=0;h<l;h++) printf("%u ",sd[h]);
-			printf("]\n");
-		}
-		ui v=0;
+		v=0;
 		for(h=0;(s[i]>47&&s[i]<58)||(s[i]>96&&s[i]<103);i++){
 			v=v<<4;
 			v+=(s[i]>='a')?s[i]+10-'a':s[i]-'0';
@@ -48,16 +45,10 @@ void S(u* ss){
 		O('{'){ H(<<=) } 
 		O('}'){ H(>>=) }
 		O('('){
-			ui ct=h=0;
 			u k=0xfe;
 			if(tm) k++;
 			tm=!tm;
-			for(++i;!(s[i]==')' && ct==0);i++){
-				macro[k][h++]=s[i];
-				if(s[i]=='(') ct++;
-				else if(s[i]==')') ct--;
-			}
-			macro[k][h]=0;
+			K('(',')')
 			sd[l++]=k;
 		}
 		O('S'){ S("2 R"); }
@@ -86,14 +77,8 @@ void S(u* ss){
 		}
 		O('#') { printf("%c", D(1)); }
 		O('['){
-			ui ct=h=0;
 			u k=L;
-			for(++i;!(s[i]==']'&&ct==0);i++){
-				macro[k][h++]=s[i];
-				ct+=(s[i]=='[');
-				ct-=(s[i]==']');
-			}
-			macro[k][h]=0;
+			K('[',']')
 		}
 		O('@'){ S(macro[L]); }
 		O('G'){ sd[l++]=*ptr; }
