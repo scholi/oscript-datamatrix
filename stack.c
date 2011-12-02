@@ -26,7 +26,7 @@ void S(u* ss){
 	// Copy string to do infinity nesting of macro without error
 	u s[102400];
 	ui i,h,v;
-	g(h,s[h]=ss[h]); s[h]=0;
+	g(h,s[h]=ss[h]);
 	g(i,s[i]){
 		v=0;
 		for(h=0;(s[i]>47&&s[i]<58)||(s[i]>96&&s[i]<103);i++){
