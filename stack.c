@@ -16,8 +16,7 @@ typedef unsigned int ui;
 ui sd[1024];
 ui l,v,h;
 
-u ram[102400];
-u *ptr;
+u ram[102400],*ptr=ram;
 u macro[256][1024];
 u tm;
 
@@ -91,8 +90,7 @@ void S(u* ss){
 		O('F'){
 			ui j=D(4),b=D(3),c=D(2),k=D(1);
 			u m[2560];
-			for(h=0;macro[k][h];h++) m[h]=macro[k][h];
-			m[h]=0;
+			for(h=0;m[h]=macro[k][h];h++);
 			l-=4;
 			for(;j<b;j+=c){
 				sd[l++]=j;
