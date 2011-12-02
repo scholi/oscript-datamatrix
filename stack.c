@@ -56,7 +56,7 @@ void S(u* ss){
 			for(h=0;mm[h]=M[m][h];h++);
 			for(;c;c--) S(mm);
 		}
-		O('#') { printf(D(1)); }
+		O('#') { printf("%c",D(1)); }
 		O('['){
 			u k=L;
 			K('[',']')
