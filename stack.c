@@ -62,17 +62,14 @@ void S(u* ss){
 			S("D1+SbcD[DzS]rp");
 		}
 		O('z'){ // Pick element
-			ui k=L;
-			if(k>0)sd[l++]=D(k);
-			
+      D(1)=D(1-D(1));
 		}
 		O('i') { S("x3x1RI@");
 		}
 		O('r') {
 			ui m=L,c=L;
 			u mm[256]; // Prevent overwriting function when nested
-			for(h=0;macro[m][h];h++) mm[h]=macro[m][h];
-			mm[h]=0;
+			for(h=0;mm[h]=macro[m][h];h++);
 			for (;c;c--) S(mm);
 		}
 		O('#') { printf("%c", D(1)); }
