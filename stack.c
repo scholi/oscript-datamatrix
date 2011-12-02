@@ -10,7 +10,7 @@
 #define K(a,b) ui ct=h=0;for(++i;!(s[i]==b && ct==0);i++){ M[k][h++]=s[i];ct+=(s[i]==a); ct-=(s[i]==b);}M[k][h]=0;
 
 ui B[1024],l;
-u R[102400],*p,M[256][1024],tm;
+u R[102400],*p=R,M[256][1024],tm;
 
 void S(u* ss){
 	u s[102400],k;
