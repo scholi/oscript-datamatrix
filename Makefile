@@ -5,7 +5,7 @@ SDEBUG=no
 repo=ioccc
 
 HEADERS=
-SOURCES=main.c stack.c
+SOURCES=main.c
 OBJS=$(SOURCES:.c=.o)
 
 ifeq ($(DEBUG),yes)
