@@ -15,7 +15,6 @@ ui lsd;
 u ram[102400];
 u *ptr;
 u macro[256][1024];
-ui lmacro[256];
 u tm;
 
 void S(u* ss){
@@ -47,17 +46,16 @@ void S(u* ss){
 		O('{'){ H(<<=) } 
 		O('}'){ H(>>=) }
 		O('('){
-			ui ct=0;
+			ui ct=h=0;
 			u k=0xfe;
 			if(tm) k++;
 			tm=!tm;
-			lmacro[k]=0;
 			for(++i;!(s[i]==')' && ct==0);i++){
-				macro[k][lmacro[k]++]=s[i];
+				macro[k][h++]=s[i];
 				if(s[i]=='(') ct++;
 				else if(s[i]==')') ct--;
 			}
-			macro[k][lmacro[k]]=0;
+			macro[k][h]=0;
 			sd[lsd++]=k;
 		}
 		O('S'){
@@ -99,15 +97,14 @@ void S(u* ss){
 			if(lsd>0) printf("%c", sd[lsd-1]);
 		}
 		O('['){
-			ui ct=0;
+			ui ct=h=0;
 			u k=sd[--lsd];
-			lmacro[k]=0;
 			for(++i;!(s[i]==']'&&ct==0);i++){
-				macro[k][lmacro[k]++]=s[i];
+				macro[k][h++]=s[i];
 				if(s[i]=='[') ct++;
 				else if(s[i]==']') ct--;
 			}
-			macro[k][lmacro[k]]=0;
+			macro[k][h]=0;
 		}
 		O('@'){
 			ui k=sd[--lsd];
