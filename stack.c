@@ -62,7 +62,9 @@ void S(u* ss){
 			S("D1+SbcD[DzS]rp");
 		}
 		O('z'){ // Pick element
-			if(L>0)sd[l++]=D(L);
+			ui k=L;
+			if(k>0)sd[l++]=D(k);
+			
 		}
 		O('i') { S("x3x1RI@");
 		}
