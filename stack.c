@@ -1,13 +1,14 @@
+#define N s[i]
 #define f(m) for(int i=0;i < m ;i++)
 #define g(v,t) for(v=0;t;v++)
-#define O(x) else if(s[i]==x)
+#define O(x) else if(N==x)
 #define D(n) B[l-n]
 #define L B[--l]
 #define P B[l++]
 #define H(x) D(2) x L;
 #define A(x) O(#x[0]){ D(2) x ## = L; }
 #define Q(x,y) O(x){ D(2)=(D(2) y L)?1:0; }
-#define K(a,b) ui ct=h=0;for(++i;!(s[i]==b && ct==0);i++){ M[k][h++]=s[i];ct+=(s[i]==a); ct-=(s[i]==b);}M[k][h]=0;
+#define K(a,b) ui ct=h=0;for(++i;!(N==b && ct==0);i++){ M[k][h++]=N;ct+=(N==a); ct-=(N==b);}M[k][h]=0;
 
 ui B[1024],l;
 u R[102400],*p=R,M[256][1024],tm;
@@ -15,19 +16,16 @@ u R[102400],*p=R,M[256][1024],tm;
 void S(u* ss){
 	u s[10240],k;
 	ui i,h,v;
-	g(h,s[h]=ss[h]);
-	g(i,s[i]){
+	g(i,N=ss[i]);
+	g(i,N){
 		v=0;
-		g(h,(s[i]>47&&s[i]<58)||(s[i]>96&&s[i]<103)){
-			v=v<<4;
-			v+=s[i]-(s[i]>96?87:48);
-			i++;
+		g(h,(N>47&&N<58)||(N>96&&N<104)){
+			v<<=4;
+			if(N==103) v<<=4;
+			else v+=s[i++]-(N>96?87:48);
 		}
-		if(h){
-			P=v;
-			--i;
-		}
-		g(v,s[i]==32) i++;
+		if(h){ P=v; --i; }
+		g(v,N==32) i++;
 		if(v){ P=v; --i; }
 		A(+)A(-)A(*)A(/)A(%)A(&)A(|)A(^)
 		O(9) P=0;
@@ -53,7 +51,7 @@ void S(u* ss){
 		O('r') {
 			ui m=L,c=L;
 			u mm[256];
-			for(h=0;mm[h]=M[m][h];h++);
+			g(h,mm[h]=M[m][h]);
 			for(;c;c--) S(mm);
 		}
 		O(35) { printf("%c",D(1)); }
@@ -72,7 +70,7 @@ void S(u* ss){
 		O(77){ p+=L; }
 		O(78){ p-=L; }
 		O(90){ P=(ui)(p-R); }
-		O(70){
+		O(70){ 
 			ui k=L,c=L,b=L,j=L;
 			u m[2560];
 			g(h,m[h]=M[k][h]);
